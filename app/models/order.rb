@@ -1,6 +1,5 @@
 class Order < ActiveRecord::Base
   validates :total_price, :completed_date, :state, presence: true
-  validates :state
 
   belongs_to :customer
   belongs_to :credit_card
