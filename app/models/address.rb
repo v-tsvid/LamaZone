@@ -1,4 +1,4 @@
 class Address < ActiveRecord::Base
-  validates :phone, :address1, :address2, presense: true
-  validates :city, :zipcode, :country, presense: true
+  validates :phone, :address1, :address2, presence: true
+  validates :city, :zipcode, :country, presence: true
 end

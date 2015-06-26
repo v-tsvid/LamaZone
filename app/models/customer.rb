@@ -1,6 +1,6 @@
 class Customer < ActiveRecord::Base
-  validates :email, :password, :password_confirmation, presense: true
-  validates :firstname, :lastname, presense: true
+  validates :email, :password, :password_confirmation, presence: true
+  validates :firstname, :lastname, presence: true
   validates :email, uniqueness: true
 
   has_many :orders
