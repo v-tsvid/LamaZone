@@ -4,7 +4,8 @@ RSpec.describe "orders/new", type: :view do
   before(:each) do
     assign(:order, Order.new(
       :state => 1,
-      :total_price => "9.99"
+      :total_price => "9.99",
+      :completed_date => Date.tomorrow
     ))
   end
 

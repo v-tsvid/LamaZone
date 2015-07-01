@@ -4,16 +4,17 @@ RSpec.describe "countries/index", type: :view do
   before(:each) do
     assign(:countries, [
       Country.create!(
-        :name => "Name"
+        :name => "Name1"
       ),
       Country.create!(
-        :name => "Name"
+        :name => "Name2"
       )
     ])
   end
 
   it "renders a list of countries" do
     render
-    assert_select "tr>td", :text => "Name".to_s, :count => 2
+    assert_select "tr>td", :text => "Name1".to_s, :count => 1
+    assert_select "tr>td", :text => "Name2".to_s, :count => 1
   end
 end

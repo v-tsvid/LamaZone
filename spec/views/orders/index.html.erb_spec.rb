@@ -5,11 +5,13 @@ RSpec.describe "orders/index", type: :view do
     assign(:orders, [
       Order.create!(
         :state => 1,
-        :total_price => "9.99"
+        :total_price => "9.99",
+        :completed_date => Date.tomorrow
       ),
       Order.create!(
         :state => 1,
-        :total_price => "9.99"
+        :total_price => "9.99",
+        :completed_date => Date.tomorrow
       )
     ])
   end

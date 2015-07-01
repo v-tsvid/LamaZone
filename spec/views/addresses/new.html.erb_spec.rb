@@ -7,8 +7,7 @@ RSpec.describe "addresses/new", type: :view do
       :address1 => "MyString",
       :address2 => "MyString",
       :city => "MyString",
-      :zipcode => "MyString",
-      :country => "MyString"
+      :zipcode => "MyString"
     ))
   end
 
@@ -26,8 +25,6 @@ RSpec.describe "addresses/new", type: :view do
       assert_select "input#address_city[name=?]", "address[city]"
 
       assert_select "input#address_zipcode[name=?]", "address[zipcode]"
-
-      assert_select "input#address_country[name=?]", "address[country]"
     end
   end
 end

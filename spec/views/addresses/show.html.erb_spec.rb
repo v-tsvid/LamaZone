@@ -7,8 +7,7 @@ RSpec.describe "addresses/show", type: :view do
       :address1 => "Address1",
       :address2 => "Address2",
       :city => "City",
-      :zipcode => "Zipcode",
-      :country => "Country"
+      :zipcode => "Zipcode"
     ))
   end
 
@@ -19,6 +18,5 @@ RSpec.describe "addresses/show", type: :view do
     expect(rendered).to match(/Address2/)
     expect(rendered).to match(/City/)
     expect(rendered).to match(/Zipcode/)
-    expect(rendered).to match(/Country/)
   end
 end

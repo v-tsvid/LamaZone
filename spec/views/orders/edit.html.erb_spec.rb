@@ -4,7 +4,8 @@ RSpec.describe "orders/edit", type: :view do
   before(:each) do
     @order = assign(:order, Order.create!(
       :state => 1,
-      :total_price => "9.99"
+      :total_price => "9.99",
+      :completed_date => Date.tomorrow
     ))
   end
 

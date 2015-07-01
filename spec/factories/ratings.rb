@@ -1,7 +1,8 @@
 FactoryGirl.define do
   factory :rating do
-    rate 1
-review "MyText"
+    rate { rand(1..10) }
+    review { Faker::Lorem.sentences(rand(1..10)).join(' ') }
+    book
+    customer
   end
-
 end

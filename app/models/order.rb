@@ -7,9 +7,11 @@ class Order < ActiveRecord::Base
   belongs_to :billing_address, :class_name => 'Address', :foreign_key => 'billing_address_id'
   belongs_to :shipping_address, :class_name => 'Address', :foreign_key => 'shipping_address_id'
 
-  def add_book
-  end
+  scope :in_progress, -> { where(state: 0) }
 
-  def total_price
+  def add_book(book_id)
+    item = order_items.where(book_id: book_id).first
+    item.quantity += 1
+    item.save
   end
 end

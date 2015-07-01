@@ -8,16 +8,14 @@ RSpec.describe "addresses/index", type: :view do
         :address1 => "Address1",
         :address2 => "Address2",
         :city => "City",
-        :zipcode => "Zipcode",
-        :country => "Country"
+        :zipcode => "Zipcode"
       ),
       Address.create!(
         :phone => "Phone",
         :address1 => "Address1",
         :address2 => "Address2",
         :city => "City",
-        :zipcode => "Zipcode",
-        :country => "Country"
+        :zipcode => "Zipcode"
       )
     ])
   end
@@ -29,6 +27,5 @@ RSpec.describe "addresses/index", type: :view do
     assert_select "tr>td", :text => "Address2".to_s, :count => 2
     assert_select "tr>td", :text => "City".to_s, :count => 2
     assert_select "tr>td", :text => "Zipcode".to_s, :count => 2
-    assert_select "tr>td", :text => "Country".to_s, :count => 2
   end
 end

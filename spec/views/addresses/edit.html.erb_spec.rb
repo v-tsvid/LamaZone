@@ -8,7 +8,6 @@ RSpec.describe "addresses/edit", type: :view do
       :address2 => "MyString",
       :city => "MyString",
       :zipcode => "MyString",
-      :country => "MyString"
     ))
   end
 
@@ -27,7 +26,6 @@ RSpec.describe "addresses/edit", type: :view do
 
       assert_select "input#address_zipcode[name=?]", "address[zipcode]"
 
-      assert_select "input#address_country[name=?]", "address[country]"
     end
   end
 end
