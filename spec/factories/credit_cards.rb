@@ -7,6 +7,14 @@ FactoryGirl.define do
     firstname { Faker::Name.first_name }
     lastname { Faker::Name.last_name }
     customer
-  end
 
+    factory :credit_card_with_orders do
+      transient do
+        orders_count 5
+      end
+      after(:create) do |credit_card, evaluator|
+        create_list(:order, evaluator.orders_count, credit_card: credit_card)
+      end
+    end
+  end
 end
