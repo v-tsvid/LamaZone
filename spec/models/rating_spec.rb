@@ -1,5 +1,11 @@
 require 'rails_helper'
 
 RSpec.describe Rating, type: :model do
-  pending "add some examples to (or delete) #{__FILE__}"
+  let(:rating) { FactoryGirl.create :rating }
+
+  [:customer, :book].each do |item|
+    it "belongs to #{item}" do
+      expect(rating).to belong_to item
+    end
+  end
 end

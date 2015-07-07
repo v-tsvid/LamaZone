@@ -1,6 +1,7 @@
 FactoryGirl.define do
-  factory :country do
-    name { Faker::Address.country }
-  end
+  sequence(:name) { |n| "Country#{n}" }
 
+  factory :country do
+    name
+  end
 end

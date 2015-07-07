@@ -12,8 +12,12 @@ class Order < ActiveRecord::Base
   before_save :state_to_default
 
   def add_book(book_id)
-    item = order_items.where(book_id: book_id).first
-    item.quantity += 1
+    item = self.order_items.where(book_id: book_id).first
+    if item
+      item.quantity += 1
+    else
+      item = self.order_items.new(book_id: book_id, order_id: self.id, quantity: 1, price: Book.where(id: book_id).pluck(:price))
+    end
     item.save
   end
 

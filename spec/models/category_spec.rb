@@ -4,10 +4,14 @@ RSpec.describe Category, type: :model do
   let(:category) { FactoryGirl.create :category }
 
   it "is invalid without title" do
-    expect(FactoryGirl.build :category, title: nil).not_to be_valid
+    expect(category).to validate_presence_of :title
   end
 
   it "does not allow duplicate titles" do
-    expect(FactoryGirl.build :category, title: category.title).not_to be_valid
+    expect(category).to validate_uniqueness_of :title
+  end
+
+  it "has many books" do
+    expect(category).to have_many :books
   end
 end

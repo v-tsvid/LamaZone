@@ -1,6 +1,7 @@
 FactoryGirl.define do
+  sequence(:title) { |n| "Category #{n}" }
   factory :category do
-    title { Faker::Lorem.words(rand(1..3)).join(' ') }
+    title
 
     factory :category_with_books do
       transient do

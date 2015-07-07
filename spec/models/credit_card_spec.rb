@@ -5,7 +5,15 @@ RSpec.describe CreditCard, type: :model do
 
   [:number, :cvv, :firstname, :lastname, :expiration_month, :expiration_year].each do |item|
     it "is invalid without #{item}" do
-      expect(FactoryGirl.build :credit_card, "#{item}": nil).not_to be_valid
+      expect(credit_card).to validate_presence_of item
     end
+  end
+
+  it "belongs to customer" do
+    expect(credit_card).to belong_to :customer
+  end
+
+  it "has many orders" do
+    expect(credit_card).to have_many :orders
   end
 end

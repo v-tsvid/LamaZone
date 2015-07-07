@@ -5,7 +5,13 @@ RSpec.describe OrderItem, type: :model do
 
   [:price, :quantity].each do |item|
     it "is invalid without #{item}" do
-      expect(FactoryGirl.build :order_item, "#{item}": nil).not_to be_valid
+      expect(order_item).to validate_presence_of item
+    end
+  end
+
+  [:book, :order].each do |item|
+    it "belongs to #{item}" do
+      expect(order_item).to belong_to item
     end
   end
 end
