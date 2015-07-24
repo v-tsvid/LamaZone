@@ -9,6 +9,16 @@ RSpec.describe OrderItem, type: :model do
     end
   end
 
+  it "is valid only when price is numerical and greater than or equal to 0" do
+    expect(order_item).to validate_numericality_of(:price).
+      is_greater_than_or_equal_to 0
+  end
+
+  it "is valid only when quantity is integer and greater than or equal to 0" do
+    expect(order_item).to validate_numericality_of(:quantity).only_integer.
+      is_greater_than_or_equal_to 0
+  end
+
   [:book, :order].each do |item|
     it "belongs to #{item}" do
       expect(order_item).to belong_to item

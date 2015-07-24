@@ -3,10 +3,10 @@ require 'rails_helper'
 RSpec.describe "credit_cards/new", type: :view do
   before(:each) do
     assign(:credit_card, CreditCard.new(
-      :number => "MyString",
-      :cvv => "MyString",
-      :expiration_month => "MyString",
-      :expiration_year => "MyString",
+      :number => "5168 7423 2791 0638",
+      :cvv => "123",
+      :expiration_month => "01",
+      :expiration_year => "2016",
       :firstname => "MyString",
       :lastname => "MyString"
     ))

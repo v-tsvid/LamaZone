@@ -3,7 +3,7 @@ require 'rails_helper'
 RSpec.describe "customers/edit", type: :view do
   before(:each) do
     @customer = assign(:customer, Customer.create!(
-      :email => "MyString",
+      :email => "MyString@mail.com",
       :password => "MyString",
       :password_confirmation => "MyString",
       :firstname => "MyString",

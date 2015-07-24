@@ -5,3 +5,6 @@
 #
 #   cities = City.create([{ name: 'Chicago' }, { name: 'Copenhagen' }])
 #   Mayor.create(name: 'Emanuel', city: cities.first)
+ISO3166::Country.all.map do |item|
+  Country.create!(name: item[0], alpha2: item[1])
+end

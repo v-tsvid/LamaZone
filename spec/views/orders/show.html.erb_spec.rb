@@ -5,7 +5,8 @@ RSpec.describe "orders/show", type: :view do
     @order = assign(:order, Order.create!(
       :state => 1,
       :total_price => "9.99",
-      :completed_date => Date.tomorrow
+      :completed_date => Date.today.next_day,
+      :created_at => DateTime.now
     ))
   end
 

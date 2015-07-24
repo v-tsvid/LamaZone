@@ -3,7 +3,8 @@ require 'rails_helper'
 RSpec.describe "countries/new", type: :view do
   before(:each) do
     assign(:country, Country.new(
-      :name => "MyString"
+      :name => "MyString",
+      :alpha2 => "MS"
     ))
   end
 

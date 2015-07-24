@@ -3,7 +3,7 @@ require 'rails_helper'
 RSpec.describe "customers/new", type: :view do
   before(:each) do
     assign(:customer, Customer.new(
-      :email => "MyString",
+      :email => "MyString@mail.com",
       :password => "MyString",
       :password_confirmation => "MyString",
       :firstname => "MyString",

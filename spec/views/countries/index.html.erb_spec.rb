@@ -4,10 +4,12 @@ RSpec.describe "countries/index", type: :view do
   before(:each) do
     assign(:countries, [
       Country.create!(
-        :name => "Name1"
+        :name => "Name1",
+        :alpha2 => "NA"
       ),
       Country.create!(
-        :name => "Name2"
+        :name => "Name2",
+        :alpha2 => "NM"
       )
     ])
   end

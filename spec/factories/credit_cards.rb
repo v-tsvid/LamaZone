@@ -1,9 +1,9 @@
 FactoryGirl.define do
   factory :credit_card do
-    number { Faker::Business.credit_card_number }
+    number "5168 7423 2791 0638"
     cvv { Faker::Number.number(3) }
-    expiration_month { Time.now.month }
-    expiration_year { Time.now.year }
+    expiration_month { Date.today.next_month.strftime("%m") }
+    expiration_year { Date.today.next_year.strftime("%Y") }
     firstname { Faker::Name.first_name }
     lastname { Faker::Name.last_name }
     customer

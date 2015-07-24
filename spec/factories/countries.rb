@@ -1,7 +1,6 @@
 FactoryGirl.define do
-  sequence(:name) { |n| "Country#{n}" }
-
   factory :country do
-    name
+    sequence(:name) { |n| ISO3166::Country.all[n][0] }
+    sequence(:alpha2) { |n| ISO3166::Country.all[n][1] }
   end
 end

@@ -3,9 +3,9 @@ require 'rails_helper'
 RSpec.describe "customers/show", type: :view do
   before(:each) do
     @customer = assign(:customer, Customer.create!(
-      :email => "Email",
+      :email => "MyString@mail.com",
       :password => "Password",
-      :password_confirmation => "Password Confirmation",
+      :password_confirmation => "Password",
       :firstname => "Firstname",
       :lastname => "Lastname"
     ))
@@ -13,9 +13,8 @@ RSpec.describe "customers/show", type: :view do
 
   it "renders attributes in <p>" do
     render
-    expect(rendered).to match(/Email/)
+    expect(rendered).to match(/mystring\@mail\.com/)
     expect(rendered).to match(/Password/)
-    expect(rendered).to match(/Password Confirmation/)
     expect(rendered).to match(/Firstname/)
     expect(rendered).to match(/Lastname/)
   end

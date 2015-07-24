@@ -4,18 +4,18 @@ RSpec.describe "credit_cards/index", type: :view do
   before(:each) do
     assign(:credit_cards, [
       CreditCard.create!(
-        :number => "Number",
-        :cvv => "Cvv",
-        :expiration_month => "Expiration Month",
-        :expiration_year => "Expiration Year",
+        :number => "5168 7423 2791 0638",
+        :cvv => "123",
+        :expiration_month => "01",
+        :expiration_year => "2016",
         :firstname => "Firstname",
         :lastname => "Lastname"
       ),
       CreditCard.create!(
-        :number => "Number",
-        :cvv => "Cvv",
-        :expiration_month => "Expiration Month",
-        :expiration_year => "Expiration Year",
+        :number => "5168 7423 2791 0638",
+        :cvv => "123",
+        :expiration_month => "01",
+        :expiration_year => "2016",
         :firstname => "Firstname",
         :lastname => "Lastname"
       )
@@ -24,10 +24,10 @@ RSpec.describe "credit_cards/index", type: :view do
 
   it "renders a list of credit_cards" do
     render
-    assert_select "tr>td", :text => "Number".to_s, :count => 2
-    assert_select "tr>td", :text => "Cvv".to_s, :count => 2
-    assert_select "tr>td", :text => "Expiration Month".to_s, :count => 2
-    assert_select "tr>td", :text => "Expiration Year".to_s, :count => 2
+    assert_select "tr>td", :text => "5168 7423 2791 0638".to_s, :count => 2
+    assert_select "tr>td", :text => "123".to_s, :count => 2
+    assert_select "tr>td", :text => "01".to_s, :count => 2
+    assert_select "tr>td", :text => "2016".to_s, :count => 2
     assert_select "tr>td", :text => "Firstname".to_s, :count => 2
     assert_select "tr>td", :text => "Lastname".to_s, :count => 2
   end

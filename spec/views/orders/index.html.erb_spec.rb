@@ -6,12 +6,14 @@ RSpec.describe "orders/index", type: :view do
       Order.create!(
         :state => 0,
         :total_price => "9.99",
-        :completed_date => Date.tomorrow
+        :completed_date => Date.today.next_day,
+        :created_at => DateTime.now
       ),
       Order.create!(
         :state => 0,
         :total_price => "9.99",
-        :completed_date => Date.tomorrow
+        :completed_date => Date.today.next_day,
+        :created_at => DateTime.now
       )
     ])
   end

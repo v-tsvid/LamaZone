@@ -1,13 +1,16 @@
 require 'rails_helper'
 
 RSpec.describe "addresses/edit", type: :view do
+  let(:country) { FactoryGirl.create :country}
+
   before(:each) do
     @address = assign(:address, Address.create!(
-      :phone => "MyString",
+      :phone => "380930000000",
       :address1 => "MyString",
       :address2 => "MyString",
       :city => "MyString",
       :zipcode => "MyString",
+      :country_id => country.id
     ))
   end
 
