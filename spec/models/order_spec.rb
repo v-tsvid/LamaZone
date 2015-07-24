@@ -30,7 +30,7 @@ RSpec.describe Order, type: :model do
     order.completed_date = Date.today.prev_day
     expect{ order.valid? }.
       to change{ order.errors.messages[:completed_date] }.
-      to contain_exactly(Order::DATE_COMPL_BEFORE_CR_MESSAGE)
+      to contain_exactly(Order::DATE_COMPLETE_BEFORE_CREATE_MESSAGE)
   end
 
   it "has many order_items" do

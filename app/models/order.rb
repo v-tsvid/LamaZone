@@ -1,8 +1,11 @@
 class Order < ActiveRecord::Base
-  DATE_COMPL_BEFORE_CR_MESSAGE = "can't be before created date"
+  DATE_COMPLETE_BEFORE_CREATE_MESSAGE = "can't be before created date"
 
   validates :total_price, :completed_date, :state, presence: true
   validates :total_price, numericality: { greater_than: 0 }
+  
+  #provided by validates_timeliness gem
+  #validates value as date
   validates_date :completed_date
   validate :date_completed_before_created
 
@@ -19,7 +22,7 @@ class Order < ActiveRecord::Base
   private
 
     def date_completed_before_created
-      errors.add(:completed_date, DATE_COMPL_BEFORE_CR_MESSAGE) unless 
+      errors.add(:completed_date, DATE_COMPLETE_BEFORE_CREATE_MESSAGE) unless 
         self.completed_date && self.created_at &&
         self.completed_date >= self.created_at
     end
