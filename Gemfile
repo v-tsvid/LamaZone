@@ -38,6 +38,10 @@ gem 'validates_zipcode', '0.0.6'
 gem 'credit_card_validator', '1.2.0'
 gem 'validates_timeliness', '3.0.14'
 gem 'rails_admin', '0.6.8'
+gem 'carrierwave', '0.10.0', github:'carrierwaveuploader/carrierwave'
+gem 'mini_magick', '4.2.9'
+gem 'devise', '3.5.1'
+gem 'fog-aws', '0.7.4'
 
 group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console

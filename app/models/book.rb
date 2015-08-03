@@ -7,4 +7,7 @@ class Book < ActiveRecord::Base
   belongs_to :author
   belongs_to :category
   has_many :ratings
+
+  mount_uploader :images, BookImageUploader
+  # attr_accessible :asset, :asset_cache, :remove_asset
 end

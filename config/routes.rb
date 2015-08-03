@@ -1,11 +1,14 @@
 Rails.application.routes.draw do
+  devise_for :customers, controllers: { sessions: "customers/sessions" }
+  devise_for :admins, controllers: { sessions: "admins/sessions" }
   mount RailsAdmin::Engine => '/admin', as: 'rails_admin'
+  # resources :admins
   resources :credit_cards
   resources :countries
   resources :addresses
   resources :order_items
   resources :orders
-  resources :customers
+  # resources :customers
   resources :ratings
   resources :authors
   resources :categories
@@ -14,7 +17,7 @@ Rails.application.routes.draw do
   # See how all your routes lay out with "rake routes".
 
   # You can have the root of your site routed with "root"
-  # root 'welcome#index'
+  # root 'books#index'
 
   # Example of regular route:
   #   get 'products/:id' => 'catalog#view'

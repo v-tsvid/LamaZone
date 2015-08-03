@@ -10,7 +10,6 @@ RSpec.describe Customer, type: :model do
   end
 
   [:email, 
-   :password_digest, 
    :firstname, 
    :lastname].each do |item|
     it "is invalid without #{item}" do
@@ -22,18 +21,18 @@ RSpec.describe Customer, type: :model do
     expect(customer).to validate_uniqueness_of(:email).case_insensitive
   end
 
-  it "does not allow password contains less than 6 chars" do
-    expect(customer).to validate_length_of(:password).is_at_least 6
-  end
+  # it "does not allow password contains less than 6 chars" do
+  #   expect(customer).to validate_length_of(:password).is_at_least 6
+  # end
 
-  it "requires password confirmation" do
-    expect(customer).to validate_confirmation_of(:password)
-  end
+  # it "requires password confirmation" do
+  #   expect(customer).to validate_confirmation_of(:password)
+  # end
 
-  it "is invalid when password does not match confirmation" do
-    customer.password_confirmation = "mismatch"
-    expect(customer).not_to be_valid
-  end
+  # it "is invalid when password does not match confirmation" do
+  #   customer.password_confirmation = "mismatch"
+  #   expect(customer).not_to be_valid
+  # end
 
   [:orders, :ratings].each do |item|
     it "has many #{item}" do
