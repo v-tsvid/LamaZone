@@ -51,7 +51,6 @@ class Customer < ActiveRecord::Base
         customer.password_confirmation = customer.password
         customer.firstname = auth.info.first_name
         customer.lastname = auth.info.last_name   
-         # customer.image = auth.info.image # assuming the customer model has an image
       end
     end
 end

@@ -44,8 +44,6 @@ gem 'devise', '3.5.1'
 gem 'fog-aws', '0.7.4'
 gem 'bootstrap-sass', '3.3.5.1'
 gem 'haml', '4.0.6'
-gem 'capybara', '2.4.4'
-gem 'capybara-webkit', '1.6.0'
 gem 'omniauth-facebook', '2.0.1'
 gem 'aasm', '4.2.0'
 gem 'acts_as_shopping_cart', '0.3.0'
@@ -62,6 +60,8 @@ group :development, :test do
   gem 'spring'
   gem 'rspec-rails', '3.3.2'
   gem 'factory_girl_rails', '4.5.0'
+  gem 'capybara', '2.4.4'
+  gem 'capybara-webkit', '1.6.0'
 end
 
 group :test do
