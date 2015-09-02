@@ -10,7 +10,7 @@ FactoryGirl.define do
 
     factory :credit_card_with_orders do
       transient do
-        orders_count 5
+        orders_count { rand(1..10) }
       end
       after(:create) do |credit_card, evaluator|
         create_list(:order, evaluator.orders_count, credit_card: credit_card)

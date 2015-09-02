@@ -42,6 +42,14 @@ gem 'carrierwave', '0.10.0', github:'carrierwaveuploader/carrierwave'
 gem 'mini_magick', '4.2.9'
 gem 'devise', '3.5.1'
 gem 'fog-aws', '0.7.4'
+gem 'bootstrap-sass', '3.3.5.1'
+gem 'haml', '4.0.6'
+gem 'capybara', '2.4.4'
+gem 'capybara-webkit', '1.6.0'
+gem 'omniauth-facebook', '2.0.1'
+gem 'aasm', '4.2.0'
+gem 'acts_as_shopping_cart', '0.3.0'
+gem 'simplecov', '0.10.0', :require => false, :group => :test
 
 group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console
@@ -60,5 +68,6 @@ group :test do
   gem 'faker', '1.4.3'
   gem 'database_cleaner', '1.4.1'
   gem 'shoulda-matchers', '2.8.0'
+  gem 'shoulda-callback-matchers', '1.1.3'
 end
 

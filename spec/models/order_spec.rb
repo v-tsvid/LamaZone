@@ -20,6 +20,10 @@ RSpec.describe Order, type: :model do
     expect(order).to validate_numericality_of(:total_price).
       is_greater_than 0
   end
+  
+  it "is invalid when state is mot included in permitted states list" do
+    expect(order).to validate_inclusion_of(:state).in_array(Order::STATE_LIST)
+  end
 
   it "is invalid when completed_date is invalid" do
     order.completed_date = "incorrect date"
@@ -37,35 +41,29 @@ RSpec.describe Order, type: :model do
     expect(order).to have_many :order_items
   end
 
+  context "#custom_label_method" do
+    it "returns string with id" do
+      expect(order.send(:custom_label_method)).
+        to eq "#{order.id}"
+    end
+  end
+
   context "#in_progress" do
-    let(:books_in_progress) { FactoryGirl.create_list(:order, 3, state: 0, 
+    let(:orders_in_progress) { FactoryGirl.create_list(
+      :order, 3, state: 'in_progress', 
       created_at: DateTime.now, completed_date: Date.today.next_day) }
 
-    it "returns books in progress" do
-      expect(Order.in_progress).to match_array(books_in_progress)
+    it "returns orders in_progress" do
+      expect(Order.in_progress).to match_array(orders_in_progress)
     end
 
-    [:books_processing, 
-     :books_pending, 
-     :books_shipping, 
-     :books_completed, 
-     :books_cancelled].map.with_index do |item, index|
-      it "does not return #{item}" do
-        item = FactoryGirl.create_list(:order, 3, state: index + 1, 
+    Order::STATE_LIST[1..4].map do |item|
+      it "does not return orders #{item}" do
+        item = FactoryGirl.create_list(:order, 3, state: item, 
           created_at: DateTime.now, completed_date: Date.today.next_day)
         expect(Order.in_progress).not_to match_array(item)
       end
     end 
-  end
-
-  context "#state_to_default" do
-    let(:order_with_state_to_default) { 
-      FactoryGirl.create(:order_with_state_to_default, state: 2, 
-        created_at: DateTime.now, completed_date: Date.today.next_day) }
-    
-    it "saves books with in_progress state" do
-      expect(order_with_state_to_default.state).to eq 0
-    end
   end
 
   context "#add_book" do

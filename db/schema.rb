@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150728080413) do
+ActiveRecord::Schema.define(version: 20150821074059) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -116,10 +116,14 @@ ActiveRecord::Schema.define(version: 20150728080413) do
     t.datetime "confirmed_at"
     t.datetime "confirmation_sent_at"
     t.string   "unconfirmed_email"
+    t.string   "provider"
+    t.string   "uid"
   end
 
   add_index "customers", ["email"], name: "index_customers_on_email", unique: true, using: :btree
+  add_index "customers", ["provider"], name: "index_customers_on_provider", using: :btree
   add_index "customers", ["reset_password_token"], name: "index_customers_on_reset_password_token", unique: true, using: :btree
+  add_index "customers", ["uid"], name: "index_customers_on_uid", using: :btree
 
   create_table "order_items", force: :cascade do |t|
     t.decimal  "price"
@@ -134,15 +138,15 @@ ActiveRecord::Schema.define(version: 20150728080413) do
   add_index "order_items", ["order_id"], name: "index_order_items_on_order_id", using: :btree
 
   create_table "orders", force: :cascade do |t|
-    t.integer  "state",               default: 0
     t.decimal  "total_price"
     t.date     "completed_date"
-    t.datetime "created_at",                      null: false
-    t.datetime "updated_at",                      null: false
+    t.datetime "created_at",          null: false
+    t.datetime "updated_at",          null: false
     t.integer  "customer_id"
     t.integer  "credit_card_id"
     t.integer  "shipping_address_id"
     t.integer  "billing_address_id"
+    t.string   "state"
   end
 
   add_index "orders", ["credit_card_id"], name: "index_orders_on_credit_card_id", using: :btree
@@ -155,10 +159,26 @@ ActiveRecord::Schema.define(version: 20150728080413) do
     t.datetime "updated_at",  null: false
     t.integer  "book_id"
     t.integer  "customer_id"
+    t.string   "state"
   end
 
   add_index "ratings", ["book_id"], name: "index_ratings_on_book_id", using: :btree
   add_index "ratings", ["customer_id"], name: "index_ratings_on_customer_id", using: :btree
+
+  create_table "shopping_cart_items", force: :cascade do |t|
+    t.integer "owner_id"
+    t.string  "owner_type"
+    t.integer "quantity"
+    t.integer "item_id"
+    t.string  "item_type"
+    t.integer "price_cents",    default: 0,     null: false
+    t.string  "price_currency", default: "USD", null: false
+  end
+
+  create_table "shopping_carts", force: :cascade do |t|
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
 
   add_foreign_key "addresses", "countries"
   add_foreign_key "books", "authors"

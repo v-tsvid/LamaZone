@@ -1,5 +1,13 @@
 Rails.application.routes.draw do
-  devise_for :customers, controllers: { sessions: "customers/sessions" }
+  resources :shopping_cart_items
+  resources :shopping_carts
+  root 'books#index'
+  # devise_scope :customer do
+  #   delete 'sign_out', :to => 'devise/sessions#destroy', :as => :destroy_customer_session
+  # end
+  # devise_for :customers, :controllers => {  }
+  devise_for :customers, controllers: { omniauth_callbacks: "customers/omniauth_callbacks", 
+    sessions: "customers/sessions" }
   devise_for :admins, controllers: { sessions: "admins/sessions" }
   mount RailsAdmin::Engine => '/admin', as: 'rails_admin'
   # resources :admins

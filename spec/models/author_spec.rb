@@ -12,4 +12,11 @@ RSpec.describe Author, type: :model do
   it "has many books" do
     expect(author).to have_many :books
   end
+
+  context "#custom_label_method" do
+    it "returns string with lastname and firstname" do
+      expect(author.send(:custom_label_method)).
+        to eq "#{author.lastname} #{author.firstname}"
+    end
+  end
 end

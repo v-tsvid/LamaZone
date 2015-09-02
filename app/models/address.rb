@@ -16,10 +16,20 @@ class Address < ActiveRecord::Base
 
   before_save :normalize_phone
 
+  rails_admin do
+    object_label_method do
+      :custom_label_method
+    end
+  end
+
   private
 
+    def custom_label_method
+      "#{self.city} #{self.address1} #{self.address2}"
+    end
+
     def normalize_phone
-      # provided by phony_rails gem
+      # provided by phony gem
       # delete all characters expecting digits
       Phony.normalize!(self.phone)
     end

@@ -10,7 +10,6 @@ RSpec.describe Address, type: :model do
   end
   
   context "with phone validation" do
-
     it "is valid when phone is plausible" do
       expect(Phony.plausible?(address.phone)).to eq true
     end
@@ -20,12 +19,23 @@ RSpec.describe Address, type: :model do
     expect(address).to belong_to :country
   end
 
+  it "is using #normalize_phone as a callback before save" do
+    expect(address).to callback(:normalize_phone).before(:save)
+  end
+
+  context "#custom_label_method" do
+    it "returns string with city, address1 and address2" do
+      expect(address.send(:custom_label_method)).
+        to eq "#{address.city} #{address.address1} #{address.address2}"
+    end
+  end
+  
   context "#normalize_phone" do
-    let(:abnorm_address) { FactoryGirl.create(
-      :address_with_normalized_phone, phone: "380s930d1$23-456") }
-      
-    it "normalizes phone before saving" do
-      expect(abnorm_address.phone).to eq Phony.normalize(abnorm_address.phone)
+    it "normalizes phone" do
+      norm_phone = Phony.normalize(address.phone)
+      expect(Phony).to receive(:normalize!).with(address.phone).
+        and_return(norm_phone)
+      address.send(:normalize_phone)
     end
   end
 

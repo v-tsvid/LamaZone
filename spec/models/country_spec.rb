@@ -1,7 +1,7 @@
 require 'rails_helper'
 
 RSpec.describe Country, type: :model do
-  let(:country) { FactoryGirl.create :country }
+  let(:country) { FactoryGirl.build :country }
   
   [:name, :alpha2].each do |item|
     it "is invalid without #{item}" do
@@ -22,7 +22,7 @@ RSpec.describe Country, type: :model do
     end
 
     it "is valid when alpha2 contains two capitals only" do
-      expect(country).to allow_value("UA").for(:alpha2)
+      expect(country).to allow_value("XX").for(:alpha2)
     end  
   end
 

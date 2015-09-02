@@ -6,4 +6,16 @@ class OrderItem < ActiveRecord::Base
 
   belongs_to :book
   belongs_to :order
+
+  rails_admin do
+    object_label_method do
+      :custom_label_method
+    end
+  end
+
+  private
+
+    def custom_label_method
+      "#{Book.find(self.book_id).title}"
+    end
 end

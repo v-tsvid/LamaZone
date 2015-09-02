@@ -9,7 +9,7 @@ FactoryGirl.define do
 
     factory :book_with_ratings do
       transient do
-        ratings_count 5
+        ratings_count { rand(1..10) }
       end
       after(:create) do |book, evaluator|
         create_list(:rating, evaluator.ratings_count, book: book)
