@@ -36,7 +36,7 @@ end
 def invalid_facebook_sign_in(opts = {})
 
   credentials = { :provider => :facebook,
-                  :invalid  => :invalid_crendentials
+                  :invalid  => :invalid_credentials
                  }.merge(opts)
 
   OmniAuth.config.test_mode = true

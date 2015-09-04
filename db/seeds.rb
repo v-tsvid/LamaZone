@@ -10,7 +10,7 @@ ISO3166::Country.all.map do |item|
   Country.create!(name: item[0], alpha2: item[1])
 end
 
-if Rails.env == 'development' 
+if Rails.env == 'development' || Rails.env == 'production' 
   Admin.create!(email: 'admin@mail.com', password: '12345678',
                 password_confirmation: '12345678')
 
