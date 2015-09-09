@@ -1,0 +1,23 @@
+%p{:id => "notice"}= notice
+
+%p
+  %strong Title:
+  = @book.title
+
+%p
+  %strong Description:
+  = @book.description
+
+%p
+  %strong Price:
+  = @book.price
+
+%p
+  %strong Books in stock:
+  - if @book.books_in_stock > 0
+    = @book.books_in_stock
+  - else
+    Out of stock  
+
+= link_to 'Add review', new_book_rating_path(@book) |
+= link_to 'Back', books_path
