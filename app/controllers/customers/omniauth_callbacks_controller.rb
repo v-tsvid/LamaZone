@@ -14,7 +14,7 @@ class Customers::OmniauthCallbacksController < Devise::OmniauthCallbacksControll
       session["devise.facebook_data"] = request.env["omniauth.auth"] 
       redirect_to root_path
       set_flash_message(:notice, :failure, kind: "Facebook", 
-        reason: "#{@customer.inspect}") if is_navigational_format?
+        reason: "#{@customer.save!.inspect}") if is_navigational_format?
     end
   end
   # You should configure your model like this:
