@@ -1,0 +1,11 @@
+%p#notice= notice
+
+%p
+  %strong Rate:
+  = @rating.rate
+
+%p
+  %strong Review:
+  = @rating.review
+
+= link_to 'Back to book', book_path(@rating.book)

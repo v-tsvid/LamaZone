@@ -96,7 +96,7 @@ RSpec.describe Customer, type: :model do
   end
 
   context "#downcase_email" do
-    it "turn email in downcase" do
+    it "turns email in downcase" do
       expect(customer.email).to receive(:downcase!).
         and_return(customer.email.downcase!)
       customer.send(:downcase_email)
@@ -114,6 +114,13 @@ RSpec.describe Customer, type: :model do
       orders = FactoryGirl.create_list(:order, 3, customer_id: customer.id, 
         state: 'in_progress')
       expect(customer.send(:order_in_progress)).to eq orders.first
+    end
+  end
+
+  context "#full_name" do
+    it "returns string wih lastname joined to firstname" do
+      expect(customer.send(:full_name)).
+        to eq "#{customer.firstname} #{customer.lastname}"
     end
   end
 end

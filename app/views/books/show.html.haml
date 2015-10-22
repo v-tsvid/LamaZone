@@ -5,6 +5,10 @@
   = @book.title
 
 %p
+  %strong Author:
+  = [@book.author.firstname, @book.author.lastname].join(' ')
+
+%p
   %strong Description:
   = @book.description
 
@@ -21,3 +25,16 @@
 
 = link_to 'Add review', new_book_rating_path(@book) |
 = link_to 'Back', books_path
+
+%p
+  %strong Reviews:
+%table
+  %thead
+    %tr
+      %th Rate
+      %th Review
+      %th Customer
+      %th{:colspan => "3"}
+    
+  %tbody
+    = render partial: "books/rating", collection: @book.ratings

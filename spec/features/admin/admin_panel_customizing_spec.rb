@@ -34,7 +34,7 @@ feature "admin panel customizing" do
   #   end
   # end
 
-  context "Database records representing" do
+  context "database records representing" do
     scenario "Address represents with city+address1+address2" do
       order = FactoryGirl.create :order
       first(:link, text: 'Orders').click
@@ -46,7 +46,7 @@ feature "admin panel customizing" do
       " #{order.shipping_address.address2}"
     end
 
-    scenario "Author represents with lastname+firstname" do
+    scenario "author represents with lastname+firstname" do
       book = FactoryGirl.create :book
       first(:link, text: 'Books').click
       find(:css, "a.pjax[href=\"/admin/book/#{book.id}/edit\"]").click
@@ -56,7 +56,7 @@ feature "admin panel customizing" do
       " #{book.author.firstname}"
     end
 
-    scenario "Credit card represents with number" do
+    scenario "credit card represents with number" do
       order = FactoryGirl.create :order
       first(:link, text: 'Orders').click
       find(:css, "a.pjax[href=\"/admin/order/#{order.id}/edit\"]").click
@@ -65,7 +65,7 @@ feature "admin panel customizing" do
       expect(page).to have_content "#{order.credit_card.number}"
     end
 
-    scenario "Customer represents with lastname+firstname" do
+    scenario "customer represents with lastname+firstname" do
       order = FactoryGirl.create :order
       first(:link, text: 'Orders').click
       find(:css, "a.pjax[href=\"/admin/order/#{order.id}/edit\"]").click
@@ -75,7 +75,7 @@ feature "admin panel customizing" do
       " #{order.customer.firstname}"
     end
 
-    scenario "Order represents with id" do
+    scenario "order represents with id" do
       credit_card = FactoryGirl.create :credit_card_with_orders
       first(:link, text: 'Credit cards').click
       find(:css, "a.pjax[href=\"/admin/credit_card/#{credit_card.id}/edit\"]").
@@ -85,7 +85,7 @@ feature "admin panel customizing" do
       expect(page).to have_content "#{credit_card.orders.first.id}"
     end
 
-    scenario "Order Item represents with book_title" do
+    scenario "order item represents with book_title" do
       order = FactoryGirl.create :order_with_order_items
       first(:link, text: 'Orders').click
       find(:css, "a.pjax[href=\"/admin/order/#{order.id}/edit\"]").click
@@ -95,7 +95,7 @@ feature "admin panel customizing" do
         to have_content "#{Book.find(order.order_items.first.book_id).title}"
     end
 
-    scenario "Rating represents with book_id+rating_id" do
+    scenario "rating represents with book_id+rating_id" do
       book = FactoryGirl.create :book_with_ratings
       first(:link, text: 'Books').click
       find(:css, "a.pjax[href=\"/admin/book/#{book.id}/edit\"]").click

@@ -1,6 +1,6 @@
 require 'features/features_spec_helper'
 
-feature "Access to admin panel" do 
+feature "access to admin panel" do 
   given(:admin) { FactoryGirl.create :admin, 
                   email:                 'admin@mail.com', 
                   password:              '12345678',

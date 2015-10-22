@@ -48,6 +48,7 @@ gem 'omniauth-facebook', '2.0.1'
 gem 'aasm', '4.2.0'
 gem 'acts_as_shopping_cart', '0.3.0'
 gem 'simplecov', '0.10.0', :require => false, :group => :test
+gem 'rspec-activemodel-mocks', '1.0.2'
 
 group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console

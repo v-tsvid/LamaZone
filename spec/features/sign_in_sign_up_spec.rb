@@ -44,7 +44,7 @@ shared_examples 'sign in or sign up via Facebook' do
       to have_content 'Successfully authenticated from Facebook account.'
   end
 
-  scenario "failed sign in with invalid credentials" do
+  scenario "failed to sign in with invalid credentials" do
     invalid_facebook_sign_in
     Rails.application.env_config["omniauth.auth"] = 
       OmniAuth.config.mock_auth[:facebook]
@@ -75,7 +75,7 @@ feature "customer signing in" do
     expect(page).to have_content 'Signed in successfully'
   end
 
-  scenario "failed sign in with incorrect email" do
+  scenario "failed to sign in with incorrect email" do
     fill_in 'Email',    with: 'wrong@mail.com'
     fill_in 'Password', with: customer.password
     click_button 'Sign in'    
@@ -83,7 +83,7 @@ feature "customer signing in" do
     expect(page).to have_content 'Invalid email or password'
   end
 
-  scenario "failed sign in with incorrect password" do
+  scenario "failed to sign in with incorrect password" do
     fill_in 'Email',    with: customer.email
     fill_in 'Password', with: 'wrong_password'
     click_button 'Sign in'    
@@ -118,7 +118,7 @@ feature "admin signing in" do
     expect(page).to have_content 'Signed in successfully'
   end
 
-  scenario "failed sign in with incorrect email" do
+  scenario "failed to sign in with incorrect email" do
     fill_in 'Email',    with: 'wrong@mail.com'
     fill_in 'Password', with: admin.password
     click_button 'Sign in'    
@@ -126,7 +126,7 @@ feature "admin signing in" do
     expect(page).to have_content 'Invalid email or password'
   end
 
-  scenario "failed sign in with incorrect password" do
+  scenario "failed to sign in with incorrect password" do
     fill_in 'Email',    with: admin.email
     fill_in 'Password', with: 'wrong_password'
     click_button 'Sign in'    
@@ -154,7 +154,7 @@ feature 'customer signing up' do
     expect(page).to have_content 'Welcome! You have signed up successfully.'
   end
 
-  scenario 'failed sign up with invalid credentials' do
+  scenario 'failed to sign up with invalid credentials' do
     fill_in 'Firstname',             with: ''
     fill_in 'Lastname',              with: ''
     fill_in 'Email',                 with: 'invalid@mail'

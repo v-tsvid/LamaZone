@@ -19,4 +19,11 @@ RSpec.describe Author, type: :model do
         to eq "#{author.lastname} #{author.firstname}"
     end
   end
+
+  context "#full_name" do
+    it "returns string wih lastname joined to firstname" do
+      expect(author.send(:full_name)).
+        to eq "#{author.firstname} #{author.lastname}"
+    end
+  end
 end

@@ -10,6 +10,9 @@ class Author < ActiveRecord::Base
   end
 
   private
+    def full_name
+      "#{self.firstname} #{self.lastname}"
+    end
 
     def custom_label_method
       "#{self.lastname} #{self.firstname}"

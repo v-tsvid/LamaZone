@@ -23,5 +23,5 @@ if Rails.env == 'development' || Rails.env == 'production'
                    password_confirmation: '12345678')
 
   FactoryGirl.create_list :order_with_order_items, 10
-  FactoryGirl.create_list :rating, 10
+  FactoryGirl.create_list :book_with_ratings, 10
 end

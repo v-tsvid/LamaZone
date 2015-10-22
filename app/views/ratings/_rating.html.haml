@@ -1,0 +1,5 @@
+%tr
+  %td= rating.rate
+  %td= rating.review
+  %td= link_to 'Show', rating
+  %td= link_to 'Destroy', rating, method: :delete, data: { confirm: 'Are you sure?' }

@@ -17,11 +17,11 @@ Rails.application.routes.draw do
   resources :order_items
   resources :orders
   # resources :customers
-  resources :ratings
+  # resources :ratings
   resources :authors
   resources :categories
-  resources :books do
-    resources :ratings, shallow: true
+  resources :books, only: [:index, :show] do
+    resources :ratings, except: [:edit, :update], shallow: true
   end
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".

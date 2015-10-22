@@ -1,0 +1,5 @@
+%tr
+  %td= book.title
+  %td= [book.author.firstname, book.author.lastname].join(' ')
+  %td= book.price
+  %td= link_to 'Details', book
