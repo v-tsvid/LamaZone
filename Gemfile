@@ -49,6 +49,7 @@ gem 'aasm', '4.2.0'
 gem 'acts_as_shopping_cart', '0.3.0'
 gem 'simplecov', '0.10.0', :require => false, :group => :test
 gem 'rspec-activemodel-mocks', '1.0.2'
+gem 'rspec-rails', '3.3.2'
 
 group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console
@@ -59,7 +60,7 @@ group :development, :test do
 
   # Spring speeds up development by keeping your application running in the background. Read more: https://github.com/rails/spring
   gem 'spring'
-  # gem 'rspec-rails', '3.3.2'
+  
   gem 'factory_girl_rails', '4.5.0'
   gem 'capybara', '2.4.4'
   gem 'capybara-webkit', '1.6.0'
