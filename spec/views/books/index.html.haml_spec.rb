@@ -10,7 +10,7 @@ RSpec.describe "books/index", type: :view do
   end
 
   [:title, :price].each do |item|
-    it "displays book's #{item}" do
+    it "displays books' #{item.to_s.pluralize}" do
       render
       [0, 1].each do |num|
         expect(rendered).to match(@books[num].send(item).to_s) 
@@ -19,7 +19,7 @@ RSpec.describe "books/index", type: :view do
   end
 
   [:firstname, :lastname].each do |item|
-    it "displays #{item} of book's author" do
+    it "displays #{item} of books' authors" do
       render
       [0, 1].each do |num|
         expect(rendered).to match(@books[num].author.send(item).to_s) 

@@ -1,7 +1,7 @@
 %h1 Editing Rating
 
-= render 'form'
+= form_for @rating do |f|
+  = render 'form', f: f
 
-= link_to 'Show', @rating 
-| 
-\#{link_to 'Back', ratings_path}
+ 
+= link_to 'Your ratings', customer_ratings_path(current_customer)

@@ -3,10 +3,9 @@ class Rating < ActiveRecord::Base
 
   STATE_LIST = ['pending', 'rejected', 'approved']
 
-  validates :state, presence: true
+  validates :state, presence: true, inclusion: { in: STATE_LIST }
   validates :rate, numericality: { allow_blank: true, only_integer: true, 
     greater_than_or_equal_to: 1, less_than_or_equal_to: 10 }
-  validates :state, inclusion: { in: STATE_LIST }
     
   belongs_to :customer
   belongs_to :book

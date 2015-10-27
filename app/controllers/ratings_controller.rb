@@ -1,11 +1,22 @@
 class RatingsController < ApplicationController
+  NOTICE_UPDATE_SUCCESS = 'Rating was successfully updated. '\
+                          'It will be available soon'
+  NOTICE_CREATE_SUCCESS = 'Rating was successfully created. '\
+                          'It will be available soon'
+
+
   before_action :set_rating, only: [:show, :destroy]
-  before_action :authenticate_customer!
+  before_action :authenticate_customer!, except: [:index, :show]
 
   # GET /ratings
   # GET /ratings.json
   def index
-    @ratings = Rating.where(state: 'approved')
+    if params[:book_id]
+      @ratings = Rating.where(state: 'approved', book_id: params[:book_id]) 
+    elsif params[:customer_id]
+      @ratings = Rating.where(
+        state: 'approved', customer_id: params[:customer_id]) 
+    end
   end
 
   # GET /ratings/1
@@ -20,9 +31,10 @@ class RatingsController < ApplicationController
   end
 
   # GET /ratings/1/edit
-  # def edit
-  #   @book = Book.find(@rating.book_id)
-  # end
+  def edit
+    @rating = Rating.find(params[:id])
+    @book = Book.find(@rating.book_id)
+  end
 
   # POST /ratings
   # POST /ratings.json
@@ -33,7 +45,7 @@ class RatingsController < ApplicationController
 
     respond_to do |format|
       if @rating.save
-        format.html { redirect_to @rating, notice: 'Rating was successfully created. It will be available soon' }
+        format.html { redirect_to @rating, notice: NOTICE_CREATE_SUCCESS }
         format.json { render :show, status: :created, location: @rating }
       else
         format.html { render :new }
@@ -44,17 +56,20 @@ class RatingsController < ApplicationController
 
   # PATCH/PUT /ratings/1
   # PATCH/PUT /ratings/1.json
-  # def update
-  #   respond_to do |format|
-  #     if @rating.update(rating_params)
-  #       format.html { redirect_to @rating, notice: 'Rating was successfully updated.' }
-  #       format.json { render :show, status: :ok, location: @rating }
-  #     else
-  #       format.html { render :edit }
-  #       format.json { render json: @rating.errors, status: :unprocessable_entity }
-  #     end
-  #   end
-  # end
+  def update
+    @rating = Rating.find(params[:id])
+    @rating.state = 'pending'
+    respond_to do |format|
+      if @rating.update(rating_params)
+
+        format.html { redirect_to @rating, notice: NOTICE_UPDATE_SUCCESS }
+        format.json { render :show, status: :ok, location: @rating }
+      else
+        format.html { render :edit }
+        format.json { render json: @rating.errors, status: :unprocessable_entity }
+      end
+    end
+  end
 
   # DELETE /ratings/1
   # DELETE /ratings/1.json
@@ -76,4 +91,8 @@ class RatingsController < ApplicationController
     def rating_params
       params.require(:rating).permit(:id, :rate, :review, :book_id)
     end
+
+    # def new_rating_params
+    #   params.require(:book_id)
+    # end
 end

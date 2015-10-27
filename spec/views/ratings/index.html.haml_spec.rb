@@ -1,22 +1,20 @@
 require 'rails_helper'
 
 RSpec.describe "ratings/index", type: :view do
-  before(:each) do
-    assign(:ratings, [
-      Rating.create!(
-        :rate => 1,
-        :review => "MyText"
-      ),
-      Rating.create!(
-        :rate => 1,
-        :review => "MyText"
-      )
-    ])
+  before do
+    @ratings = FactoryGirl.create_list :rating, 2
+    render
   end
 
-  it "renders a list of ratings" do
-    render
-    assert_select "tr>td", :text => 1.to_s, :count => 2
-    assert_select "tr>td", :text => "MyText".to_s, :count => 2
+  it "renders _rating partial" do
+    expect(view).to render_template(partial: '_rating', count: 2)
+  end
+
+  [:rate, :review].each do |item|
+    it "displays ratings' #{item.to_s.pluralize}" do
+      [0, 1].each do |num|
+        expect(rendered).to match(@ratings[num].send(item).to_s)
+      end
+    end
   end
 end
