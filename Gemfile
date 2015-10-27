@@ -50,7 +50,8 @@ gem 'acts_as_shopping_cart', '0.3.0'
 gem 'simplecov', '0.10.0', :require => false, :group => :test
 gem 'rspec-activemodel-mocks', '1.0.2'
 gem 'rspec-rails', '3.3.2'
-
+gem 'faker', '1.4.3'
+  
 group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console
   gem 'byebug'
@@ -66,7 +67,6 @@ group :development, :test do
 end
 
 group :test do
-  gem 'faker', '1.4.3'
   gem 'database_cleaner', '1.4.1'
   gem 'shoulda-matchers', '2.8.0'
   gem 'shoulda-callback-matchers', '1.1.3'
