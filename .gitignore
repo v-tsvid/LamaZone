@@ -12,7 +12,6 @@
 !/log/.keep
 /tmp
 /coverage
-/config/database.yml
 /config/secrets.yml
 /config/local_env.yml
 coverage
