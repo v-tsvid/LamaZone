@@ -1,4 +1,4 @@
-== README
+== README 
 
 [![Build Status](https://travis-ci.org/v-tsvid/LamaZone.svg?branch=master)](https://travis-ci.org/v-tsvid/LamaZone)
 [![Test Coverage](https://codeclimate.com/repos/56309f7fe30ba0310900a6ab/badges/11546985ca4dfe9246c5/coverage.svg)](https://codeclimate.com/repos/56309f7fe30ba0310900a6ab/coverage)
