@@ -336,7 +336,7 @@ DEPENDENCIES
   capybara (= 2.4.4)
   capybara-webkit (= 1.6.0)
   carrierwave (= 0.10.0)!
-  codeclimate-test-reporter
+  codeclimate-test-reporter (= 0.4.8)
   coffee-rails (= 4.1.0)
   countries (= 0.11.5)
   credit_card_validator (= 1.2.0)
