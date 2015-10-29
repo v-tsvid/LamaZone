@@ -6,5 +6,6 @@ addons:
     repo_token: 950276bcfd4accb333ee0fb8f14da60532783dc9b250e851f90321c6d8260569 bundle exec rake
 before_script:
   - psql -c 'create database travis_ci_test;' -U postgres
+  - bundle exec rake db:seed RAILS_ENV=test
 # uncomment this line if your project needs to run something other than `rake`:
 # script: bundle exec rspec spec
