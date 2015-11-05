@@ -32,6 +32,7 @@ gem 'bcrypt', '3.1.10'
 # Use Capistrano for deployment
 # gem 'capistrano-rails', group: :development
 
+gem 'cancancan', '1.13.1'
 gem 'countries', '0.11.5', :require => 'iso3166'
 gem 'phony_rails', '0.12.9'
 gem 'validates_zipcode', '0.0.6'
