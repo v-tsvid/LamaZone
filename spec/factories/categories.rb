@@ -11,6 +11,15 @@ FactoryGirl.define do
         create_list(:book, rand(3..10), categories: [category])
       end
     end
+
+    factory :category_with_books_with_ratings do
+      transient do
+        ary { array_of_categories }
+      end
+      after(:create) do |cat, ev|
+        create_list(:book_with_ratings, rand(3..10), categories: ev.ary.push(cat))
+      end
+    end
   end
 
 end
