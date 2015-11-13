@@ -11,7 +11,7 @@ RSpec.describe Category, type: :model do
     expect(category).to validate_uniqueness_of :title
   end
 
-  it "has many books" do
-    expect(category).to have_many :books
+  it "has and belongs to many books" do
+    expect(category).to have_and_belong_to_many :books
   end
 end

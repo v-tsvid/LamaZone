@@ -4,11 +4,11 @@ FactoryGirl.define do
     title
 
     factory :category_with_books do
-      transient do
-        books_count 5
-      end
-      after(:create) do |category, evaluator|
-        create_list(:book, evaluator.books_count, category: category)
+      # transient do
+      #   books_count 5
+      # end
+      after(:create) do |category|
+        create_list(:book, rand(3..10), categories: [category])
       end
     end
   end

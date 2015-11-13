@@ -5,7 +5,7 @@ class Book < ActiveRecord::Base
     { only_integer: true, greater_than_or_equal_to: 0 }
 
   belongs_to :author
-  belongs_to :category
+  has_and_belongs_to_many :categories
   has_many :ratings
 
   mount_uploader :images, BookImageUploader

@@ -20,13 +20,16 @@ RSpec.describe Book, type: :model do
       is_greater_than_or_equal_to(0).only_integer
   end
 
-  [:author, :category].each do |item|
-    it "belongs to #{item}" do
-      expect(book).to belong_to item
-    end
+  
+  it "belongs to author" do
+    expect(book).to belong_to :author
   end
 
   it "has many ratings" do
     expect(book).to have_many :ratings
+  end
+
+  it "has and belongs to many categories" do
+    expect(book).to have_and_belong_to_many :categories
   end
 end

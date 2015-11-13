@@ -5,7 +5,6 @@ FactoryGirl.define do
     price { rand(10.0..100.0).round(2) }
     books_in_stock { rand(1..100) }
     author
-    category
 
     factory :book_with_ratings do
       transient do
