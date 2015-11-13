@@ -1,21 +1,26 @@
 class RatingsController < ApplicationController
-  NOTICE_UPDATE_SUCCESS = 'Rating was successfully updated. '\
-                          'It will be available soon'
+
   NOTICE_CREATE_SUCCESS = 'Rating was successfully created. '\
                           'It will be available soon'
+  NOTICE_UPDATE_SUCCESS = 'Rating was successfully updated. '\
+                          'It will be available soon'
+  NOTICE_DESTROY_SUCCESS = 'Rating was successfully destroyed.'
 
-
-  before_action :set_rating, only: [:show, :destroy]
   before_action :authenticate_customer!, except: [:index, :show]
+  # before_action :authenticate_customer_if_exists, only: [:index]
+  before_action :set_rating, only: [:show, :edit, :update, :destroy]
+  
+  load_and_authorize_resource
+  skip_load_resource only: [:index, :new]
 
   # GET /ratings
   # GET /ratings.json
   def index
     if params[:book_id]
       @ratings = Rating.where(state: 'approved', book_id: params[:book_id]) 
-    elsif params[:customer_id]
-      @ratings = Rating.where(
-        state: 'approved', customer_id: params[:customer_id]) 
+    # elsif params[:customer_id] 
+    #   @ratings = Rating.where(
+    #     state: 'approved', customer_id: params[:customer_id]) 
     end
   end
 
@@ -32,7 +37,6 @@ class RatingsController < ApplicationController
 
   # GET /ratings/1/edit
   def edit
-    @rating = Rating.find(params[:id])
     @book = Book.find(@rating.book_id)
   end
 
@@ -57,7 +61,7 @@ class RatingsController < ApplicationController
   # PATCH/PUT /ratings/1
   # PATCH/PUT /ratings/1.json
   def update
-    @rating = Rating.find(params[:id])
+    # @rating = Rating.find(params[:id])
     @rating.state = 'pending'
     respond_to do |format|
       if @rating.update(rating_params)
@@ -66,7 +70,8 @@ class RatingsController < ApplicationController
         format.json { render :show, status: :ok, location: @rating }
       else
         format.html { render :edit }
-        format.json { render json: @rating.errors, status: :unprocessable_entity }
+        format.json { 
+          render json: @rating.errors, status: :unprocessable_entity }
       end
     end
   end
@@ -76,7 +81,8 @@ class RatingsController < ApplicationController
   def destroy
     @rating.destroy
     respond_to do |format|
-      format.html { redirect_to book_url(@rating.book), notice: 'Rating was successfully destroyed.' }
+      format.html { 
+        redirect_to book_url(@rating.book), notice: NOTICE_DESTROY_SUCCESS }
       format.json { head :no_content }
     end
   end
@@ -92,7 +98,7 @@ class RatingsController < ApplicationController
       params.require(:rating).permit(:id, :rate, :review, :book_id)
     end
 
-    # def new_rating_params
-    #   params.require(:book_id)
+    # def authenticate_customer_if_exists
+    #   authenticate_customer! if params[:customer_id]
     # end
 end

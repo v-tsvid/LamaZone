@@ -1,7 +1,10 @@
 %tr
-  %td
-    = rating.rate
-  %td
-    = truncate(rating.review.to_s, length: 100, separator: ' ', omission: ''){ link_to "...", rating_path(rating) }
-  %td
-    = Customer.find(rating.customer_id).send(:full_name)
+  - if rating.state == 'approved'
+    %td
+      = rating.rate
+    %td
+      = truncate(rating.review.to_s, length: 100, separator: ' ', omission: '')
+    %td
+      = Customer.find(rating.customer_id).send(:full_name)
+    %td
+      = link_to "...", rating_path(rating)

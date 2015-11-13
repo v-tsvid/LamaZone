@@ -39,6 +39,8 @@ RSpec.describe BooksController, type: :controller do
   # let(:book_params) { FactoryGirl.attributes_for(:book).stringify_keys }
   let(:book) { FactoryGirl.create :book }
   let(:customer) { FactoryGirl.create(:customer) }
+  let(:book_params) { 
+    FactoryGirl.attributes_for(:book, id: book.id).stringify_keys }
 
   before do
     @request.env["devise.mapping"] = Devise.mappings[:customer]
@@ -46,11 +48,6 @@ RSpec.describe BooksController, type: :controller do
   end
 
   describe "GET #index" do
-    it "receives all on Book and returns all books" do
-      expect(Book).to receive(:all).and_return [book]
-      get :index
-    end
-
     it "assigns all books as @books" do
       get :index
       expect(assigns(:books)).to eq [book]
@@ -64,6 +61,15 @@ RSpec.describe BooksController, type: :controller do
     end
 
     it "receives set_book" do
+      expect(controller).to receive(:set_book)
+      get :show, {:id => book.to_param}
+    end
+  end
+
+  describe ".set_book" do
+    it "receives find on Book and returns book with requested id" do
+      expect(Book).to receive(:find).with(book_params[:id])
+      controller.send(:set_book)
     end
   end
 end

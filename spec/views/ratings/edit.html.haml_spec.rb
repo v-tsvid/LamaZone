@@ -2,12 +2,13 @@ require 'rails_helper'
 
 RSpec.describe "ratings/edit", type: :view do
   before(:each) do
-    @customer = FactoryGirl.create :customer
-    @book = FactoryGirl.create :book
-    @rating = FactoryGirl.create :rating, 
-              book_id: @book.id, 
-              customer_id: @customer.id
-    sign_in @customer
+    @customer = stub_model(Customer)
+    @author = FactoryGirl.create :author
+    @book = stub_model(Book, author_id: @author.id)
+    assign(:rating, stub_model(Rating, 
+                    book_id: @book.id, 
+                    customer_id: @customer.id))
+    allow(controller).to receive(:current_customer).and_return(@customer)
     render
   end
   
@@ -16,9 +17,9 @@ RSpec.describe "ratings/edit", type: :view do
       expect(view).to render_template(partial: '_form')
     end
 
-    it "displays link to all customer's ratings" do
+    it "displays link to books" do
       expect(rendered).to have_selector(
-        "a[href=\"#{customer_ratings_path(@customer)}\"]", text: 'Your ratings')
+        "a[href=\"/books\"]", text: 'Back to books')
     end  
   end
 end

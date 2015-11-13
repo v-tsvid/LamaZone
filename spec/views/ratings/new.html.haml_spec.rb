@@ -2,8 +2,10 @@ require 'rails_helper'
 
 RSpec.describe "ratings/new", type: :view do
   before(:each) do
-    @book = FactoryGirl.create :book
-    @rating = FactoryGirl.build :rating, book_id: @book.id
+    @author = FactoryGirl.create :author
+    @book = stub_model(Book, author_id: @author.id)
+    assign(:rating, stub_model(Rating, 
+                    book_id: @book.id)).as_new_record
     render
   end
 

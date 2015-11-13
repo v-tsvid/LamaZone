@@ -4,9 +4,15 @@ class ApplicationController < ActionController::Base
   protect_from_forgery with: :exception
   before_action :configure_permitted_parameters, if: :devise_controller?
 
+  alias_method :current_user, :current_customer
+
   protected
 
   def configure_permitted_parameters
     devise_parameter_sanitizer.for(:sign_up) << :firstname << :lastname
   end
+
+  # def current_ability
+  #   @current_ability ||= Ability.new(current_customer)
+  # end
 end

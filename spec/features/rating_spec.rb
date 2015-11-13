@@ -47,9 +47,10 @@ feature 'rating addition' do
 
     scenario 'delete own rating' do
       rating = FactoryGirl.create :rating, 
-               customer_id: @customer.id, 
+               customer_id: @customer.id,
+               book_id: @book_id, 
                state: 'approved'
-      visit customer_ratings_path(@customer)
+      visit book_ratings_path(@book)
       first(:link, 'Destroy').click
       expect(page).to have_content "Rating was successfully destroyed."
     end

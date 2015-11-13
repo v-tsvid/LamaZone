@@ -16,13 +16,22 @@ RSpec.describe "books/show", type: :view do
     expect(rendered).to match @book.author.send(:full_name)
   end
   
-  it "displays book ratings" do
+  it "displays approved book ratings only" do
     render
     @book.ratings.each do |rating|
-      expect(rendered).to match rating.rate.to_s
-      expect(rendered).to match(
-        truncate(rating.review.to_s, length: 100, separator: ' ', omission: ''))
-      expect(rendered).to match Customer.find(rating.customer_id).send(:full_name)
+      if rating.state == 'approved'
+        expect(rendered).to match rating.rate.to_s
+        expect(rendered).to match(
+          truncate(
+            rating.review.to_s, length: 100, separator: ' ', omission: ''))
+        expect(rendered).to match(
+          Customer.find(rating.customer_id).send(:full_name))
+      else
+        rating.review = 'review for unapproved rating'
+        expect(rendered).not_to match(
+          truncate(
+            rating.review.to_s, length: 100, separator: ' ', omission: ''))
+      end
     end
   end
 

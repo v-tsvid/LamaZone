@@ -6,9 +6,7 @@ Rails.application.routes.draw do
   devise_for :customers, controllers: { omniauth_callbacks: "customers/omniauth_callbacks", 
     sessions: "customers/sessions" } 
   
-  resources :customers do
-    resources :ratings, only: [:index], shallow: true
-  end
+  resources :customers, except: [:index, :destroy]
   
   devise_for :admins, controllers: { sessions: "admins/sessions" }
   mount RailsAdmin::Engine => '/admin', as: 'rails_admin'

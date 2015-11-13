@@ -5,8 +5,8 @@ RSpec.describe RatingsController, type: :routing do
 
     it "routes to #index" do
       expect(get: "books/1/ratings").to route_to("ratings#index", book_id: "1")
-      expect(get: "customers/1/ratings").
-        to route_to("ratings#index", customer_id: "1")
+      # expect(get: "customers/1/ratings").
+      #   to route_to("ratings#index", customer_id: "1")
     end
 
     it "routes to #new" do

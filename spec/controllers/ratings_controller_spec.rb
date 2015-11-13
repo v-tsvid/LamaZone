@@ -22,13 +22,13 @@ RSpec.describe RatingsController, type: :controller do
   end
 
   shared_examples "customer authentication" do
-    it "calls customer_authenticate! method" do
+    it "receives customer_authenticate!" do
       expect(controller).to receive(:authenticate_customer!)
     end
   end
 
   shared_examples "rating setting" do
-    it "calls set_rating method" do
+    it "receives set_rating" do
       expect(controller).to receive(:set_rating)
     end
   end
@@ -42,13 +42,13 @@ RSpec.describe RatingsController, type: :controller do
       expect(assigns(:ratings)).to match_array([rating])
     end
 
-    it "assigns as @ratings all approved ratings of current customer "\
-       "when book wasn't requested" do
-      rating
-      wrong_rating
-      get :index, { customer_id: customer.id }
-      expect(assigns(:ratings)).to match_array([rating])
-    end
+    # it "assigns as @ratings all approved ratings of current customer "\
+    #    "when book wasn't requested" do
+    #   rating
+    #   wrong_rating
+    #   get :index, { customer_id: customer.id }
+    #   expect(assigns(:ratings)).to match_array([rating])
+    # end
     
     after { get :index, { book_id: book.id } }
 
@@ -58,6 +58,10 @@ RSpec.describe RatingsController, type: :controller do
         to receive(:where).with(state: 'approved', book_id: book.to_param).
           and_return [rating]
     end
+
+    # it "receives authenticate_customer_if_exists method" do
+    #   expect(controller).to receive(:authenticate_customer_if_exists)
+    # end
   end
 
   describe "GET #show" do
@@ -109,6 +113,7 @@ RSpec.describe RatingsController, type: :controller do
 
       after { get :edit, { id: rating.id.to_param } }
       
+      it_behaves_like "rating setting"
       it_behaves_like "customer authentication"
       
       it "receives find on Rating with requested id" do
@@ -132,6 +137,11 @@ RSpec.describe RatingsController, type: :controller do
   end
 
   describe "POST #create" do
+
+    it "permits white list parameters" do
+      is_expected.to permit(:id, :rate, :review, :book_id).
+        for(:create, params: rating_params)
+    end
 
     context "messages receiving" do
 
@@ -193,10 +203,16 @@ RSpec.describe RatingsController, type: :controller do
     let(:new_rating_params) { 
       FactoryGirl.attributes_for(:rating, book_id: book.id).stringify_keys }
 
+    it "permits white list parameters" do
+      is_expected.to permit(:id, :rate, :review, :book_id).
+        for(:update, params: rating.attributes)
+    end
+
     context "messages receiving" do
     
       after { put :update, { id: rating.to_param, rating: new_rating_params } }
 
+      it_behaves_like "rating setting"
       it_behaves_like "customer authentication"
     end 
 
@@ -246,8 +262,8 @@ RSpec.describe RatingsController, type: :controller do
 
       after { delete :destroy, {:id => rating.to_param} }
 
-      it_behaves_like "customer authentication"
       # it_behaves_like "rating setting"
+      it_behaves_like "customer authentication"
     end
 
     it "destroys the requested rating" do
@@ -262,11 +278,17 @@ RSpec.describe RatingsController, type: :controller do
     end
   end
 
-  # describe ".set_rating" do
-  #   it "receives find on Rating and returns rating with requested id" do
-  #     expect(Rating).to receive(:find).with(rating_params.id)
-  #     controller.send(:set_rating)
+  describe ".set_rating" do
+    it "receives find on Rating and returns rating with requested id" do
+      expect(Rating).to receive(:find).with(rating_params[:id])
+      controller.send(:set_rating)
+    end
+  end
+
+  # describe ".authenticate_customer_if_exists" do
+  #   it "receives authenticate_customer! if params[:customer_id] exists" do
+  #     expect(controller).to receive(:authenticate_customer!)
+  #     get :index, { customer_id: customer.id }
   #   end
   # end
-
 end

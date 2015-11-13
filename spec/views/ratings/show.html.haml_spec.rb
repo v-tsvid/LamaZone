@@ -2,23 +2,24 @@ require 'rails_helper'
 
 RSpec.describe "ratings/show", type: :view do
   before(:each) do
-    @customer = FactoryGirl.create :customer
-    @book = FactoryGirl.create :book
-    @rating = FactoryGirl.create :rating, 
-              book_id: @book.id, 
-              customer_id: @customer.id
+    @customer = stub_model(Customer)
+    @author = FactoryGirl.create :author
+    @book = stub_model(Book, author_id: @author.id)
+    assign(:rating, stub_model(Rating, 
+                    book_id: @book.id, 
+                    customer_id: @customer.id))
   end
 
   context "for authorized customers" do
     before do
-      sign_in @customer
+      allow(controller).to receive(:current_user)
       render
     end
 
-    it "displays link to all customer's ratings" do
+    it "displays link to books" do
       expect(rendered).to have_selector(
-        "a[href=\"#{customer_ratings_path(@customer)}\"]", text: 'Your ratings')
-    end    
+        "a[href=\"/books\"]", text: 'Back to books')
+    end     
   end
 
   context "for unauthorized customers" do
