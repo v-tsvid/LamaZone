@@ -5,6 +5,12 @@ class BooksController < ApplicationController
   # GET /books
   # GET /books.json
   def index
+    if params[:category]
+      @books = Book.books_of_category(params[:category]) 
+      @category_id = params[:category]
+    else
+      @category_id = '-1'
+    end
   end
 
   # GET /books/1
@@ -15,6 +21,12 @@ class BooksController < ApplicationController
 
   # DELETE /books/1
   # DELETE /books/1.json
+
+  # def bestsellers
+  #   @categories = Category.all
+  #   @books = Book.books_of_category(1)
+  #   render :index
+  # end
 
   private
     # Use callbacks to share common setup or constraints between actions.

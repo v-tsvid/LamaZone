@@ -4,10 +4,18 @@ class Book < ActiveRecord::Base
   validates :books_in_stock, numericality: 
     { only_integer: true, greater_than_or_equal_to: 0 }
 
+  # scope :bestsellers, -> { Category.find_by_title('bestsellers').books }
+
   belongs_to :author
   has_and_belongs_to_many :categories
   has_many :ratings
 
   mount_uploader :images, BookImageUploader
   # attr_accessible :asset, :asset_cache, :remove_asset
+
+  private
+
+    def self.books_of_category(id)
+      Category.find(id).books || nil
+    end
 end

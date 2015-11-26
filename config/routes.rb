@@ -1,7 +1,12 @@
 Rails.application.routes.draw do
   resources :shopping_cart_items
   resources :shopping_carts
-  root 'books#index'
+  
+  if Category.count > 0
+    root :to => redirect('/books?category=1') 
+  else
+    root :to => 'books#index'
+  end
   
   devise_for :customers, controllers: { omniauth_callbacks: "customers/omniauth_callbacks", 
     sessions: "customers/sessions" } 
@@ -20,6 +25,9 @@ Rails.application.routes.draw do
   
   resources :books, only: [:index, :show] do
     resources :ratings, shallow: true
+    # collection do
+    #   get 'books/bestsellers'
+    # end
   end
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".

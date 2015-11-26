@@ -1,6 +1,11 @@
 require 'features/features_spec_helper'
 
+shared_context "bestseller book creation" do
+  background { FactoryGirl.create :bestseller_book }
+end
+
 shared_examples 'sign in or sign up via Facebook' do
+
   background do
     correct_customer = Customer.find_by(email: 'vad_1989@mail.ru')
     correct_customer.destroy if correct_customer
@@ -56,6 +61,8 @@ shared_examples 'sign in or sign up via Facebook' do
 end
 
 feature "customer signing in" do
+  include_context 'bestseller book creation'
+
   given(:customer) { FactoryGirl.create :customer, 
                      email:                 'customer@mail.com', 
                      password:              '12345678',
@@ -99,6 +106,8 @@ feature "customer signing in" do
 end
 
 feature "admin signing in" do
+  include_context 'bestseller book creation'
+  
   given(:admin) { FactoryGirl.create :admin, 
                   email:                 'admin@mail.com', 
                   password:              '12345678',
@@ -136,6 +145,7 @@ feature "admin signing in" do
 end
 
 feature 'customer signing up' do
+  include_context 'bestseller book creation'
 
   background do
     page.driver.delete destroy_admin_session_path

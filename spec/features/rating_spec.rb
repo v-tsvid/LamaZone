@@ -2,7 +2,7 @@ require 'features/features_spec_helper'
 
 feature 'rating addition' do 
   background do
-    @book = FactoryGirl.create :book            
+    @book = FactoryGirl.create :bestseller_book
     page.driver.delete destroy_admin_session_path
     page.driver.delete destroy_customer_session_path
   end

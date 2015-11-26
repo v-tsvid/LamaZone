@@ -3,7 +3,7 @@ require 'rails_helper'
 RSpec.describe "books/index", type: :view do
 
   before { @books = FactoryGirl.create_list :book, 2 }
-  
+
   it "renders _books partial" do
     render
     expect(view).to render_template(partial: '_book', count: 2)
@@ -24,6 +24,14 @@ RSpec.describe "books/index", type: :view do
       [0, 1].each do |num|
         expect(rendered).to match(@books[num].author.send(item).to_s) 
       end
+    end
+  end
+
+  it "renders category selection form" do
+    render
+    
+    assert_select "form[action=?][method=?]", "/books", "get" do
+      assert_select "select#category"
     end
   end
 end

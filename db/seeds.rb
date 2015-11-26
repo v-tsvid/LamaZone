@@ -24,5 +24,6 @@ if Rails.env == 'development' || Rails.env == 'production'
 
   FactoryGirl.create_list :order_with_order_items, 10
   # FactoryGirl.create_list :book_with_ratings, 10
+  FactoryGirl.create :category_with_books_with_ratings, title: 'bestsellers'
   FactoryGirl.create_list :category_with_books_with_ratings, 5
 end

@@ -1,5 +1,11 @@
 %p{:id => "notice"}= notice
 
+%aside
+  = form_tag("/books", method: "get") do
+    = label_tag(:q, "Filter by:")
+    = select_tag(:category, options_for_select(Category.all.unshift(Category.new(id: '-1', title: 'none')).map {|category| [category.title, category.id]}, @category_id))
+    = submit_tag("Filter")
+
 %h1 Listing books
 
 %table

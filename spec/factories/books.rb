@@ -14,5 +14,26 @@ FactoryGirl.define do
         create_list(:rating, evaluator.ratings_count, book: book)
       end
     end
+
+    factory :book_with_categories do
+      transient do
+        ary { array_of(Book) }
+      end
+      after(:create) do |book, ev|
+        create_list(:category, rand(1..3), books: ev.ary.push(book).uniq)
+      end
+    end
+    
+    factory :book_of_category do
+      after(:create) do |book, ev|
+        create(:category, books: [book])
+      end
+    end
+
+    factory :bestseller_book do
+      after(:create) do |book, ev|
+        create(:category, books: [book], title: "bestsellers")
+      end
+    end
   end
 end
