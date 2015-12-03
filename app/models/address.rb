@@ -1,6 +1,6 @@
 class Address < ActiveRecord::Base
 
-  validates :phone, :address1, presence: true
+  validates :contact_name, :phone, :address1, presence: true
   validates :city, :zipcode, presence: true
   
   # provided by phony_rails gem
@@ -30,7 +30,7 @@ class Address < ActiveRecord::Base
 
     def normalize_phone
       # provided by phony gem
-      # delete all characters expecting digits
+      # delete all characters excepting digits
       Phony.normalize!(self.phone)
     end
 

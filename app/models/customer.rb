@@ -17,6 +17,7 @@ class Customer < ActiveRecord::Base
 
   has_many :orders
   has_many :ratings
+  has_many :addresses
 
   before_save :downcase_email
 

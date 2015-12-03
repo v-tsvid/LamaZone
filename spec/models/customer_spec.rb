@@ -35,7 +35,7 @@ RSpec.describe Customer, type: :model do
     expect(customer).not_to be_valid
   end
 
-  [:orders, :ratings].each do |item|
+  [:orders, :ratings, :addresses].each do |item|
     it "has many #{item}" do
       expect(customer).to have_many item
     end

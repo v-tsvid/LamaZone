@@ -1,11 +1,13 @@
 FactoryGirl.define do
   factory :address do
     sequence(:phone, 9000000) { |n| "38093#{n}"}
+    contact_name { Faker::Name.name }
     address1 { Faker::Address.street_address }
     address2 { Faker::Address.secondary_address }
     city { Faker::Address.city }
     zipcode { Faker::Address.zip_code }
     country_id { rand(1..250) }
+    customer
 
     # after(:build) { |address| address.class.skip_callback(:save, :before, :normalize_phone) }
 
