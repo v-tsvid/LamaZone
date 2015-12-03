@@ -7,7 +7,7 @@ FactoryGirl.define do
     city { Faker::Address.city }
     zipcode { Faker::Address.zip_code }
     country_id { rand(1..250) }
-    customer
+    # customer
 
     # after(:build) { |address| address.class.skip_callback(:save, :before, :normalize_phone) }
 
