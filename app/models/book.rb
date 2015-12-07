@@ -7,7 +7,7 @@ class Book < ActiveRecord::Base
   # scope :bestsellers, -> { Category.find_by_title('bestsellers').books }
 
   belongs_to :author
-  has_and_belongs_to_many :categories
+  has_and_belongs_to_many :categories #, join_table: :books_categories
   has_many :ratings
 
   mount_uploader :images, BookImageUploader

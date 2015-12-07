@@ -3,19 +3,13 @@ rvm:
  - "2.2.2"
 addons:
   code_climate:
-    repo_token: 950276bcfd4accb333ee0fb8f14da60532783dc9b250e851f90321c6d8260569 rake
+    repo_token: 950276bcfd4accb333ee0fb8f14da60532783dc9b250e851f90321c6d8260569 bundle exec rake
 before_script:
   - psql -c 'create database travis_ci_test;' -U postgres
   - cp config/database.yml.travis config/database.yml
 script:
-  - rake db:test:prepare
-  - rake db:migrate
-  - rake db:migrate RAILS_ENV=test
-  - rake db:reset
-  - rake db:reset RAILS_ENV=test
-  # - rake db:test:load
-  - rspec spec/ -f d
-
-
+  - bundle exec rake db:schema:load
+  - bundle exec rake db:test:prepare
+  - bundle exec rspec spec/ -f d
 # uncomment this line if your project needs to run something other than `rake`:
-# script: rspec spec
+# script: bundle exec rspec spec
