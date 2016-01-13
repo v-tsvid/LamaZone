@@ -27,7 +27,7 @@ feature "visiting main" do
   # end
 
   # scenario "as customer signed in" do
-  #   sign_in customer
+  #   sign_in_via_capybara customer
 
   #   expect(page).not_to have_content 'Sign Up'
   #   expect(page).not_to have_content 'Sign In'
@@ -38,7 +38,7 @@ feature "visiting main" do
   # end
 
   # scenario "as admin signed in" do
-  #   sign_in admin
+  #   sign_in_via_capybara admin
 
   #   expect(page).not_to have_content 'Sign Up'
   #   expect(page).not_to have_content 'Sign In'

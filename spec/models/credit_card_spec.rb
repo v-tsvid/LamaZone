@@ -57,7 +57,11 @@ RSpec.describe CreditCard, type: :model do
     end
   end
 
-  it "is invalid when exp_year is now and expiration_month was in the past" do
+  it "is invalid when expiration_year is now and expiration_month was in the past" do
+    if Date.today.strftime("%m") == "01"
+      allow(Date).to receive(:today).and_return(Date.today.next_month) 
+    end
+    
     credit_card.expiration_month = Date.today.prev_month.strftime("%m")
     credit_card.expiration_year = Date.today.strftime("%Y")
     expect{ credit_card.valid? }.

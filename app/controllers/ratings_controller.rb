@@ -10,17 +10,18 @@ class RatingsController < ApplicationController
   # before_action :authenticate_customer_if_exists, only: [:index]
   before_action :set_rating, only: [:show, :edit, :update, :destroy]
   
-  load_and_authorize_resource
   skip_load_resource only: [:index, :new]
+  load_and_authorize_resource
+  
 
   # GET /ratings
   # GET /ratings.json
   def index
     if params[:book_id]
       @ratings = Rating.where(state: 'approved', book_id: params[:book_id]) 
-    # elsif params[:customer_id] 
-    #   @ratings = Rating.where(
-    #     state: 'approved', customer_id: params[:customer_id]) 
+    elsif params[:customer_id] 
+      @ratings = Rating.where(
+        state: 'approved', customer_id: params[:customer_id]) 
     end
   end
 
@@ -32,7 +33,7 @@ class RatingsController < ApplicationController
   # GET /ratings/new
   def new
     @book = Book.find(params[:book_id])
-    @rating = Rating.new(book: @book)
+    @rating = Rating.new(book: @book, customer: current_customer)
   end
 
   # GET /ratings/1/edit

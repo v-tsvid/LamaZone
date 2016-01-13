@@ -11,13 +11,17 @@ Rails.application.routes.draw do
   devise_for :customers, controllers: { omniauth_callbacks: "customers/omniauth_callbacks", 
     sessions: "customers/sessions" } 
   
-  resources :customers, except: [:index, :destroy]
+  resources :customers, except: [:index, :destroy] do
+    resources :addresses, shallow: true 
+    resources :ratings, only: :index
+  end
   
   devise_for :admins, controllers: { sessions: "admins/sessions" }
   mount RailsAdmin::Engine => '/admin', as: 'rails_admin'
+  
   resources :credit_cards
   resources :countries
-  resources :addresses
+  
   resources :order_items
   resources :orders
   resources :authors
@@ -29,6 +33,7 @@ Rails.application.routes.draw do
     #   get 'books/bestsellers'
     # end
   end
+
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".
 

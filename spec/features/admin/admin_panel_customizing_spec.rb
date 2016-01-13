@@ -35,7 +35,7 @@ feature "admin panel customizing" do
   # end
 
   context "database records representing" do
-    scenario "Address represents with city+address1+address2" do
+    scenario "address represents with city+address1+address2" do
       order = FactoryGirl.create :order
       first(:link, text: 'Orders').click
       find(:css, "a.pjax[href=\"/admin/order/#{order.id}/edit\"]").click

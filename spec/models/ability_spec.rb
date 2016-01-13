@@ -16,17 +16,19 @@ RSpec.describe Ability, type: :model do
     let(:customer) { FactoryGirl.create :customer }
     let(:wrong_customer) { FactoryGirl.create :customer } 
 
+    [:address, :credit_card].each do |item|
+      it "can manage his own #{item} only" do
+        expect(subject).to have_abilities(:manage, 
+          FactoryGirl.build(item, customer_id: customer.id))
+        expect(subject).to not_have_abilities(:manage,
+          FactoryGirl.build(item, customer_id: wrong_customer.id))
+      end
+    end
+
     it "can read countries" do
       expect(subject).to have_abilities(:read, Country.new)
     end
     
-    it "can manage his own credit cards only" do
-      expect(subject).to have_abilities(:manage, 
-        FactoryGirl.build(:credit_card, customer_id: customer.id))
-      expect(subject).to not_have_abilities(:manage,
-        FactoryGirl.build(:credit_card, customer_id: wrong_customer.id))
-    end
-
     it "can read and update his own Customer object only" do
       expect(subject).to have_abilities([:read, :update], customer)
       expect(subject).to not_have_abilities([:read, :update], wrong_customer)
@@ -49,8 +51,16 @@ RSpec.describe Ability, type: :model do
         FactoryGirl.build(:order_item, order_id: wrong_order.id))
     end
 
-    it "can create ratings" do
-      expect(subject).to have_abilities(:create, FactoryGirl.build(:rating))
+    it "can create and destroy his own ratings only" do
+      expect(subject).to have_abilities([:create, :destroy], 
+        FactoryGirl.build(:rating, customer_id: customer.id))
+      expect(subject).to not_have_abilities([:create, :destroy],
+        FactoryGirl.build(:rating, customer_id: wrong_customer.id))
+    end
+
+    it "can read ratings" do
+      expect(subject).to have_abilities(:read,
+        FactoryGirl.build(:rating))
     end
 
     it "can update and destroy his own ratings only" do

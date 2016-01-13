@@ -1,4 +1,4 @@
-def sign_in(user, options={})
+def sign_in_via_capybara(user)
   user.class == Admin ? visit(admin_session_path) : visit(customer_session_path)
 
   fill_in "Email",    with: user.email

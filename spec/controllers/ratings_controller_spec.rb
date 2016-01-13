@@ -92,7 +92,7 @@ RSpec.describe RatingsController, type: :controller do
       end
 
       it "receives new on Rating with finded book" do
-        expect(Rating).to receive(:new).with(book: book)
+        expect(Rating).to receive(:new).with(book: book, customer: customer)
       end
     end
 

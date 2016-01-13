@@ -1,10 +1,15 @@
 class AddressesController < ApplicationController
   before_action :set_address, only: [:show, :edit, :update, :destroy]
+  before_action :authenticate_customer!
+  
+  load_and_authorize_resource
+  # skip_load_resource only: [:index]
 
   # GET /addresses
   # GET /addresses.json
   def index
-    @addresses = Address.all
+    @customer = Customer.find(params[:customer_id])
+    # @addresses = Address.where(customer_id: @customer.id)
   end
 
   # GET /addresses/1
@@ -14,7 +19,8 @@ class AddressesController < ApplicationController
 
   # GET /addresses/new
   def new
-    @address = Address.new
+    @customer = Customer.find(params[:customer_id])
+    @address = Address.new(customer_id: @customer.id)
   end
 
   # GET /addresses/1/edit
@@ -24,14 +30,16 @@ class AddressesController < ApplicationController
   # POST /addresses
   # POST /addresses.json
   def create
+    # @customer = Customer.find(address_params[:customer_id])
     @address = Address.new(address_params)
+    @address.customer_id = current_customer.id
 
     respond_to do |format|
       if @address.save
         format.html { redirect_to @address, notice: 'Address was successfully created.' }
         format.json { render :show, status: :created, location: @address }
       else
-        format.html { render :new }
+        format.html { render :new, locals: { customer_id: @customer.id } }
         format.json { render json: @address.errors, status: :unprocessable_entity }
       end
     end
@@ -69,6 +77,6 @@ class AddressesController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def address_params
-      params.require(:address).permit(:phone, :address1, :address2, :city, :zipcode, :country)
+      params.require(:address).permit(:phone, :address1, :address2, :city, :zipcode, :country_id, :contact_name, :customer_id)
     end
 end

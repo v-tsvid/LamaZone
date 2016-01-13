@@ -1,6 +1,6 @@
 require 'features/features_spec_helper'
 
-feature 'rating addition' do 
+feature 'rating management' do 
   background do
     @book = FactoryGirl.create :bestseller_book
     page.driver.delete destroy_admin_session_path
@@ -14,7 +14,7 @@ feature 'rating addition' do
                   password:              '12345678',
                   password_confirmation: '12345678'
                   
-      sign_in @customer
+      sign_in_via_capybara @customer
     end
 
     # background {  }
