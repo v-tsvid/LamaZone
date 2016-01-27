@@ -11,6 +11,8 @@ RSpec.describe "ratings/edit", type: :view do
     allow(controller).to receive(:current_customer).and_return(@customer)
     render
   end
+
+  subject { assigns(:rating) }
   
   context "for authorized customers" do
     it "renders _form partial" do

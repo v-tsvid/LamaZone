@@ -2,6 +2,11 @@ class CustomersController < ApplicationController
   before_action :set_customer, only: [:show, :edit, :update, :destroy]
   before_action :authenticate_customer!
 
+  def addresses
+    # @customer = Customer.find(params[:customer_id])
+    @addresses = Address.where(customer_id: current_customer)
+  end
+
   # GET /customers
   # GET /customers.json
   def index

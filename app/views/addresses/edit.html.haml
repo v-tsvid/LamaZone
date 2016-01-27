@@ -1,0 +1,9 @@
+%h1 Editing Address
+
+= form_for @address do |f|
+  = render 'form', f: f 
+
+
+= link_to 'Show', @address
+|
+= link_to 'Back', customer_addresses_path(current_customer)

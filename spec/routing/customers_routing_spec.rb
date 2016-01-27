@@ -7,6 +7,10 @@ RSpec.describe CustomersController, type: :routing do
     #   expect(:get => "/customers").to route_to("customers#index")
     # end
 
+    it "routes to #addresses" do
+      expect(get: "/customer/addresses").to route_to("customers#addresses")
+    end
+
     it "routes to #new" do
       expect(:get => "/customers/new").to route_to("customers#new")
     end

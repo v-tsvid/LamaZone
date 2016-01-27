@@ -1,108 +1,108 @@
-require 'features/features_spec_helper'
+# require 'features/features_spec_helper'
 
-feature "admin panel customizing" do
-  given(:admin) { FactoryGirl.create :admin, 
-                  email:                 'admin@mail.com', 
-                  password:              '12345678',
-                  password_confirmation: '12345678' }
+# feature "admin panel customizing" do
+#   given(:admin) { FactoryGirl.create :admin, 
+#                   email:                 'admin@mail.com', 
+#                   password:              '12345678',
+#                   password_confirmation: '12345678' }
 
-  background do 
-    login_as admin, scope: :admin
-    visit rails_admin_path
-  end
+#   background do 
+#     login_as admin, scope: :admin
+#     visit rails_admin_path
+#   end
   
-  # {'address' => ['city', 'address1', 'address2'],
-  #  'author'  => ['lastname', 'firstname'],
-  #  'credit_card' => ['number'],
-  #  'customer' => ['lastname', 'firstname'],
-  #  'order' => ['book_id'],
-  #  'rating' => ['book_id', 'id']}.each do |key, value|
+#   # {'address' => ['city', 'address1', 'address2'],
+#   #  'author'  => ['lastname', 'firstname'],
+#   #  'credit_card' => ['number'],
+#   #  'customer' => ['lastname', 'firstname'],
+#   #  'order' => ['book_id'],
+#   #  'rating' => ['book_id', 'id']}.each do |key, value|
     
-  #   @value_str = value.join('+')
+#   #   @value_str = value.join('+')
 
-  #   scenario "#{key} represents with #{@value_str}" do
-  #     obj = FactoryGirl.create key.to_sym
-  #     # first(:link, text: "#{key.capitalize.pluralize}").click
-  #     first(:css, "a.pjax[href=\"/admin/#{key}\"]").click
-  #     find(:css, "a.pjax[href=\"/admin/#{key}/#{obj.id}/edit\"]").click
+#   #   scenario "#{key} represents with #{@value_str}" do
+#   #     obj = FactoryGirl.create key.to_sym
+#   #     # first(:link, text: "#{key.capitalize.pluralize}").click
+#   #     first(:css, "a.pjax[href=\"/admin/#{key}\"]").click
+#   #     find(:css, "a.pjax[href=\"/admin/#{key}/#{obj.id}/edit\"]").click
 
-  #     expect(page).not_to have_content "#{key.capitalize} ##{order.shipping_address.id}"
-  #     expect(page).to have_content "#{order.shipping_address.city}" + 
-  #     " #{order.shipping_address.address1}" + 
-  #     " #{order.shipping_address.address2}"
+#   #     expect(page).not_to have_content "#{key.capitalize} ##{order.shipping_address.id}"
+#   #     expect(page).to have_content "#{order.shipping_address.city}" + 
+#   #     " #{order.shipping_address.address1}" + 
+#   #     " #{order.shipping_address.address2}"
 
-  #   end
-  # end
+#   #   end
+#   # end
 
-  context "database records representing" do
-    scenario "address represents with city+address1+address2" do
-      order = FactoryGirl.create :order
-      first(:link, text: 'Orders').click
-      find(:css, "a.pjax[href=\"/admin/order/#{order.id}/edit\"]").click
+#   context "database records representing" do
+#     scenario "address represents with city+address1+address2" do
+#       order = FactoryGirl.create :order
+#       first(:link, text: 'Orders').click
+#       find(:css, "a.pjax[href=\"/admin/order/#{order.id}/edit\"]").click
 
-      expect(page).not_to have_content "Address ##{order.shipping_address.id}"
-      expect(page).to have_content "#{order.shipping_address.city}" + 
-      " #{order.shipping_address.address1}" + 
-      " #{order.shipping_address.address2}"
-    end
+#       expect(page).not_to have_content "Address ##{order.shipping_address.id}"
+#       expect(page).to have_content "#{order.shipping_address.city}" + 
+#       " #{order.shipping_address.address1}" + 
+#       " #{order.shipping_address.address2}"
+#     end
 
-    scenario "author represents with lastname+firstname" do
-      book = FactoryGirl.create :book
-      first(:link, text: 'Books').click
-      find(:css, "a.pjax[href=\"/admin/book/#{book.id}/edit\"]").click
+#     scenario "author represents with lastname+firstname" do
+#       book = FactoryGirl.create :book
+#       first(:link, text: 'Books').click
+#       find(:css, "a.pjax[href=\"/admin/book/#{book.id}/edit\"]").click
 
-      expect(page).not_to have_content "Author ##{book.author.id}"
-      expect(page).to have_content "#{book.author.lastname}" + 
-      " #{book.author.firstname}"
-    end
+#       expect(page).not_to have_content "Author ##{book.author.id}"
+#       expect(page).to have_content "#{book.author.lastname}" + 
+#       " #{book.author.firstname}"
+#     end
 
-    scenario "credit card represents with number" do
-      order = FactoryGirl.create :order
-      first(:link, text: 'Orders').click
-      find(:css, "a.pjax[href=\"/admin/order/#{order.id}/edit\"]").click
+#     scenario "credit card represents with number" do
+#       order = FactoryGirl.create :order
+#       first(:link, text: 'Orders').click
+#       find(:css, "a.pjax[href=\"/admin/order/#{order.id}/edit\"]").click
 
-      expect(page).not_to have_content "CreditCard ##{order.credit_card.id}"
-      expect(page).to have_content "#{order.credit_card.number}"
-    end
+#       expect(page).not_to have_content "CreditCard ##{order.credit_card.id}"
+#       expect(page).to have_content "#{order.credit_card.number}"
+#     end
 
-    scenario "customer represents with lastname+firstname" do
-      order = FactoryGirl.create :order
-      first(:link, text: 'Orders').click
-      find(:css, "a.pjax[href=\"/admin/order/#{order.id}/edit\"]").click
+#     scenario "customer represents with lastname+firstname" do
+#       order = FactoryGirl.create :order
+#       first(:link, text: 'Orders').click
+#       find(:css, "a.pjax[href=\"/admin/order/#{order.id}/edit\"]").click
 
-      expect(page).not_to have_content "Customer ##{order.customer.id}"
-      expect(page).to have_content "#{order.customer.lastname}" + 
-      " #{order.customer.firstname}"
-    end
+#       expect(page).not_to have_content "Customer ##{order.customer.id}"
+#       expect(page).to have_content "#{order.customer.lastname}" + 
+#       " #{order.customer.firstname}"
+#     end
 
-    scenario "order represents with id" do
-      credit_card = FactoryGirl.create :credit_card_with_orders
-      first(:link, text: 'Credit cards').click
-      find(:css, "a.pjax[href=\"/admin/credit_card/#{credit_card.id}/edit\"]").
-        click
+#     scenario "order represents with id" do
+#       credit_card = FactoryGirl.create :credit_card_with_orders
+#       first(:link, text: 'Credit cards').click
+#       find(:css, "a.pjax[href=\"/admin/credit_card/#{credit_card.id}/edit\"]").
+#         click
 
-      expect(page).not_to have_content "Order ##{credit_card.orders.first.id}"
-      expect(page).to have_content "#{credit_card.orders.first.id}"
-    end
+#       expect(page).not_to have_content "Order ##{credit_card.orders.first.id}"
+#       expect(page).to have_content "#{credit_card.orders.first.id}"
+#     end
 
-    scenario "order item represents with book_title" do
-      order = FactoryGirl.create :order_with_order_items
-      first(:link, text: 'Orders').click
-      find(:css, "a.pjax[href=\"/admin/order/#{order.id}/edit\"]").click
+#     scenario "order item represents with book_title" do
+#       order = FactoryGirl.create :order_with_order_items
+#       first(:link, text: 'Orders').click
+#       find(:css, "a.pjax[href=\"/admin/order/#{order.id}/edit\"]").click
 
-      expect(page).not_to have_content "OrderItem ##{order.order_items.first.id}"
-      expect(page).
-        to have_content "#{Book.find(order.order_items.first.book_id).title}"
-    end
+#       expect(page).not_to have_content "OrderItem ##{order.order_items.first.id}"
+#       expect(page).
+#         to have_content "#{Book.find(order.order_items.first.book_id).title}"
+#     end
 
-    scenario "rating represents with book_id+rating_id" do
-      book = FactoryGirl.create :book_with_ratings
-      first(:link, text: 'Books').click
-      find(:css, "a.pjax[href=\"/admin/book/#{book.id}/edit\"]").click
+#     scenario "rating represents with book_id+rating_id" do
+#       book = FactoryGirl.create :book_with_ratings
+#       first(:link, text: 'Books').click
+#       find(:css, "a.pjax[href=\"/admin/book/#{book.id}/edit\"]").click
 
-      expect(page).not_to have_content "Rating ##{book.ratings.first.id}"
-      expect(page).to have_content "rating #{book.ratings.first.id}" + 
-      " for book #{book.ratings.first.book_id}"
-    end
-  end
-end
+#       expect(page).not_to have_content "Rating ##{book.ratings.first.id}"
+#       expect(page).to have_content "rating #{book.ratings.first.id}" + 
+#       " for book #{book.ratings.first.book_id}"
+#     end
+#   end
+# end

@@ -3,14 +3,9 @@ class AddressesController < ApplicationController
   before_action :authenticate_customer!
   
   load_and_authorize_resource
-  # skip_load_resource only: [:index]
+  skip_load_resource only: [:addresses]
 
-  # GET /addresses
-  # GET /addresses.json
-  def index
-    @customer = Customer.find(params[:customer_id])
-    # @addresses = Address.where(customer_id: @customer.id)
-  end
+  
 
   # GET /addresses/1
   # GET /addresses/1.json
@@ -32,7 +27,8 @@ class AddressesController < ApplicationController
   def create
     # @customer = Customer.find(address_params[:customer_id])
     @address = Address.new(address_params)
-    @address.customer_id = current_customer.id
+    @customer = Customer.find(current_customer.id)
+    @address.customer_id = @customer.id
 
     respond_to do |format|
       if @address.save
@@ -64,7 +60,7 @@ class AddressesController < ApplicationController
   def destroy
     @address.destroy
     respond_to do |format|
-      format.html { redirect_to addresses_url, notice: 'Address was successfully destroyed.' }
+      format.html { redirect_to customer_addresses_url(current_customer), notice: 'Address was successfully destroyed.' }
       format.json { head :no_content }
     end
   end

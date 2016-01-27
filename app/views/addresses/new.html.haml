@@ -1,0 +1,6 @@
+%h1 New Address
+
+= form_for [@customer, @address] do |f|
+  = render 'form', f: f 
+
+= link_to 'Back', customer_addresses_path(@customer)

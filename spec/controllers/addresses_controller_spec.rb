@@ -29,19 +29,19 @@ RSpec.describe AddressesController, type: :controller do
     end
   end
 
-  describe "GET #index" do
+  # describe "GET #index" do
 
-    it "assigns all addresses of current customer as @addresses" do
-      addresses = FactoryGirl.create_list :address, 2, customer_id: customer.id
-      wrong_address = FactoryGirl.create :address, customer_id: wrong_customer.id
-      get :index, { customer_id: customer.id }
-      expect(assigns(:addresses)).to eq(addresses)
-    end
+  #   it "assigns all addresses of current customer as @addresses" do
+  #     addresses = FactoryGirl.create_list :address, 2, customer_id: customer.id
+  #     wrong_address = FactoryGirl.create :address, customer_id: wrong_customer.id
+  #     get :index, { customer_id: customer.id }
+  #     expect(assigns(:addresses)).to eq(addresses)
+  #   end
     
-    after { get :index, { customer_id: customer.id } }
+  #   after { get :index, { customer_id: customer.id } }
 
-    it_behaves_like 'customer authentication'
-  end
+  #   it_behaves_like 'customer authentication'
+  # end
 
   describe "GET #show" do
     it "assigns the requested address as @address" do

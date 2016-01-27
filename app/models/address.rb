@@ -1,7 +1,7 @@
 class Address < ActiveRecord::Base
 
   validates :contact_name, :phone, :address1, presence: true
-  validates :city, :zipcode, presence: true
+  validates :city, :zipcode, :country_id, presence: true
   
   # provided by phony_rails gem
   # validates phone number to be correct and plausible 

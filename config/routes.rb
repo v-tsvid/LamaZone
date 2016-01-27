@@ -12,9 +12,11 @@ Rails.application.routes.draw do
     sessions: "customers/sessions" } 
   
   resources :customers, except: [:index, :destroy] do
-    resources :addresses, shallow: true 
+    resources :addresses, except: [:index], shallow: true 
     resources :ratings, only: :index
   end
+
+  get 'customer/addresses', to: 'customers#addresses', as: :adresses
   
   devise_for :admins, controllers: { sessions: "admins/sessions" }
   mount RailsAdmin::Engine => '/admin', as: 'rails_admin'

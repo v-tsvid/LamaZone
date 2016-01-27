@@ -11,7 +11,6 @@ feature "address management by authorized customer" do
                   password_confirmation: '12345678'
                   
     sign_in_via_capybara @customer
-    # visit customer_addresses_path(@customer)
   end
 
   scenario 'add address' do

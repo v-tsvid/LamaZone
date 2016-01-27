@@ -3,10 +3,10 @@ require "rails_helper"
 RSpec.describe AddressesController, type: :routing do
   describe "routing" do
 
-    it "routes to #index" do
-      expect(:get => "customers/1/addresses").
-        to route_to("addresses#index", customer_id: '1')
-    end
+    # it "routes to #index" do
+    #   expect(:get => "customers/1/addresses").
+    #     to route_to("addresses#index", customer_id: '1')
+    # end
 
     it "routes to #new" do
       expect(:get => "customers/1/addresses/new").
