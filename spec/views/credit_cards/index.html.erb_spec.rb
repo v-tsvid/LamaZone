@@ -7,7 +7,7 @@ RSpec.describe "credit_cards/index", type: :view do
         :number => "5168 7423 2791 0638",
         :cvv => "123",
         :expiration_month => "01",
-        :expiration_year => "2016",
+        :expiration_year => "2017",
         :firstname => "Firstname",
         :lastname => "Lastname"
       ),
@@ -15,7 +15,7 @@ RSpec.describe "credit_cards/index", type: :view do
         :number => "5168 7423 2791 0638",
         :cvv => "123",
         :expiration_month => "01",
-        :expiration_year => "2016",
+        :expiration_year => "2017",
         :firstname => "Firstname",
         :lastname => "Lastname"
       )
@@ -27,7 +27,7 @@ RSpec.describe "credit_cards/index", type: :view do
     assert_select "tr>td", :text => "5168 7423 2791 0638".to_s, :count => 2
     assert_select "tr>td", :text => "123".to_s, :count => 2
     assert_select "tr>td", :text => "01".to_s, :count => 2
-    assert_select "tr>td", :text => "2016".to_s, :count => 2
+    assert_select "tr>td", :text => "2017".to_s, :count => 2
     assert_select "tr>td", :text => "Firstname".to_s, :count => 2
     assert_select "tr>td", :text => "Lastname".to_s, :count => 2
   end

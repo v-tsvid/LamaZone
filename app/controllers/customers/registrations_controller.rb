@@ -1,23 +1,25 @@
 class Customers::RegistrationsController < Devise::RegistrationsController
-# before_filter :configure_sign_up_params, only: [:create]
-# before_filter :configure_account_update_params, only: [:update]
+before_filter :configure_sign_up_params, only: [:create]
+before_filter :configure_account_update_params, only: [:update]
 
-  # GET /resource/sign_up
+  # # GET /resource/sign_up
   # def new
   #   super
   # end
 
-  # POST /resource
+  # # POST /resource
   # def create
   #   super
   # end
 
   # GET /resource/edit
-  # def edit
-  #   super
-  # end
+  def edit
+    resource.build_billing_address unless resource.billing_address
+    resource.build_shipping_address unless resource.shipping_address
+    super
+  end
 
-  # PUT /resource
+  # # PUT /resource
   # def update
   #   super
   # end
@@ -36,17 +38,46 @@ class Customers::RegistrationsController < Devise::RegistrationsController
   #   super
   # end
 
-  # protected
+  protected
 
   # If you have extra params to permit, append them to the sanitizer.
-  # def configure_sign_up_params
-  #   devise_parameter_sanitizer.for(:sign_up) << :attribute
-  # end
+  def params_to_permit
+    [:firstname,
+     :lastname,
+     :email, 
+     :password, 
+     :password_confirmation, 
+     :current_password, 
+     billing_address_attributes: [:firstname, 
+                                  :lastname, 
+                                  :phone, 
+                                  :address1, 
+                                  :address2, 
+                                  :city, 
+                                  :zipcode, 
+                                  :country_id], 
+     shipping_address_attributes: [:firstname, 
+                                   :lastname, 
+                                   :phone, 
+                                   :address1, 
+                                   :address2, 
+                                   :city, 
+                                   :zipcode, 
+                                   :country_id]]
+  end
+
+  def configure_sign_up_params
+    devise_parameter_sanitizer.for(:sign_up) do |u| 
+      u.permit(params_to_permit)
+    end
+  end
 
   # If you have extra params to permit, append them to the sanitizer.
-  # def configure_account_update_params
-  #   devise_parameter_sanitizer.for(:account_update) << :attribute
-  # end
+  def configure_account_update_params
+    devise_parameter_sanitizer.for(:account_update) do |u| 
+      u.permit(params_to_permit)
+    end
+  end
 
   # The path used after sign up.
   # def after_sign_up_path_for(resource)

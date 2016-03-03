@@ -16,13 +16,20 @@ RSpec.describe Ability, type: :model do
     let(:customer) { FactoryGirl.create :customer }
     let(:wrong_customer) { FactoryGirl.create :customer } 
 
-    [:address, :credit_card].each do |item|
-      it "can manage his own #{item} only" do
-        expect(subject).to have_abilities(:manage, 
-          FactoryGirl.build(item, customer_id: customer.id))
-        expect(subject).to not_have_abilities(:manage,
-          FactoryGirl.build(item, customer_id: wrong_customer.id))
-      end
+    it "can manage his own addresses only" do
+      expect(subject).to have_abilities(:manage, customer.billing_address)
+      expect(subject).to have_abilities(:manage, customer.shipping_address)
+      expect(subject).to not_have_abilities(:manage, 
+        wrong_customer.billing_address)
+      expect(subject).to not_have_abilities(:manage, 
+        wrong_customer.shipping_address)
+    end
+
+    it "can manage his own credit_cards only" do
+      expect(subject).to have_abilities(:manage, 
+        FactoryGirl.build(:credit_card, customer_id: customer.id))
+      expect(subject).to not_have_abilities(:manage,
+        FactoryGirl.build(:credit_card, customer_id: wrong_customer.id))
     end
 
     it "can read countries" do

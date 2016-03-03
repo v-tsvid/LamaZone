@@ -21,139 +21,139 @@ require 'rails_helper'
 RSpec.describe ShoppingCartItemsController, type: :controller do
 
   # This should return the minimal set of attributes required to create a valid
-  # ShoppingCartItem. As you add validations to ShoppingCartItem, be sure to
-  # adjust the attributes here as well.
-  let(:valid_attributes) {
-    skip("Add a hash of attributes valid for your model")
-  }
+  # # ShoppingCartItem. As you add validations to ShoppingCartItem, be sure to
+  # # adjust the attributes here as well.
+  # let(:valid_attributes) {
+  #   skip("Add a hash of attributes valid for your model")
+  # }
 
-  let(:invalid_attributes) {
-    skip("Add a hash of attributes invalid for your model")
-  }
+  # let(:invalid_attributes) {
+  #   skip("Add a hash of attributes invalid for your model")
+  # }
 
-  # This should return the minimal set of values that should be in the session
-  # in order to pass any filters (e.g. authentication) defined in
-  # ShoppingCartItemsController. Be sure to keep this updated too.
-  let(:valid_session) { {} }
+  # # This should return the minimal set of values that should be in the session
+  # # in order to pass any filters (e.g. authentication) defined in
+  # # ShoppingCartItemsController. Be sure to keep this updated too.
+  # let(:valid_session) { {} }
 
-  describe "GET #index" do
-    it "assigns all shopping_cart_items as @shopping_cart_items" do
-      shopping_cart_item = ShoppingCartItem.create! valid_attributes
-      get :index, {}, valid_session
-      expect(assigns(:shopping_cart_items)).to eq([shopping_cart_item])
-    end
-  end
+  # describe "GET #index" do
+  #   it "assigns all shopping_cart_items as @shopping_cart_items" do
+  #     shopping_cart_item = ShoppingCartItem.create! valid_attributes
+  #     get :index, {}, valid_session
+  #     expect(assigns(:shopping_cart_items)).to eq([shopping_cart_item])
+  #   end
+  # end
 
-  describe "GET #show" do
-    it "assigns the requested shopping_cart_item as @shopping_cart_item" do
-      shopping_cart_item = ShoppingCartItem.create! valid_attributes
-      get :show, {:id => shopping_cart_item.to_param}, valid_session
-      expect(assigns(:shopping_cart_item)).to eq(shopping_cart_item)
-    end
-  end
+  # describe "GET #show" do
+  #   it "assigns the requested shopping_cart_item as @shopping_cart_item" do
+  #     shopping_cart_item = ShoppingCartItem.create! valid_attributes
+  #     get :show, {:id => shopping_cart_item.to_param}, valid_session
+  #     expect(assigns(:shopping_cart_item)).to eq(shopping_cart_item)
+  #   end
+  # end
 
-  describe "GET #new" do
-    it "assigns a new shopping_cart_item as @shopping_cart_item" do
-      get :new, {}, valid_session
-      expect(assigns(:shopping_cart_item)).to be_a_new(ShoppingCartItem)
-    end
-  end
+  # describe "GET #new" do
+  #   it "assigns a new shopping_cart_item as @shopping_cart_item" do
+  #     get :new, {}, valid_session
+  #     expect(assigns(:shopping_cart_item)).to be_a_new(ShoppingCartItem)
+  #   end
+  # end
 
-  describe "GET #edit" do
-    it "assigns the requested shopping_cart_item as @shopping_cart_item" do
-      shopping_cart_item = ShoppingCartItem.create! valid_attributes
-      get :edit, {:id => shopping_cart_item.to_param}, valid_session
-      expect(assigns(:shopping_cart_item)).to eq(shopping_cart_item)
-    end
-  end
+  # describe "GET #edit" do
+  #   it "assigns the requested shopping_cart_item as @shopping_cart_item" do
+  #     shopping_cart_item = ShoppingCartItem.create! valid_attributes
+  #     get :edit, {:id => shopping_cart_item.to_param}, valid_session
+  #     expect(assigns(:shopping_cart_item)).to eq(shopping_cart_item)
+  #   end
+  # end
 
-  describe "POST #create" do
-    context "with valid params" do
-      it "creates a new ShoppingCartItem" do
-        expect {
-          post :create, {:shopping_cart_item => valid_attributes}, valid_session
-        }.to change(ShoppingCartItem, :count).by(1)
-      end
+  # describe "POST #create" do
+  #   context "with valid params" do
+  #     it "creates a new ShoppingCartItem" do
+  #       expect {
+  #         post :create, {:shopping_cart_item => valid_attributes}, valid_session
+  #       }.to change(ShoppingCartItem, :count).by(1)
+  #     end
 
-      it "assigns a newly created shopping_cart_item as @shopping_cart_item" do
-        post :create, {:shopping_cart_item => valid_attributes}, valid_session
-        expect(assigns(:shopping_cart_item)).to be_a(ShoppingCartItem)
-        expect(assigns(:shopping_cart_item)).to be_persisted
-      end
+  #     it "assigns a newly created shopping_cart_item as @shopping_cart_item" do
+  #       post :create, {:shopping_cart_item => valid_attributes}, valid_session
+  #       expect(assigns(:shopping_cart_item)).to be_a(ShoppingCartItem)
+  #       expect(assigns(:shopping_cart_item)).to be_persisted
+  #     end
 
-      it "redirects to the created shopping_cart_item" do
-        post :create, {:shopping_cart_item => valid_attributes}, valid_session
-        expect(response).to redirect_to(ShoppingCartItem.last)
-      end
-    end
+  #     it "redirects to the created shopping_cart_item" do
+  #       post :create, {:shopping_cart_item => valid_attributes}, valid_session
+  #       expect(response).to redirect_to(ShoppingCartItem.last)
+  #     end
+  #   end
 
-    context "with invalid params" do
-      it "assigns a newly created but unsaved shopping_cart_item as @shopping_cart_item" do
-        post :create, {:shopping_cart_item => invalid_attributes}, valid_session
-        expect(assigns(:shopping_cart_item)).to be_a_new(ShoppingCartItem)
-      end
+  #   context "with invalid params" do
+  #     it "assigns a newly created but unsaved shopping_cart_item as @shopping_cart_item" do
+  #       post :create, {:shopping_cart_item => invalid_attributes}, valid_session
+  #       expect(assigns(:shopping_cart_item)).to be_a_new(ShoppingCartItem)
+  #     end
 
-      it "re-renders the 'new' template" do
-        post :create, {:shopping_cart_item => invalid_attributes}, valid_session
-        expect(response).to render_template("new")
-      end
-    end
-  end
+  #     it "re-renders the 'new' template" do
+  #       post :create, {:shopping_cart_item => invalid_attributes}, valid_session
+  #       expect(response).to render_template("new")
+  #     end
+  #   end
+  # end
 
-  describe "PUT #update" do
-    context "with valid params" do
-      let(:new_attributes) {
-        skip("Add a hash of attributes valid for your model")
-      }
+  # describe "PUT #update" do
+  #   context "with valid params" do
+  #     let(:new_attributes) {
+  #       skip("Add a hash of attributes valid for your model")
+  #     }
 
-      it "updates the requested shopping_cart_item" do
-        shopping_cart_item = ShoppingCartItem.create! valid_attributes
-        put :update, {:id => shopping_cart_item.to_param, :shopping_cart_item => new_attributes}, valid_session
-        shopping_cart_item.reload
-        skip("Add assertions for updated state")
-      end
+  #     it "updates the requested shopping_cart_item" do
+  #       shopping_cart_item = ShoppingCartItem.create! valid_attributes
+  #       put :update, {:id => shopping_cart_item.to_param, :shopping_cart_item => new_attributes}, valid_session
+  #       shopping_cart_item.reload
+  #       skip("Add assertions for updated state")
+  #     end
 
-      it "assigns the requested shopping_cart_item as @shopping_cart_item" do
-        shopping_cart_item = ShoppingCartItem.create! valid_attributes
-        put :update, {:id => shopping_cart_item.to_param, :shopping_cart_item => valid_attributes}, valid_session
-        expect(assigns(:shopping_cart_item)).to eq(shopping_cart_item)
-      end
+  #     it "assigns the requested shopping_cart_item as @shopping_cart_item" do
+  #       shopping_cart_item = ShoppingCartItem.create! valid_attributes
+  #       put :update, {:id => shopping_cart_item.to_param, :shopping_cart_item => valid_attributes}, valid_session
+  #       expect(assigns(:shopping_cart_item)).to eq(shopping_cart_item)
+  #     end
 
-      it "redirects to the shopping_cart_item" do
-        shopping_cart_item = ShoppingCartItem.create! valid_attributes
-        put :update, {:id => shopping_cart_item.to_param, :shopping_cart_item => valid_attributes}, valid_session
-        expect(response).to redirect_to(shopping_cart_item)
-      end
-    end
+  #     it "redirects to the shopping_cart_item" do
+  #       shopping_cart_item = ShoppingCartItem.create! valid_attributes
+  #       put :update, {:id => shopping_cart_item.to_param, :shopping_cart_item => valid_attributes}, valid_session
+  #       expect(response).to redirect_to(shopping_cart_item)
+  #     end
+  #   end
 
-    context "with invalid params" do
-      it "assigns the shopping_cart_item as @shopping_cart_item" do
-        shopping_cart_item = ShoppingCartItem.create! valid_attributes
-        put :update, {:id => shopping_cart_item.to_param, :shopping_cart_item => invalid_attributes}, valid_session
-        expect(assigns(:shopping_cart_item)).to eq(shopping_cart_item)
-      end
+  #   context "with invalid params" do
+  #     it "assigns the shopping_cart_item as @shopping_cart_item" do
+  #       shopping_cart_item = ShoppingCartItem.create! valid_attributes
+  #       put :update, {:id => shopping_cart_item.to_param, :shopping_cart_item => invalid_attributes}, valid_session
+  #       expect(assigns(:shopping_cart_item)).to eq(shopping_cart_item)
+  #     end
 
-      it "re-renders the 'edit' template" do
-        shopping_cart_item = ShoppingCartItem.create! valid_attributes
-        put :update, {:id => shopping_cart_item.to_param, :shopping_cart_item => invalid_attributes}, valid_session
-        expect(response).to render_template("edit")
-      end
-    end
-  end
+  #     it "re-renders the 'edit' template" do
+  #       shopping_cart_item = ShoppingCartItem.create! valid_attributes
+  #       put :update, {:id => shopping_cart_item.to_param, :shopping_cart_item => invalid_attributes}, valid_session
+  #       expect(response).to render_template("edit")
+  #     end
+  #   end
+  # end
 
-  describe "DELETE #destroy" do
-    it "destroys the requested shopping_cart_item" do
-      shopping_cart_item = ShoppingCartItem.create! valid_attributes
-      expect {
-        delete :destroy, {:id => shopping_cart_item.to_param}, valid_session
-      }.to change(ShoppingCartItem, :count).by(-1)
-    end
+  # describe "DELETE #destroy" do
+  #   it "destroys the requested shopping_cart_item" do
+  #     shopping_cart_item = ShoppingCartItem.create! valid_attributes
+  #     expect {
+  #       delete :destroy, {:id => shopping_cart_item.to_param}, valid_session
+  #     }.to change(ShoppingCartItem, :count).by(-1)
+  #   end
 
-    it "redirects to the shopping_cart_items list" do
-      shopping_cart_item = ShoppingCartItem.create! valid_attributes
-      delete :destroy, {:id => shopping_cart_item.to_param}, valid_session
-      expect(response).to redirect_to(shopping_cart_items_url)
-    end
-  end
+  #   it "redirects to the shopping_cart_items list" do
+  #     shopping_cart_item = ShoppingCartItem.create! valid_attributes
+  #     delete :destroy, {:id => shopping_cart_item.to_param}, valid_session
+  #     expect(response).to redirect_to(shopping_cart_items_url)
+  #   end
+  # end
 
 end

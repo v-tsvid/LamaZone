@@ -6,7 +6,7 @@ RSpec.describe "credit_cards/edit", type: :view do
       :number => "5168 7423 2791 0638",
       :cvv => "123",
       :expiration_month => "01",
-      :expiration_year => "2016",
+      :expiration_year => "2017",
       :firstname => "MyString",
       :lastname => "MyString"
     ))

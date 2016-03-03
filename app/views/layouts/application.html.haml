@@ -35,9 +35,6 @@
             %ul.nav.navbar-nav.navbar-right
               %li{class: current_page?(edit_customer_registration_path) ? "active" : nil}
                 =link_to "My Profile", edit_customer_registration_path
-            %ul.nav.navbar-nav.navbar-right
-              %li{class: current_page?(adresses_path) ? "active" : nil}
-                =link_to "My Addresses", adresses_path
     = yield
     %p
     = params.inspect

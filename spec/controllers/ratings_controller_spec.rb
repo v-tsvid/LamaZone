@@ -34,21 +34,21 @@ RSpec.describe RatingsController, type: :controller do
   end
 
   describe "GET #index" do
-
-    it "assigns all approved ratings of requested book as @ratings" do
+    before do
       rating
       wrong_rating
+    end
+
+    it "assigns all approved ratings of requested book as @ratings" do
       get :index, { book_id: book.id }
       expect(assigns(:ratings)).to match_array([rating])
     end
 
-    # it "assigns as @ratings all approved ratings of current customer "\
-    #    "when book wasn't requested" do
-    #   rating
-    #   wrong_rating
-    #   get :index, { customer_id: customer.id }
-    #   expect(assigns(:ratings)).to match_array([rating])
-    # end
+    it "assigns as @ratings all approved ratings of current customer "\
+       "when book wasn't requested" do
+      get :index, { customer_id: customer.id }
+      expect(assigns(:ratings)).to match_array([rating])
+    end
     
     after { get :index, { book_id: book.id } }
 
@@ -240,16 +240,35 @@ RSpec.describe RatingsController, type: :controller do
 
     context "with invalid params" do
 
-      before { 
-        put :update, { id: rating.to_param, rating: invalid_rating_params } 
-      }
+      context "for html format" do
 
-      it "assigns the rating as @rating" do
-        expect(assigns(:rating)).to eq(rating)
+        before do 
+          put :update, { id: rating.to_param, rating: invalid_rating_params } 
+        end
+
+        it "assigns the rating as @rating" do
+          expect(assigns(:rating)).to eq(rating)
+        end
+
+        it "re-renders the 'edit' template" do
+          expect(response).to render_template("edit")
+        end
       end
 
-      it "re-renders the 'edit' template" do
-        expect(response).to render_template("edit")
+      context "for json format" do
+
+        before do 
+          put :update, {
+            id: rating.to_param, rating: invalid_rating_params, format: :json } 
+        end
+
+        it "renders @rating.errors" do
+          expect(response.body).to eq(assigns(:rating).errors.to_json)
+        end
+
+        it "has unprocessable response" do
+          expect(response).to be_unprocessable
+        end
       end
     end
   end

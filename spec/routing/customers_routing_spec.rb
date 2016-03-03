@@ -7,9 +7,9 @@ RSpec.describe CustomersController, type: :routing do
     #   expect(:get => "/customers").to route_to("customers#index")
     # end
 
-    it "routes to #addresses" do
-      expect(get: "/customer/addresses").to route_to("customers#addresses")
-    end
+    # it "routes to #addresses" do
+    #   expect(get: "/customer/addresses").to route_to("customers#addresses")
+    # end
 
     it "routes to #new" do
       expect(:get => "/customers/new").to route_to("customers#new")
@@ -24,7 +24,7 @@ RSpec.describe CustomersController, type: :routing do
     end
 
     it "routes to #create" do
-      expect(:post => "/customers").to route_to("devise/registrations#create")
+      expect(:post => "/customers").to route_to("customers/registrations#create")
     end
 
     it "routes to #update via PUT" do

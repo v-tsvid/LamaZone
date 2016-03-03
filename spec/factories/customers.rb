@@ -9,6 +9,8 @@ FactoryGirl.define do
     password_confirmation "password"
     provider 'facebook'
     uid { Faker::Number.number(15) }
+    association :billing_address, factory: :address
+    association :shipping_address, factory: :address
 
     # reset_password_token { Faker::Lorem.characters(32) }
     # reset_password_sent_at { 

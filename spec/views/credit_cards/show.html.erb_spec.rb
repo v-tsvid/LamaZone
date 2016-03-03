@@ -6,7 +6,7 @@ RSpec.describe "credit_cards/show", type: :view do
       :number => "5168 7423 2791 0638",
       :cvv => "123",
       :expiration_month => "01",
-      :expiration_year => "2016",
+      :expiration_year => "2017",
       :firstname => "Firstname",
       :lastname => "Lastname"
     ))
@@ -17,7 +17,7 @@ RSpec.describe "credit_cards/show", type: :view do
     expect(rendered).to match(/5168 7423 2791 0638/)
     expect(rendered).to match(/123/)
     expect(rendered).to match(/01/)
-    expect(rendered).to match(/2016/)
+    expect(rendered).to match(/2017/)
     expect(rendered).to match(/Firstname/)
     expect(rendered).to match(/Lastname/)
   end

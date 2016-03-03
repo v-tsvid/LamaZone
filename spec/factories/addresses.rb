@@ -1,7 +1,8 @@
 FactoryGirl.define do
   factory :address do
     sequence(:phone, 9000000) { |n| "38093#{n}"}
-    contact_name { Faker::Name.name }
+    firstname { Faker::Name.first_name }
+    lastname { Faker::Name.last_name }
     address1 { Faker::Address.street_address }
     address2 { Faker::Address.secondary_address }
     city { Faker::Address.city }

@@ -14,13 +14,24 @@ if Rails.env == 'development' || Rails.env == 'production'
   Admin.create!(email: 'admin@mail.com', password: '12345678',
                 password_confirmation: '12345678')
 
-  Customer.create!(firstname: "Vadim", lastname: "Tsvid",
-                   email: 'vad_1989@mail.ru', password: '12345678',
-                   password_confirmation: '12345678',
-                   provider: "facebook", uid: "580001345483302")
-  Customer.create!(firstname: 'Cus', lastname: 'Tomer', 
-                   email: 'customer@mail.com', password: '12345678',
-                   password_confirmation: '12345678')
+  # Customer.create!(firstname: "Vadim", lastname: "Tsvid",
+  #                  email: 'vad_1989@mail.ru', password: '12345678',
+  #                  password_confirmation: '12345678',
+  #                  provider: "facebook", uid: "580001345483302")
+  # Customer.create!(firstname: 'Cus', lastname: 'Tomer', 
+  #                  email: 'customer@mail.com', password: '12345678',
+  #                  password_confirmation: '12345678')
+
+  FactoryGirl.create(:customer, 
+    firstname: "Vadim", lastname: "Tsvid",
+    email: 'vad_1989@mail.ru', password: '12345678',
+    password_confirmation: '12345678',
+    provider: "facebook", uid: "580001345483302")
+
+  FactoryGirl.create(:customer, 
+    firstname: 'Cus', lastname: 'Tomer', 
+    email: 'customer@mail.com', password: '12345678',
+    password_confirmation: '12345678')
 
   FactoryGirl.create_list :order_with_order_items, 10
   # FactoryGirl.create_list :book_with_ratings, 10

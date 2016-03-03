@@ -1,18 +1,11 @@
 %h2 Sign up
 - flash.each do |name, msg|
   = content_tag :div, msg
-- if current_page?(new_customer_registration_path) # || current_page?(customer_session_path)
-  = link_to "Sign up with Facebook", customer_omniauth_authorize_path(:facebook)
+/ - if current_page?(new_customer_registration_path)
+= link_to "Sign up with Facebook", customer_omniauth_authorize_path(:facebook)
 = form_for(resource, as: resource_name, url: registration_path(resource_name)) do |f|
   = devise_error_messages!
-  .field
-    = f.label :firstname
-    %br
-    = f.text_field :firstname, autofocus: true
-  .field
-    = f.label :lastname
-    %br
-    = f.text_field :lastname
+  
   .field
     = f.label :email
     %br

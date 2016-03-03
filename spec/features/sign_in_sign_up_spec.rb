@@ -154,8 +154,6 @@ feature 'customer signing up' do
   end
 
   scenario 'successfully sign up with valid credentials' do
-    fill_in 'Firstname',             with: 'John'
-    fill_in 'Lastname',              with: 'Doe'
     fill_in 'Email',                 with: 'john_doe@mail.com'
     fill_in 'Password',              with: 'password'
     fill_in 'Password confirmation', with: 'password'
@@ -165,8 +163,6 @@ feature 'customer signing up' do
   end
 
   scenario 'failed to sign up with invalid credentials' do
-    fill_in 'Firstname',             with: ''
-    fill_in 'Lastname',              with: ''
     fill_in 'Email',                 with: 'invalid@mail'
     fill_in 'Password',              with: 'wrong'
     fill_in 'Password confirmation', with: 'wrong1'

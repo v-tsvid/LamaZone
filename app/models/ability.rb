@@ -5,7 +5,8 @@ class Ability
     customer ||= Customer.new
     
     if customer.persisted?
-      can :manage, Address, customer_id: customer.id
+      can :manage, Address, id: customer.shipping_address.try(:id)
+      can :manage, Address, id: customer.billing_address.try(:id)
       can :read, Country
       can :manage, CreditCard, customer_id: customer.id
       can [:read, :update], Customer, id: customer.id

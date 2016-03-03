@@ -59,9 +59,9 @@ describe 'layouts/application.html.haml' do
     it_behaves_like 'any user'
     it_behaves_like 'authentified user'
 
-    it "has link 'My Addresses'" do
-      expect(rendered).to have_link 'My Addresses'
-    end
+    # it "has link 'My Addresses'" do
+    #   expect(rendered).to have_link 'My Addresses'
+    # end
   end
 
   context 'authentified admin' do

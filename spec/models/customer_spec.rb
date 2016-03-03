@@ -10,12 +10,8 @@ RSpec.describe Customer, type: :model do
     end
   end
 
-  [:email, 
-   :firstname, 
-   :lastname].each do |item|
-    it "is invalid without #{item}" do
-      expect(customer).to validate_presence_of item
-    end
+  it "is invalid without email" do
+      expect(customer).to validate_presence_of :email
   end
 
   it "does not allow case insensitive duplicating email" do
@@ -35,9 +31,15 @@ RSpec.describe Customer, type: :model do
     expect(customer).not_to be_valid
   end
 
-  [:orders, :ratings, :addresses].each do |item|
+  [:orders, :ratings].each do |item|
     it "has many #{item}" do
       expect(customer).to have_many item
+    end
+  end
+
+  [:billing_address, :shipping_address].each do |item|
+    it "has one #{item}" do
+      expect(customer).to have_one item
     end
   end
 
