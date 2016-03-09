@@ -12,36 +12,16 @@ RSpec.describe BooksController, type: :controller do
     sign_in customer
   end
 
-  describe "GET #index" do
-    context "if params contains category" do
-      let(:category) { best_book.categories[0].to_param }
-
-      it "receives books_of_category with params[:category] on Book" do
-        expect(Book).to receive(:books_of_category).with category
-        get :index, { category: category }
-      end
-
-      before { get :index, { category: category } }
-
-      it "assigns books of certain category as @books" do
-        expect(assigns(:books)).to eq [best_book]
-      end
-
-      it "assigns params[:category] as @category_id" do
-        expect(assigns(:category_id)).to eq category
-      end
+  describe "GET #index" do  
+    it "assigns all books as @books" do
+      get :index
+      expect(assigns(:books)).to eq [book, best_book]
     end
 
-    context "if params doesn't contain category" do
-      it "assigns all books as @books" do
-        get :index
-        expect(assigns(:books)).to eq [book, best_book]
-      end
-
-      it "assigns -1 as @category_id" do
-        get :index
-        expect(assigns(:category_id)).to eq '-1'
-      end
+    it "assigns alla categories as @categories" do
+      categories = FactoryGirl.create_list :category, 3
+      get :index
+      expect(assigns(:categories)).to eq categories
     end
   end
 

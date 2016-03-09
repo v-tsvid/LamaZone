@@ -1,6 +1,6 @@
 conditional_root = lambda {
   if Category.count > 0
-    '/books?category=1'
+    '/categories/1'
   else
     '/books'
   end

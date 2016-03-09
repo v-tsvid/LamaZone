@@ -2,36 +2,35 @@ require 'rails_helper'
 
 RSpec.describe "books/index", type: :view do
 
-  before { @books = FactoryGirl.create_list :book, 2 }
-
-  it "renders _books partial" do
+  before do
+    @books = FactoryGirl.create_list :book, 2
+    @categories = FactoryGirl.create_list :category, 2
     render
+  end
+
+  it "renders _book partial" do
     expect(view).to render_template(partial: '_book', count: 2)
+  end    
+  
+  it "displays categorys' titles" do
+    @categories.each do |cat|
+      expect(rendered).to match(cat.title)
+    end
   end
 
   [:title, :price].each do |item|
     it "displays books' #{item.to_s.pluralize}" do
-      render
-      [0, 1].each do |num|
-        expect(rendered).to match(@books[num].send(item).to_s) 
+      @books.each do |book|
+        expect(rendered).to match(book.send(item).to_s) 
       end
     end
   end
 
   [:firstname, :lastname].each do |item|
     it "displays #{item} of books' authors" do
-      render
-      [0, 1].each do |num|
-        expect(rendered).to match(@books[num].author.send(item).to_s) 
+      @books.each do |book|
+        expect(rendered).to match(book.author.send(item).to_s) 
       end
-    end
-  end
-
-  it "renders category selection form" do
-    render
-    
-    assert_select "form[action=?][method=?]", "/books", "get" do
-      assert_select "select#category"
     end
   end
 end

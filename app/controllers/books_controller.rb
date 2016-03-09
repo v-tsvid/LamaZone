@@ -5,12 +5,7 @@ class BooksController < ApplicationController
   # GET /books
   # GET /books.json
   def index
-    if params[:category]
-      @books = Book.books_of_category(params[:category]) 
-      @category_id = params[:category]
-    else
-      @category_id = '-1'
-    end
+    @categories = Category.all
   end
 
   # GET /books/1
