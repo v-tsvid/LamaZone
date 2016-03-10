@@ -1,12 +1,15 @@
 conditional_root = lambda {
-  if Category.count > 0
-    '/categories/1'
+  category = Category.find_by_title('bestsellers') || nil
+  if category && category.books
+    '/home'
   else
     '/books'
   end
 }
 
 Rails.application.routes.draw do
+  get 'static_pages/home', path: 'home'
+
   resources :shopping_cart_items
   resources :shopping_carts
   

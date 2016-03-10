@@ -38,7 +38,7 @@ RSpec.describe Book, type: :model do
       @other_books = FactoryGirl.create_list(:book, 2)
     end
 
-    subject { Book.books_of_category(Category.find_by_title('bestsellers').id) }
+    subject { Book.books_of_category('bestsellers') }
 
     it "returns books belongs to certain category" do
       expect(subject).to match_array [@best_book]

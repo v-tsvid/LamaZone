@@ -1,0 +1,29 @@
+%h1 LamaZone
+
+#bestBooksCarousel.carousel.slide
+  %ol{:class => "carousel-indicators"}
+    %li.active{"data-target" => "#bestBooksCarousel", "data-slide-to" => "0"}
+    %li{"data-target" => "#bestBooksCarousel", "data-slide-to" => "1"}
+    %li{"data-target" => "#bestBooksCarousel", "data-slide-to" => "2"}
+  
+  .carousel-inner
+    .active.item
+      = image_tag @books.first.images
+      %strong Title:
+      = @books.first.title
+      %strong by
+      = [@books.first.author.firstname, @books.first.author.lastname].join(' ')
+      %br/
+      %br/
+      = @books.first.description
+      %br/
+      %br/
+      %strong Price:
+      = @books.first.price
+      %br/
+      %strong In stock:
+      = @books.first.books_in_stock
+    = render partial: "book", collection: @books.drop(1)
+
+  %a.carousel-control.left{:href => "#bestBooksCarousel", "data-slide" => "prev"} &lsaquo;
+  %a.carousel-control.right{:href => "#bestBooksCarousel", "data-slide" => "next"} &rsaquo;

@@ -7,6 +7,21 @@ feature 'category selection' do
     @another_book = FactoryGirl.create :book
   end
 
+  context "home page" do
+    background do
+      @best_category = FactoryGirl.create :category, title: 'bestsellers'
+      @best_books = FactoryGirl.create_list :book, 2
+      @best_category.books << @best_books
+      visit "/home"
+    end
+
+    scenario "see the bestsellers" do
+      @best_books.each do |book|
+        expect(page).to have_content book.title
+      end
+    end
+  end
+
   scenario 'select some category' do
     visit "/categories/#{@category.id}"
     
@@ -31,5 +46,4 @@ feature 'category selection' do
       expect(page).to have_content cat.title
     end
   end
-
 end

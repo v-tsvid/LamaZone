@@ -47,12 +47,13 @@ gem 'bootstrap-sass', '3.3.5.1'
 gem 'haml', '4.0.6'
 gem 'omniauth-facebook', '2.0.1'
 gem 'aasm', '4.2.0'
-gem 'acts_as_shopping_cart', '0.3.0'
+# gem 'acts_as_shopping_cart', '0.3.0'
 gem 'simplecov', '0.10.0', :require => false, :group => :test
 gem 'rspec-activemodel-mocks', '1.0.2'
 gem 'rspec-rails', '3.3.2'
 gem 'faker', '1.4.3'
 gem 'factory_girl_rails', '4.5.0'
+gem 'bootstrap-slider-rails', '6.1.4'
   
   
 group :development, :test do

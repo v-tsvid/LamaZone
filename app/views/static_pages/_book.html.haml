@@ -1,0 +1,16 @@
+.item
+  = image_tag book.images
+  %strong Title:
+  = book.title
+  %strong by
+  = [book.author.firstname, book.author.lastname].join(' ')
+  %br/
+  %br/
+  = book.description
+  %br/
+  %br/
+  %strong Price:
+  = book.price
+  %br/
+  %strong In stock:
+  = book.books_in_stock

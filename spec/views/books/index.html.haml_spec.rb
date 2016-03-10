@@ -12,7 +12,7 @@ RSpec.describe "books/index", type: :view do
     expect(view).to render_template(partial: '_book', count: 2)
   end    
   
-  it "displays categorys' titles" do
+  it "displays categories' titles" do
     @categories.each do |cat|
       expect(rendered).to match(cat.title)
     end
