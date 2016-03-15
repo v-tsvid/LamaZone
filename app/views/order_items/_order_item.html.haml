@@ -3,4 +3,8 @@
   %td= Book.find(order_item.book_id).price
   %td= order_item.quantity
   %td= order_item.price
-  %td= link_to 'X', order_item, method: :delete, data: { confirm: 'Are you sure?' }
+  %td
+    = form_tag(controller: 'order_items', action: 'pop_from_cookies', method: :post) do
+      = hidden_field_tag 'book_id', order_item.book_id
+      = hidden_field_tag 'quantity', order_item.quantity 
+      = submit_tag "X", id: "book_#{order_item.book_id}_remove"

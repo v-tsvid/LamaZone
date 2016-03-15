@@ -1,47 +1,36 @@
 class OrderItemsController < ApplicationController
   before_action :set_order_item, only: [:show, :edit, :update, :destroy]
 
-  def push_to_cookie
-    cookies[:order_items] ||= ''
-    
-    cookies[:order_items] = { value: [cookies[:order_items],
-                                      params[:book_id],
-                                      params[:quantity]].join(' '),
-                              expires: 30.days.from_now }
+  def push_to_cookies
+    order_items = read_from_cookies
+    order_items << OrderItem.new(book_id: params[:book_id], quantity: params[:quantity])
+    write_to_cookies(order_items)
 
     redirect_to :back, notice: "\"#{Book.find(params[:book_id]).title}\" " \
-                               "was added to cart"
+                           "was added to cart"
   end
 
-  def read_from_cookies
-    order_items = Array.new
+  def pop_from_cookies
+    order_items = read_from_cookies
 
-    cookies[:order_items].split(' ').
-      partition.with_index{ |v, index| index.even? }.transpose.each do |item|
-        order_items << OrderItem.new(book_id: item[0], quantity: item[1])
+    order_items.each do |item|
+      if item.book_id.to_s == params[:book_id] && 
+         item.quantity.to_s == params[:quantity]
+        order_items.delete(item) 
+      end
     end
 
-    order_items = order_items.group_by{|h| h.book_id}.values.map do |a| 
-      OrderItem.new(book_id: a.first.book_id, 
-                    quantity: a.inject(0){|sum,h| sum + h.quantity})
-    end
+    write_to_cookies(order_items)
 
-    order_items.each do |item| 
-      item.price = Book.find(item.book_id).price * item.quantity
-    end
+    redirect_to :back, notice: "\"#{Book.find(params[:book_id]).title}\" " \
+                           "was removed from cart"
   end
-
-
 
   # GET /order_items
   # GET /order_items.json
   def index
-    @order_items = Array.new
     @order_items = read_from_cookies
-    
   end
-
-
 
   # GET /order_items/1
   # GET /order_items/1.json
@@ -106,5 +95,33 @@ class OrderItemsController < ApplicationController
     # Never trust parameters from the scary internet, only allow the white list through.
     def order_item_params
       params.require(:order_item).permit(:price, :quantity, :book_id)
+    end
+
+    def write_to_cookies(items)
+      cookies[:order_items] = ''
+      items.each do |item|
+        cookies[:order_items] = { value: [cookies[:order_items],
+                                          item[:book_id],
+                                          item[:quantity]].join(' '),
+                                  expires: 30.days.from_now }
+      end
+    end
+
+    def read_from_cookies
+      order_items = Array.new
+
+      cookies[:order_items].split(' ').
+        partition.with_index{ |v, index| index.even? }.transpose.each do |item|
+          order_items << OrderItem.new(book_id: item[0], quantity: item[1])
+      end
+
+      order_items = order_items.group_by{|h| h.book_id}.values.map do |a| 
+        OrderItem.new(book_id: a.first.book_id, 
+                      quantity: a.inject(0){|sum,h| sum + h.quantity})
+      end
+
+      order_items.each do |item| 
+        item.price = Book.find(item.book_id).price * item.quantity
+      end
     end
 end
