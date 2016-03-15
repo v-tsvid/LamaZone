@@ -46,9 +46,9 @@ class Customer < ActiveRecord::Base
       orders.new
     end
 
-    def order_in_progress
-      orders.in_progress.first
-    end
+    # def current_order
+    #   Order.find_by(customer: self, state: 'in_progress')
+    # end
 
     def self.from_omniauth(auth)
       where(provider: auth.provider, uid: auth.uid).first_or_create do |customer|

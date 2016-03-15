@@ -177,7 +177,7 @@ feature "data management with admin panel" do
   end
 
   scenario "allowed to change order states" do
-    order = FactoryGirl.create :order, state: "in_queue"
+    order = FactoryGirl.create :order, state: "processing"
     first(:link, text: 'Orders').click
     find(:css, "a.pjax[href=\"/admin/order/#{order.id}/edit\"]").click
     find("option[value='canceled']").click

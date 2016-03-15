@@ -1,0 +1,6 @@
+%tr
+  %td= link_to "#{Book.find(order_item.book_id).title}", Book.find(order_item.book_id)
+  %td= Book.find(order_item.book_id).price
+  %td= order_item.quantity
+  %td= order_item.price
+  %td= link_to 'X', order_item, method: :delete, data: { confirm: 'Are you sure?' }

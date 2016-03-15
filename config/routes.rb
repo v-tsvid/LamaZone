@@ -8,10 +8,11 @@ conditional_root = lambda {
 }
 
 Rails.application.routes.draw do
-  get 'static_pages/home', path: 'home'
 
-  resources :shopping_cart_items
-  resources :shopping_carts
+
+  # get 'static_pages/cart', path: 'cart'
+
+  get 'static_pages/home', path: 'home'
   
   if ActiveRecord::Base.connection.table_exists? 'categories'
     root :to => redirect(conditional_root.call)
@@ -32,6 +33,9 @@ Rails.application.routes.draw do
   
   resources :credit_cards
   resources :countries
+
+  post 'order_items/push_to_cookie'
+  get '/order_items/index', path: 'cart'
   
   resources :order_items
   resources :orders

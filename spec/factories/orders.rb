@@ -19,7 +19,8 @@ FactoryGirl.define do
         order_items_count { rand(1..10) }
       end
       after(:create) do |order, evaluator|
-        create_list(:order_item, evaluator.order_items_count, order: order)
+        items = create_list(:order_item, evaluator.order_items_count, order: order)
+        order.order_items << items
       end
     end
   end

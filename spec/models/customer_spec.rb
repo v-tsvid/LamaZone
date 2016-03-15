@@ -111,13 +111,13 @@ RSpec.describe Customer, type: :model do
     end
   end
 
-  context "#order_in_progress" do
-    it "returns first order in progress" do
-      orders = FactoryGirl.create_list(:order, 3, customer_id: customer.id, 
-        state: 'in_progress')
-      expect(customer.send(:order_in_progress)).to eq orders.first
-    end
-  end
+  # context "#current_order" do
+  #   it "returns customer's order in_progress" do
+  #     order_in_progress = FactoryGirl.create(:order, 
+  #       state: 'in_progress', customer: customer)
+  #     expect(customer.send(:current_order)).to eq order_in_progress
+  #   end
+  # end
 
   context "#full_name" do
     it "returns string wih lastname joined to firstname" do

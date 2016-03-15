@@ -2,12 +2,14 @@ class Order < ActiveRecord::Base
   include AASM
 
   STATE_LIST = ["in_progress", 
-                "in_queue", 
-                "in_delivery", 
-                "delivered", 
+                "processing", 
+                "shipping", 
+                "completed", 
                 "canceled"]
   
   DATE_COMPLETE_BEFORE_CREATE_MESSAGE = "can't be before created date"
+
+  # before_save :total_price
 
   validates :total_price, :completed_date, :state, presence: true
   validates :total_price, numericality: { greater_than: 0 }
@@ -27,13 +29,13 @@ class Order < ActiveRecord::Base
 
   aasm column: 'state', whiny_transitions: false do 
     state :in_progress, initial: true
-    state :in_queue
-    state :in_delivery 
-    state :delivered 
+    state :processing
+    state :shipping 
+    state :completed 
     state :canceled
 
     event :cancel do
-      transitions from: [:in_progress, :in_queue], to: :canceled
+      transitions from: [:in_progress, :processing], to: :canceled
     end
   end
 
@@ -47,7 +49,11 @@ class Order < ActiveRecord::Base
     end
   end
 
-  private
+  def update_total_price
+    self.total_price = order_items.collect { |item| (item.quantity * item.price) }.sum
+  end
+
+  private 
 
     def custom_label_method
       "#{self.id}"

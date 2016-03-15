@@ -53,7 +53,7 @@ RSpec.describe Order, type: :model do
       :order, 3, state: 'in_progress', 
       created_at: DateTime.now, completed_date: Date.today.next_day) }
 
-    it "returns orders in_progress" do
+    it "returns in_progress orders" do
       expect(Order.in_progress).to match_array(orders_in_progress)
     end
 
@@ -85,6 +85,31 @@ RSpec.describe Order, type: :model do
       expect{ order.send(:add_book, books[0]) }.to change{ 
         OrderItem.find_by(order_id: order.id, book_id: books[0].id).quantity 
         }.from(1).to(2)
+    end
+  end
+
+  # context "before saving the order" do
+    
+  #   let(:unsaved_order) { FactoryGirl.build :order }
+    
+  #   it "update total_price for the order" do
+  #     expect(unsaved_order).to receive(:update_total_price)
+  #     unsaved_order.save
+  #   end
+  # end
+
+  context "#update_total_price" do
+
+    let(:order) { FactoryGirl.create :order }
+
+    it "sets total_price of the order equal to sum of all the order_items" do
+      order_items = FactoryGirl.create_list :order_item, 2, order: order
+      order.order_items << order_items
+      
+
+      ttl_prc = order_items.collect { |item| (item.quantity * item.price) }.sum
+
+      expect{order.update_total_price}.to change{order.total_price}.to ttl_prc
     end
   end
 end

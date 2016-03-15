@@ -28,4 +28,7 @@ class BooksController < ApplicationController
     def set_book
       @book = Book.find(params[:id])
     end
+
+    def add_to_cart
+    end
 end

@@ -6,6 +6,13 @@ class ApplicationController < ActionController::Base
 
   alias_method :current_user, :current_customer
 
+  helper_method :current_order
+
+  def current_order
+    # cookies[:order_items] = Array.new
+    cookies[:order] ||= JSON.generate(Order.new.attributes)
+  end
+
   protected
 
   def configure_permitted_parameters
