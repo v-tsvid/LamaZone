@@ -15,26 +15,32 @@
           %p.navbar-text Hi there! You're in LamaZone now!
         .collapse.navbar-collapse#bs-example-navbar-collapse-1
           %ul.nav.navbar-nav
-            %li{class: current_page?(books_path) || current_page?(root_path) ? "active" : nil}
-              =link_to "Books", books_path
-            %li
-              %a About
-            - if current_admin  
-              %li{class: current_page?(rails_admin_path) ? "active" : nil}
-                =link_to "Admin Panel", rails_admin_path
+            %li{class: current_page?('/home') || current_page?(root_path) ? "active" : nil}
+              =link_to "HOME", root_path
+            %li{class: current_page?(books_path) ? "active" : nil}
+              =link_to "SHOP", books_path
+
           - if !current_customer && !current_admin
             %ul.nav.navbar-nav.navbar-right
               %li{class: current_page?(new_customer_registration_path) ? "active" : nil}
                 =link_to "Sign Up", new_customer_registration_path
               %li{class: current_page?(new_customer_session_path) ? "active" : nil}
                 =link_to "Sign In", new_customer_session_path
+
           - else
-            %ul.nav.navbar-nav.navbar-right
-              %li{class: current_page?(destroy_customer_session_path) ? "active" : nil}
-                =link_to "Sign Out", destroy_customer_session_path, method: "delete"
             %ul.nav.navbar-nav.navbar-right
               %li{class: current_page?(edit_customer_registration_path) ? "active" : nil}
                 =link_to "My Profile", edit_customer_registration_path
+              %li{class: current_page?(destroy_customer_session_path) ? "active" : nil}
+                =link_to "Sign Out", destroy_customer_session_path, method: "delete"
+
+          %ul.nav.navbar-nav.navbar-right
+            %li{class: current_page?(order_items_path) || current_page?('/cart')? "active" : nil}
+              =link_to "CART: (EMPTY)", '/cart'
+
+            - if current_admin  
+              %li{class: current_page?(rails_admin_path) ? "active" : nil}
+                =link_to "Admin Panel", rails_admin_path
     = yield
     %p
     = params.inspect

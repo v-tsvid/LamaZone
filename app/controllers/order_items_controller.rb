@@ -1,29 +1,13 @@
 class OrderItemsController < ApplicationController
   before_action :set_order_item, only: [:show, :edit, :update, :destroy]
 
-  def push_to_cookies
+  def interact_with_cookies
     order_items = read_from_cookies
-    order_items << OrderItem.new(book_id: params[:book_id], quantity: params[:quantity])
-    write_to_cookies(order_items)
-
+    order_items = params[:pop] ? pop_from_cookies(order_items) : push_to_cookies(order_items)
+    write_to_cookies(order_items)    
+    add_or_remove = params[:pop] ? 'removed from' : 'added to'
     redirect_to :back, notice: "\"#{Book.find(params[:book_id]).title}\" " \
-                           "was added to cart"
-  end
-
-  def pop_from_cookies
-    order_items = read_from_cookies
-
-    order_items.each do |item|
-      if item.book_id.to_s == params[:book_id] && 
-         item.quantity.to_s == params[:quantity]
-        order_items.delete(item) 
-      end
-    end
-
-    write_to_cookies(order_items)
-
-    redirect_to :back, notice: "\"#{Book.find(params[:book_id]).title}\" " \
-                           "was removed from cart"
+                               "was #{add_or_remove} cart"
   end
 
   # GET /order_items
@@ -97,6 +81,16 @@ class OrderItemsController < ApplicationController
       params.require(:order_item).permit(:price, :quantity, :book_id)
     end
 
+    def push_to_cookies(order_items)
+      order_items << OrderItem.new(book_id: params[:book_id], quantity: params[:quantity])
+    end
+
+    def pop_from_cookies(order_items)
+      order_items.each do |item|
+        order_items.delete(item) if item.book_id.to_s == params[:book_id]
+      end
+    end
+
     def write_to_cookies(items)
       cookies[:order_items] = ''
       items.each do |item|
@@ -109,19 +103,21 @@ class OrderItemsController < ApplicationController
 
     def read_from_cookies
       order_items = Array.new
+      if cookies[:order_items]
+        cookies[:order_items].split(' ').
+          partition.with_index{ |v, index| index.even? }.transpose.each do |item|
+            order_items << OrderItem.new(book_id: item[0], quantity: item[1])
+        end
 
-      cookies[:order_items].split(' ').
-        partition.with_index{ |v, index| index.even? }.transpose.each do |item|
-          order_items << OrderItem.new(book_id: item[0], quantity: item[1])
-      end
+        order_items = order_items.group_by{|h| h.book_id}.values.map do |a| 
+          OrderItem.new(book_id: a.first.book_id, 
+                        quantity: a.inject(0){|sum,h| sum + h.quantity})
+        end
 
-      order_items = order_items.group_by{|h| h.book_id}.values.map do |a| 
-        OrderItem.new(book_id: a.first.book_id, 
-                      quantity: a.inject(0){|sum,h| sum + h.quantity})
+        order_items.each do |item| 
+          item.price = Book.find(item.book_id).price * item.quantity
+        end
       end
-
-      order_items.each do |item| 
-        item.price = Book.find(item.book_id).price * item.quantity
-      end
+      order_items
     end
 end

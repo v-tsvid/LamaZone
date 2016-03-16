@@ -1,40 +1,20 @@
 %p{:id => "notice"}= notice
 
-%p
-  %strong Title:
-  = @book.title
+%h1 #{@book.title} by #{[@book.author.firstname, @book.author.lastname].join(' ')}
 
 %p
-  %strong Author:
-  = [@book.author.firstname, @book.author.lastname].join(' ')
+  = form_tag(controller: 'order_items', action: 'interact_with_cookies', method: :post) do
+    = @book.price
+    = hidden_field_tag 'book_id', @book.id
+    = number_field_tag 'quantity', '1', in: 1..@book.books_in_stock, id: "book_quantity" 
+    = submit_tag "Add to Cart", id: "add_to_cart"
 
 %p
-  %strong Description:
   = @book.description
 
 %p
-  %strong Price:
-  = @book.price
+  %strong Reviews
 
-%p
-  %strong Books in stock:
-  - if @book.books_in_stock > 0
-    = @book.books_in_stock
-  - else
-    Out of stock  
+= link_to 'Add review for this book', new_book_rating_path(@book)
 
-= link_to 'Add review', new_book_rating_path(@book) |
-= link_to 'Back', books_path
-
-%p
-  %strong Reviews:
-%table
-  %thead
-    %tr
-      %th Rate
-      %th Review
-      %th Customer
-      %th{:colspan => "3"}
-    
-  %tbody
-    = render partial: "books/rating", collection: @book.ratings
+= render partial: "books/rating", collection: @book.ratings

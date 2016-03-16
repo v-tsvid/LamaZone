@@ -36,13 +36,123 @@ RSpec.describe OrderItemsController, type: :controller do
   # # OrderItemsController. Be sure to keep this updated too.
   # let(:valid_session) { {} }
 
-  # describe "GET #index" do
-  #   it "assigns all order_items as @order_items" do
-  #     order_item = OrderItem.create! valid_attributes
-  #     get :index, {}, valid_session
-  #     expect(assigns(:order_items)).to eq([order_item])
-  #   end
-  # end
+  describe "#interact_with_cookies" do
+
+    shared_context "without order items" do
+      before { @order_items = Array.new }
+    end
+
+    shared_context "with order items" do
+      before { @order_items = FactoryGirl.build_list :order_item, 2 }
+    end
+
+    shared_context "shared stuff" do
+      before do 
+        @book = FactoryGirl.create :book
+        allow(controller).to receive(:read_from_cookies).and_return(@order_items)
+        request.env["HTTP_REFERER"] = "/books"
+      end
+    end
+
+    shared_context "with params[:pop]" do
+      before do 
+        @params_hash = { pop: true, book_id: @book.id, quantity: 1 } 
+        @order_item = @order_items.first
+        @new_order_items = @order_items
+        @new_order_items.pop
+      end
+    end
+
+    shared_context "without params[:pop]" do
+      before do 
+        @params_hash = { book_id: @book.id, quantity: 1 } 
+        @order_item = OrderItem.new(book_id: @book.id, quantity: 1)
+        @new_order_items = @order_items + [@order_item]
+      end
+    end
+
+    shared_examples "correct method executing" do
+      context do
+
+        after { post :interact_with_cookies, @params_hash }
+
+        it "reads order items from cookies" do
+          expect(controller).to receive(:read_from_cookies)  
+        end
+
+        it "modifies order_items and write it to cookies" do
+            if @params_hash[:pop]
+              expect(controller).to receive(:write_to_cookies).
+                with(@new_order_items)
+            else
+              expect(controller).to receive(:write_to_cookies) do |obj| 
+                expect(obj.last.attributes).
+                  to eq(@new_order_items.last.attributes) 
+              end
+            end
+        end
+      end
+
+      context do
+
+        before { post :interact_with_cookies, @params_hash }
+
+        it "redirects to back" do
+          expect(response).to redirect_to request.env["HTTP_REFERER"]
+        end
+
+        it "sends notice" do
+          expect(flash[:notice]).to eq (
+            "\"#{@book.title}\" was " +
+            "#{@params_hash[:pop] ? 'removed from cart' : 'added to cart'}")
+        end
+      end
+    end
+
+    context "if some order items were readed from cookies" do
+      include_context "with order items"
+      include_context "shared stuff"
+
+      context "if params[:pop] was passed" do
+        include_context "with params[:pop]"
+        it_behaves_like "correct method executing"
+      end
+
+      context "if params[:pop was not passed" do
+        include_context "without params[:pop]"
+        it_behaves_like "correct method executing"
+      end
+    end
+    
+
+    context "if no order items was readed from cookies" do
+      include_context "without order items"
+      include_context "shared stuff"
+
+      context "if params[:pop] was passed" do
+        include_context "with params[:pop]"
+        it_behaves_like "correct method executing"
+      end
+
+      context "if params[:pop] was not passed" do
+        include_context "without params[:pop]"
+        it_behaves_like "correct method executing"
+      end
+    end
+  end
+
+
+  describe "GET #index" do
+    before do
+      @order_items = FactoryGirl.build_list :order_item, 2
+      allow(controller).to receive(:read_from_cookies).and_return(@order_items)
+    end
+    
+    it "assigns the result of #read_from_cookies as @order_items" do
+      get :index
+      expect(assigns(:order_items)).to eq controller.send(:read_from_cookies)
+    end
+  end
 
   # describe "GET #show" do
   #   it "assigns the requested order_item as @order_item" do

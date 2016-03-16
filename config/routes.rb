@@ -34,9 +34,8 @@ Rails.application.routes.draw do
   resources :credit_cards
   resources :countries
 
-  post 'order_items/push_to_cookies'
-  post 'order_items/pop_from_cookies'
-  get '/order_items/index', path: 'cart'
+  post 'order_items/interact_with_cookies'
+  get 'order_items/index', path: 'cart'
   
   resources :order_items
   resources :orders

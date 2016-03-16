@@ -3,8 +3,3 @@
   %td= [book.author.firstname, book.author.lastname].join(' ')
   %td= book.price
   %td= link_to 'Details', book
-  %td
-    = form_tag(controller: 'order_items', action: 'push_to_cookies', method: :post) do
-      = hidden_field_tag 'book_id', book.id
-      = number_field_tag 'quantity', '1', min: 1, id: "book_#{book.id}_quantity" 
-      = submit_tag "Add to Cart", id: "book_#{book.id}_add"

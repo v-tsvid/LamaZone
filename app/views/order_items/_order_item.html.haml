@@ -1,10 +1,11 @@
 %tr
-  %td= link_to "#{Book.find(order_item.book_id).title}", Book.find(order_item.book_id)
-  %td= Book.find(order_item.book_id).price
-  %td= order_item.quantity
+  %td= link_to "#{order_item.book.title}", order_item.book
+  %td= order_item.book.price
+  %td 
+    = number_field_tag 'quantity', order_item.quantity, min: 1, id: "book_#{order_item.book_id}_quantity"
+    = hidden_field_tag "book_#{order_item.book_id}_id"
   %td= order_item.price
   %td
-    = form_tag(controller: 'order_items', action: 'pop_from_cookies', method: :post) do
+    = form_tag(controller: 'order_items', action: 'interact_with_cookies', pop: true, method: :post) do
       = hidden_field_tag 'book_id', order_item.book_id
-      = hidden_field_tag 'quantity', order_item.quantity 
       = submit_tag "X", id: "book_#{order_item.book_id}_remove"

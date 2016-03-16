@@ -11,7 +11,6 @@ feature "view book details" do
     expect(page).to have_content @book.title
     expect(page).to have_content @book.description
     expect(page).to have_content @book.price
-    expect(page).to have_content @book.books_in_stock
     expect(page).to have_content @book.author.lastname
   end
 end

@@ -14,7 +14,7 @@ describe 'layouts/application.html.haml' do
     end
 
     it "has link \"Books\"" do
-      expect(rendered).to have_link 'Books'
+      expect(rendered).to have_link 'SHOP'
     end
   end
 
