@@ -43,8 +43,7 @@ RSpec.describe "categories/show", type: :view do
   it "renders the name of the author of the category's books" do
     render
     @books.each do |book|
-      expect(rendered).to match(
-        [book.author.firstname, book.author.lastname].join(' '))
+      expect(rendered).to match(book.author.full_name)
     end
   end
 

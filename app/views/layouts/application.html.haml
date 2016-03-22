@@ -15,9 +15,9 @@
           %p.navbar-text Hi there! You're in LamaZone now!
         .collapse.navbar-collapse#bs-example-navbar-collapse-1
           %ul.nav.navbar-nav
-            %li{class: current_page?('/home') || current_page?(root_path) ? "active" : nil}
+            %li{class: current_page?(root_path) ? "active" : nil}
               =link_to "HOME", root_path
-            %li{class: current_page?(books_path) ? "active" : nil}
+            %li{class: (resource.class == Book || Category) && !current_page?(root_path) ? "active" : nil}
               =link_to "SHOP", books_path
 
           - if !current_customer && !current_admin
@@ -30,7 +30,9 @@
           - else
             %ul.nav.navbar-nav.navbar-right
               %li{class: current_page?(edit_customer_registration_path) ? "active" : nil}
-                =link_to "My Profile", edit_customer_registration_path
+                =link_to "Settings", edit_customer_registration_path
+              %li{class: current_page?(orders_path) ? "active" : nil}
+                =link_to "Orders", orders_path
               %li{class: current_page?(destroy_customer_session_path) ? "active" : nil}
                 =link_to "Sign Out", destroy_customer_session_path, method: "delete"
 

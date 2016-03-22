@@ -1,6 +1,14 @@
 %p{:id => "notice"}= notice
 
-%h1 #{@book.title} by #{[@book.author.firstname, @book.author.lastname].join(' ')}
+%span #{@book.title}
+%span by 
+= link_to "#{@book.author.full_name}", author_path(@book.author)
+%br/
+%br/
+
+= image_tag @book.images
+%br/
+%br/
 
 %p
   = form_tag(controller: 'order_items', action: 'interact_with_cookies', method: :post) do

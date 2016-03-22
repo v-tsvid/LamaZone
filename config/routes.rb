@@ -1,22 +1,25 @@
-conditional_root = lambda {
-  category = Category.find_by_title('bestsellers') || nil
-  if category && category.books
-    '/home'
-  else
-    '/books'
-  end
-}
+# conditional_root = lambda {
+#   category = Category.find_by_title('bestsellers') || nil
+#   if category && category.books
+#     '/home'
+#   else
+#     '/books'
+#   end
+# }
 
 Rails.application.routes.draw do
 
-
+  
   # get 'static_pages/cart', path: 'cart'
 
   get 'static_pages/home', path: 'home'
+  root to: 'static_pages#home'
   
-  if ActiveRecord::Base.connection.table_exists? 'categories'
-    root :to => redirect(conditional_root.call)
-  end
+  # if ActiveRecord::Base.connection.table_exists? 'categories'
+  #   root :to => redirect(conditional_root.call)
+  # end
+
+
   
   devise_for :customers, controllers: { omniauth_callbacks: "customers/omniauth_callbacks", 
     sessions: "customers/sessions", registrations: "customers/registrations" } 

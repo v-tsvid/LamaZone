@@ -1,6 +1,8 @@
-%h1 New Rating
+%h4
+  %span New Review for
+  = link_to "#{@book.title} by #{@book.author.full_name}", @book
 
 = form_for [@book, @rating] do |f|
   = render 'form', f: f
 
-= link_to 'Back', book_path(@book)
+

@@ -8,22 +8,8 @@
   
   .carousel-inner
     .active.item
-      = image_tag @books.first.images
-      %strong Title:
-      = @books.first.title
-      %strong by
-      = [@books.first.author.firstname, @books.first.author.lastname].join(' ')
-      %br/
-      %br/
-      = @books.first.description
-      %br/
-      %br/
-      %strong Price:
-      = @books.first.price
-      %br/
-      %strong In stock:
-      = @books.first.books_in_stock
-    = render partial: "book", collection: @books.drop(1)
+      = render partial: "book", locals: { book: @books.first }
+    = render partial: "carousel_item", collection: @books.drop(1)
 
   %a.carousel-control.left{:href => "#bestBooksCarousel", "data-slide" => "prev"} &lsaquo;
   %a.carousel-control.right{:href => "#bestBooksCarousel", "data-slide" => "next"} &rsaquo;

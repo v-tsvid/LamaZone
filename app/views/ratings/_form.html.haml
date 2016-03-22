@@ -6,17 +6,16 @@
     %ul
       - @rating.errors.full_messages.each do |message|
         %li= message
-.field
-  = f.label :book_id, "\"#{@book.title}\" by #{Author.find(@book.author_id).firstname} #{Author.find(@book.author_id).lastname}"
-  %br/
+
   = f.number_field :book_id, readonly: true, hidden: true, value: @book.id
 .field
-  = f.label :rate
-  %br/
+  = f.label :rate, 'Rating'
   = f.number_field :rate, in: 1..10, value: 10
 .field
-  = f.label :review
+  = f.label :review, 'Text review'
   %br/
   = f.text_area :review
 .actions
-  = f.submit "Save"
+  = f.submit "Add"
+  %span or
+  = link_to 'Cancel', @book

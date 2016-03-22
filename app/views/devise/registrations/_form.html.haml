@@ -37,3 +37,8 @@
   = f.label(:country_id)
   %br/
   = f.select(:country_id, options_for_select(Country.all.map {|country| [country.name, country.id]}, kountry))
+  %br/
+  %br/
+
+  .actions
+    = f.submit "SAVE"

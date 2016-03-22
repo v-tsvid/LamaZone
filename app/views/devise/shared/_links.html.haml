@@ -1,8 +1,10 @@
 - if controller_name != 'sessions'
+  %span Have an account?
   = link_to "Sign in", new_session_path(resource_name)
   %br/
 
 - if devise_mapping.registerable? && controller_name != 'registrations'
+  %span Don't have an account?
   = link_to "Sign up", new_registration_path(resource_name) 
   %br/
 

@@ -1,27 +1,17 @@
 %p{:id => "notice"}= notice
 
 %aside
-  %h1 Categories
+  %h1 SHOP BY CATEGORIES
 
   %table
     %tbody
       - @categories.each do |category|
         %tr
           %td= link_to "#{category.title}", category
-
   %br
 
-
-%h1 Listing books
-
-%table
-  %thead
-    %tr
-      %th Title
-      %th Author
-      %th Price
-      %th{:colspan => "4"}
+%h1 Shop
     
-  %tbody
-    = render @books
+= render @books
+= paginate @books
 

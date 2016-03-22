@@ -1,6 +1,6 @@
 class AddressesController < ApplicationController
-  # before_action :set_address, only: [:show, :edit, :update, :destroy]
-  # before_action :authenticate_customer!
+  before_action :set_address, only: [:show, :edit, :update, :destroy]
+  before_action :authenticate_customer!
   
   # load_and_authorize_resource
   # skip_load_resource only: [:addresses]
@@ -16,9 +16,9 @@ class AddressesController < ApplicationController
   #   @address = Address.new(customer_id: @customer.id)
   # end
 
-  # # GET /addresses/1/edit
-  # def edit
-  # end
+  # GET /addresses/1/edit
+  def edit
+  end
 
   # # POST /addresses
   # # POST /addresses.json
@@ -40,17 +40,17 @@ class AddressesController < ApplicationController
 
   # # PATCH/PUT /addresses/1
   # # PATCH/PUT /addresses/1.json
-  # def update
-  #   respond_to do |format|
-  #     if @address.update(address_params)
-  #       format.html { redirect_to @address, notice: 'Address was successfully updated.' }
-  #       format.json { render :show, status: :ok, location: @address }
-  #     else
-  #       format.html { render :edit }
-  #       format.json { render json: @address.errors, status: :unprocessable_entity }
-  #     end
-  #   end
-  # end
+  def update
+    respond_to do |format|
+      if @address.update(address_params)
+        format.html { redirect_to @address, notice: 'Address was successfully updated.' }
+        format.json { render :show, status: :ok, location: @address }
+      else
+        format.html { render :edit }
+        format.json { render json: @address.errors, status: :unprocessable_entity }
+      end
+    end
+  end
 
   # # DELETE /addresses/1
   # # DELETE /addresses/1.json
@@ -64,21 +64,19 @@ class AddressesController < ApplicationController
 
   private
     # Use callbacks to share common setup or constraints between actions.
-    # def set_address
-    #   @address = Address.find(params[:id])
-    # end
+    def set_address
+      @address = Address.find(params[:id])
+    end
 
     # # Never trust parameters from the scary internet, only allow the white list through.
-    # def address_params
-    #   params.require(:address).permit(:phone, 
-    #                                   :address1, 
-    #                                   :address2, 
-    #                                   :city, 
-    #                                   :zipcode, 
-    #                                   :country_id, 
-    #                                   :firtname, 
-    #                                   :lastname, 
-    #                                   :billing_address_for_id, 
-    #                                   :shipping_address_for_id)
-    # end
+    def address_params
+      params.require(:address).permit(:phone, 
+                                      :address1, 
+                                      :address2, 
+                                      :city, 
+                                      :zipcode, 
+                                      :country_id, 
+                                      :firstname, 
+                                      :lastname)
+    end
 end

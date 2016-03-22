@@ -18,8 +18,8 @@ class Customer < ActiveRecord::Base
   has_one :billing_address, class_name: 'Address', foreign_key: 'billing_address_for_id'
   has_one :shipping_address, class_name: 'Address', foreign_key: 'shipping_address_for_id'
 
-  accepts_nested_attributes_for :billing_address, allow_destroy: true#, reject_if: lambda {|attributes| attributes['billing_address_attributes'].all? {|key, value| key == '_destroy' || value.blank? }}
-  accepts_nested_attributes_for :shipping_address, allow_destroy: true#, reject_if: lambda {|attributes| attributes['shipping_address_attributes'].all? {|key, value| key == '_destroy' || value.blank? }}
+  # accepts_nested_attributes_for :billing_address, allow_destroy: true#, reject_if: lambda {|attributes| attributes['billing_address_attributes'].all? {|key, value| key == '_destroy' || value.blank? }}
+  # accepts_nested_attributes_for :shipping_address, allow_destroy: true#, reject_if: lambda {|attributes| attributes['shipping_address_attributes'].all? {|key, value| key == '_destroy' || value.blank? }}
 
   before_save :downcase_email
 
@@ -29,10 +29,11 @@ class Customer < ActiveRecord::Base
     end
   end
 
+  def full_name
+    "#{self.firstname} #{self.lastname}"
+  end
+
   private
-    def full_name
-      "#{self.firstname} #{self.lastname}"
-    end
 
     def custom_label_method
       "#{self.lastname} #{self.firstname}"

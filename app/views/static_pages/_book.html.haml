@@ -1,16 +1,15 @@
-.item
-  = image_tag book.images
-  %strong Title:
-  = book.title
-  %strong by
-  = [book.author.firstname, book.author.lastname].join(' ')
-  %br/
-  %br/
-  = book.description
-  %br/
-  %br/
-  %strong Price:
-  = book.price
-  %br/
-  %strong In stock:
-  = book.books_in_stock
+%strong= book.title
+%span by
+= link_to"#{book.author.full_name}", author_path(book.author)
+%br/
+%br/
+= image_tag book.images
+%br/
+= book.description
+%br/
+%p
+  = form_tag(controller: 'order_items', action: 'interact_with_cookies', method: :post) do
+    %strong= book.price
+    = hidden_field_tag 'book_id', book.id
+    = number_field_tag 'quantity', '1', in: 1..book.books_in_stock, id: "book_quantity" 
+    = submit_tag "Add to Cart", id: "add_to_cart"

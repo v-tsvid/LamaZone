@@ -1,5 +1,4 @@
-%tr
-  %td= book.title
-  %td= [book.author.firstname, book.author.lastname].join(' ')
-  %td= book.price
-  %td= link_to 'Details', book
+%p= link_to image_tag(book.images), book_path(book)
+%p= link_to book.title, book_path(book)
+%p= book.price
+%br/

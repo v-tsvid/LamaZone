@@ -54,6 +54,7 @@ gem 'rspec-rails', '3.3.2'
 gem 'faker', '1.4.3'
 gem 'factory_girl_rails', '4.5.0'
 gem 'bootstrap-slider-rails', '6.1.4'
+gem 'kaminari', '0.16.3'
   
   
 group :development, :test do

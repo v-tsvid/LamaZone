@@ -1,51 +1,60 @@
-%h2
-  Edit #{resource_name.to_s.humanize}
+%h3 Settings
+
+%h4 BILLING ADDRESS
+= form_for(resource.billing_address, html: { method: :put }) do |bil_addr_f|
+  = render 'form', f: bil_addr_f, kountry: resource.billing_address.try(:country_id)
+
+%h4 SHIPPING ADDRESS
+= form_for(resource.shipping_address, html: { method: :put }) do |ship_addr_f|
+  = render 'form', f: ship_addr_f, kountry: resource.shipping_address.try(:country_id) 
+
 
 = form_for(resource, as: resource_name, url: registration_path(resource_name), html: { method: :put }) do |f|
   = devise_error_messages!
 
-  %h3 My billing address
-
-  = f.fields_for :billing_address do |bil_addr_f|
-    = render 'form', f: bil_addr_f, kountry: resource.billing_address.try(:country_id) || 1
-
-  %h3 My shipping address
-
-  = f.fields_for :shipping_address do |ship_addr_f|
-    = render 'form', f: ship_addr_f, kountry: resource.shipping_address.try(:country_id) || 1
-
-  %h3 My profile
+  %h4 EMAIL
 
   .field
     = f.label :email
     %br/
     = f.email_field :email, autofocus: true
-  
+    %br/
+    %br/
+
+  .actions
+    = f.submit "SAVE"
+
+= form_for(resource, as: resource_name, url: registration_path(resource_name), html: { method: :put }) do |f|
+  = devise_error_messages!
+
+  %h4 PASSWORD
+
   - if devise_mapping.confirmable? && resource.pending_reconfirmation?
     %div Currently waiting confirmation for: #{resource.unconfirmed_email}
 
   .field
-    = f.label :password
-    %i (leave blank if you don't want to change it)
-    %br/
-    = f.password_field :password, autocomplete: "off"
-
-  .field
-    = f.label :password_confirmation
-    %br/
-    = f.password_field :password_confirmation, autocomplete: "off"
-
-  .field
-    = f.label :current_password
-    %i (we need your current password to confirm your changes)
+    = f.label :current_password, 'Old password'
     %br/
     = f.password_field :current_password, autocomplete: "off"
 
+  .field
+    = f.label :password, 'New password'
+    %br/
+    = f.password_field :password, autocomplete: "off"
+    %br/
+    %br/
+
   .actions
-    = f.submit "Update"
+    = f.submit "SAVE"
 
-%h3 Cancel my account
 
-%p Unhappy? #{button_to("Cancel my account", registration_path(resource_name), data: { confirm: "Are you sure?" }, method: :delete)}
+%h4 REMOVE ACCOUNT
 
+= form_for(resource, as: resource_name, url: registration_path(resource_name), html: { method: :delete }) do |f|
+  = devise_error_messages!
+  %p#alert= alert
+
+  .actions
+    %p #{f.submit "PLEASE REMOVE MY ACCOUNT"} #{check_box_tag 'confirm'} #{label_tag 'I understand that all data will be lost'}
+    
 = link_to "Back", :back
