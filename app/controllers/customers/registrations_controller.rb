@@ -31,7 +31,7 @@ before_filter :configure_account_update_params, only: [:update]
     if params[:confirm] == '1'
       super 
     else
-      redirect_to :back, alert: 'You must confirm that you understand all risks first'
+      redirect_to :back, notice: 'You must confirm that you understand all risks first'
     end
   end
 

@@ -8,14 +8,19 @@
         %li= message
 
 .field
-  = f.label :contact_name 
+  = f.label :firstname
   %br/
-  = f.text_field :contact_name
+  = f.text_field :firstname
+
+.field
+  = f.label :lastname
+  %br/
+  = f.text_field :lastname
 
 .field
   = f.label :phone
   %br/
-  = f.text_field :phone
+  = f.text_field :phone 
 
 .field
   = f.label :address1
@@ -36,6 +41,12 @@
   = f.label :zipcode
   %br/
   = f.text_field :zipcode
+
+.field
+  = f.hidden_field :billing_address_for_id
+
+.field
+  = f.hidden_field :shipping_address_for_id
 
 .field
   = f.label(:country_id)

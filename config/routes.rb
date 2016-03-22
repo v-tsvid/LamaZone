@@ -25,9 +25,10 @@ Rails.application.routes.draw do
     sessions: "customers/sessions", registrations: "customers/registrations" } 
   
   resources :customers, except: [:index, :destroy] do
-    resources :addresses, except: [:index], shallow: true 
     resources :ratings, only: :index
   end
+
+  resources :addresses, except: [:index]
 
   # get 'customer/addresses', to: 'customers#addresses', as: :adresses
   

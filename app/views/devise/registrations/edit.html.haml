@@ -1,12 +1,23 @@
 %h3 Settings
+%p#notice= notice
 
 %h4 BILLING ADDRESS
-= form_for(resource.billing_address, html: { method: :put }) do |bil_addr_f|
-  = render 'form', f: bil_addr_f, kountry: resource.billing_address.try(:country_id)
+- if @billing_address.id
+  = form_for(@billing_address, html: { method: :put }) do |bil_addr_f|
+    = render 'form', f: bil_addr_f, kountry: @billing_address.try(:country_id)
+- else
+  = form_for(@billing_address, html: { method: :post }) do |bil_addr_f|
+    = render 'form', f: bil_addr_f, kountry: @billing_address.try(:country_id)
+  
+
 
 %h4 SHIPPING ADDRESS
-= form_for(resource.shipping_address, html: { method: :put }) do |ship_addr_f|
-  = render 'form', f: ship_addr_f, kountry: resource.shipping_address.try(:country_id) 
+- if @shipping_address.id
+  = form_for(@shipping_address, html: { method: :put }) do |ship_addr_f|
+    = render 'form', f: ship_addr_f, kountry: @shipping_address.try(:country_id)
+- else
+  = form_for(@shipping_address, html: { method: :post }) do |ship_addr_f|
+    = render 'form', f: ship_addr_f, kountry: @shipping_address.try(:country_id)
 
 
 = form_for(resource, as: resource_name, url: registration_path(resource_name), html: { method: :put }) do |f|
@@ -17,7 +28,7 @@
   .field
     = f.label :email
     %br/
-    = f.email_field :email, autofocus: true
+    = f.email_field :email
     %br/
     %br/
 
@@ -52,7 +63,6 @@
 
 = form_for(resource, as: resource_name, url: registration_path(resource_name), html: { method: :delete }) do |f|
   = devise_error_messages!
-  %p#alert= alert
 
   .actions
     %p #{f.submit "PLEASE REMOVE MY ACCOUNT"} #{check_box_tag 'confirm'} #{label_tag 'I understand that all data will be lost'}

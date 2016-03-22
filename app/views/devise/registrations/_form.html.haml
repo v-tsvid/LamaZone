@@ -34,6 +34,12 @@
   = f.text_field :zipcode
 
 .field
+  = f.hidden_field :billing_address_for_id
+
+.field
+  = f.hidden_field :shipping_address_for_id
+
+.field
   = f.label(:country_id)
   %br/
   = f.select(:country_id, options_for_select(Country.all.map {|country| [country.name, country.id]}, kountry))

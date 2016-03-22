@@ -10,11 +10,16 @@ class AddressesController < ApplicationController
   # def show
   # end
 
-  # # GET /addresses/new
-  # def new
-  #   @customer = Customer.find(params[:customer_id])
-  #   @address = Address.new(customer_id: @customer.id)
-  # end
+  # GET /addresses/new
+  def new
+    @customer_bil = Customer.find(params[:billing_address_for_id]) if params[:billing_address_for_id]
+    @customer_ship = Customer.find(params[:shipping_address_for_id]) if params[:shipping_address_for_id]
+    @address = Address.new(
+      billing_address_for_id: @customer_bil.to_param, 
+      shipping_address_for_id: @customer_ship.to_param)
+
+    # redirect_to edit_customer_registration_path(current_customer)
+  end
 
   # GET /addresses/1/edit
   def edit
@@ -22,28 +27,26 @@ class AddressesController < ApplicationController
 
   # # POST /addresses
   # # POST /addresses.json
-  # def create
-  #   @address = Address.new(address_params)
-  #   @customer = Customer.find(current_customer.id)
-  #   @address.customer_id = @customer.id
+  def create
+    @address = Address.new(address_params)
 
-  #   respond_to do |format|
-  #     if @address.save
-  #       format.html { redirect_to @address, notice: 'Address was successfully created.' }
-  #       format.json { render :show, status: :created, location: @address }
-  #     else
-  #       format.html { render :new, locals: { customer_id: @customer.id } }
-  #       format.json { render json: @address.errors, status: :unprocessable_entity }
-  #     end
-  #   end
-  # end
+    respond_to do |format|
+      if @address.save
+        format.html { redirect_to edit_customer_registration_path(current_customer), notice: 'Address was successfully created.' }
+        format.json { render :show, status: :created, location: @address }
+      else
+        format.html { render :new, locals: { customer_id: @customer.id } }
+        format.json { render json: @address.errors, status: :unprocessable_entity }
+      end
+    end
+  end
 
   # # PATCH/PUT /addresses/1
   # # PATCH/PUT /addresses/1.json
   def update
     respond_to do |format|
       if @address.update(address_params)
-        format.html { redirect_to @address, notice: 'Address was successfully updated.' }
+        format.html { redirect_to edit_customer_registration_path(current_customer), notice: 'Address was successfully updated.' }
         format.json { render :show, status: :ok, location: @address }
       else
         format.html { render :edit }
@@ -77,6 +80,8 @@ class AddressesController < ApplicationController
                                       :zipcode, 
                                       :country_id, 
                                       :firstname, 
-                                      :lastname)
+                                      :lastname,
+                                      :billing_address_for_id,
+                                      :shipping_address_for_id)
     end
 end
