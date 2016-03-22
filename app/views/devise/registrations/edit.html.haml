@@ -1,5 +1,14 @@
 %h3 Settings
 %p#notice= notice
+- if flash[:errors] && flash[:errors].any?
+  #error_explanation
+    %h2
+      = pluralize(flash[:errors].count, "error")
+      prohibited this address from being saved:
+    %ul
+      - flash[:errors].each do |key, values|
+        - values.each do |value|
+          %li= "#{key.capitalize} #{value}"
 
 %h4 BILLING ADDRESS
 - if @billing_address.id

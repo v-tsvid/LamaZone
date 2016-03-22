@@ -35,7 +35,7 @@ class AddressesController < ApplicationController
         format.html { redirect_to edit_customer_registration_path(current_customer), notice: 'Address was successfully created.' }
         format.json { render :show, status: :created, location: @address }
       else
-        format.html { render :new, locals: { customer_id: @customer.id } }
+        format.html { redirect_to :back, {flash: { errors: @address.errors }} }
         format.json { render json: @address.errors, status: :unprocessable_entity }
       end
     end
@@ -49,7 +49,7 @@ class AddressesController < ApplicationController
         format.html { redirect_to edit_customer_registration_path(current_customer), notice: 'Address was successfully updated.' }
         format.json { render :show, status: :ok, location: @address }
       else
-        format.html { render :edit }
+        format.html { redirect_to :back, {flash: { errors: @address.errors }} }
         format.json { render json: @address.errors, status: :unprocessable_entity }
       end
     end
