@@ -41,7 +41,7 @@ if Rails.env == 'development' || Rails.env == 'production'
     price: 9.46,
     books_in_stock: rand(20..100),
     author_id: author.id,
-    images: File.open(Rails.root + "app/assets/images/books_images/41OgOIZBVPL.jpg"))
+    images: File.open(Rails.root + "app/assets/images/books-images/41OgOIZBVPL.jpg"))
 
   best_books[1] = FactoryGirl.create(:book,
     title: 'How to Practice: The Way to a Meaningful Life',
@@ -49,7 +49,7 @@ if Rails.env == 'development' || Rails.env == 'production'
     price: 10.29,
     books_in_stock: rand(20..100),
     author_id: author.id,
-    images: File.open(Rails.root + "app/assets/images/books_images/4133VHHWJ1L.jpg"))
+    images: File.open(Rails.root + "app/assets/images/books-images/4133VHHWJ1L.jpg"))
 
   best_books[2] = FactoryGirl.create(:book,
     title: 'Beyond Religion: Ethics for a Whole World',
@@ -57,7 +57,7 @@ if Rails.env == 'development' || Rails.env == 'production'
     price: 8.95,
     books_in_stock: rand(20..100),
     author_id: author.id,
-    images: File.open(Rails.root + "app/assets/images/books_images/51-W1m2z4WL.jpg"))
+    images: File.open(Rails.root + "app/assets/images/books-images/51-W1m2z4WL.jpg"))
 
   best_category.books << best_books
   
@@ -72,7 +72,7 @@ if Rails.env == 'development' || Rails.env == 'production'
     price: 10.49,
     books_in_stock: rand(20..100),
     author_id: author.id,
-    images: File.open(Rails.root + "app/assets/images/books_images/51AdUxb4frL.jpg"))
+    images: File.open(Rails.root + "app/assets/images/books-images/51AdUxb4frL.jpg"))
 
   other_books[1] = FactoryGirl.create(:book,
   title: 'The Art of Happiness in a Troubled World',
@@ -80,7 +80,7 @@ if Rails.env == 'development' || Rails.env == 'production'
   price: 15.21,
   books_in_stock: rand(20..100),
   author_id: author.id,
-  images: File.open(Rails.root + "app/assets/images/books_images/51KBQZ+S9+L.jpg"))
+  images: File.open(Rails.root + "app/assets/images/books-images/51KBQZ+S9+L.jpg"))
 
   other_books[2] = FactoryGirl.create(:book,
   title: 'The Best Teachings Of The Dalai Lama: Journey To A Happy, Fulfilling & Meaningful Life',
@@ -88,7 +88,7 @@ if Rails.env == 'development' || Rails.env == 'production'
   price: 8.95,
   books_in_stock: rand(20..100),
   author_id: author.id,
-  images: File.open(Rails.root + "app/assets/images/books_images/51N9CN+kljL.jpg"))
+  images: File.open(Rails.root + "app/assets/images/books-images/51N9CN+kljL.jpg"))
 
   other_books[3] = FactoryGirl.create(:book,
   title: '365 Dalai Lama: Daily Advice from the Heart',
@@ -96,7 +96,7 @@ if Rails.env == 'development' || Rails.env == 'production'
   price: 13.38,
   books_in_stock: rand(20..100),
   author_id: author.id,
-  images: File.open(Rails.root + "app/assets/images/books_images/51TX2yVUq0L.jpg"))
+  images: File.open(Rails.root + "app/assets/images/books-images/51TX2yVUq0L.jpg"))
 
   other_books[4] = FactoryGirl.create(:book,
   title: 'Freedom in Exile: The Autobiography of The Dalai Lama',
@@ -104,7 +104,7 @@ if Rails.env == 'development' || Rails.env == 'production'
   price: 14.36,
   books_in_stock: rand(20..100),
   author_id: author.id,
-  images: File.open(Rails.root + "app/assets/images/books_images/51TxD+aE+bL._SX331_BO1,204,203,200_.jpg"))
+  images: File.open(Rails.root + "app/assets/images/books-images/51TxD+aE+bL._SX331_BO1,204,203,200_.jpg"))
 
   other_books[5] = FactoryGirl.create(:book,
   title: "The Dalai Lama's Little Book of Inner Peace: The Essential Life and Teachings",
@@ -112,7 +112,7 @@ if Rails.env == 'development' || Rails.env == 'production'
   price: 12.28,
   books_in_stock: rand(20..100),
   author_id: author.id,
-  images: File.open(Rails.root + "app/assets/images/books_images/61KPB4YQnRL.jpg"))
+  images: File.open(Rails.root + "app/assets/images/books-images/61KPB4YQnRL.jpg"))
 
   other_books[6] = FactoryGirl.create(:book,
   title: "The Dalai Lama's Book of Wisdom",
@@ -120,7 +120,7 @@ if Rails.env == 'development' || Rails.env == 'production'
   price: 8.95,
   books_in_stock: rand(20..100),
   author_id: author.id,
-  images: File.open(Rails.root + "app/assets/images/books_images/71-qtQ6xR1L.jpg"))
+  images: File.open(Rails.root + "app/assets/images/books-images/71-qtQ6xR1L.jpg"))
 
   other_category.books << other_books
 

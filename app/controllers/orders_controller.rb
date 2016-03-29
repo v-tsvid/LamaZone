@@ -1,5 +1,5 @@
 class OrdersController < ApplicationController
-  # before_action :set_order, only: [:show, :edit, :update, :destroy]
+  before_action :set_order, only: [:show, :edit, :update, :destroy]
 
   # # GET /orders
   # # GET /orders.json
@@ -9,8 +9,8 @@ class OrdersController < ApplicationController
 
   # # GET /orders/1
   # # GET /orders/1.json
-  # def show
-  # end
+  def show
+  end
 
   # # GET /orders/new
   # def new
@@ -61,14 +61,14 @@ class OrdersController < ApplicationController
   #   end
   # end
 
-  # private
-  #   # Use callbacks to share common setup or constraints between actions.
-  #   def set_order
-  #     @order = Order.find(params[:id])
-  #   end
+  private
+    # Use callbacks to share common setup or constraints between actions.
+    def set_order
+      @order = Order.find(params[:id])
+    end
 
-  #   # Never trust parameters from the scary internet, only allow the white list through.
-  #   def order_params
-  #     params.require(:order).permit(:state, :total_price, :completed_date)
-  #   end
+    # Never trust parameters from the scary internet, only allow the white list through.
+    def order_params
+      params.require(:order).permit(:state, :total_price, :completed_date)
+    end
 end

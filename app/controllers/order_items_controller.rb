@@ -1,19 +1,46 @@
 class OrderItemsController < ApplicationController
   before_action :set_order_item, only: [:show, :edit, :update, :destroy]
 
-  def interact_with_cookies
-    order_items = read_from_cookies
-    order_items = params[:pop] ? pop_from_cookies(order_items) : push_to_cookies(order_items)
-    write_to_cookies(order_items)    
-    add_or_remove = params[:pop] ? 'removed from' : 'added to'
-    redirect_to :back, notice: "\"#{Book.find(params[:book_id]).title}\" " \
-                               "was #{add_or_remove} cart"
+  def add_to_cart
+    if current_customer
+      order = current_order || Order.new(customer: current_customer)
+      order.order_items << OrderItem.create!(book_id: params[:book_id], quantity: params[:quantity], order: order)
+      if order.order_items != compact_order_items(order.order_items)
+        temp_items = order.order_items
+        order.order_items.each { |item| item.destroy }
+        order.order_items << compact_order_items(temp_items)
+      end
+      
+      if order.save!
+        redirect_to :back, notice: "\"#{Book.find(params[:book_id]).title}\" " \
+                                   "was added to the cart"
+      else
+        redirect_to :back, notice: "can't save order"
+      end
+    else
+      interact_with_cookies
+    end
   end
+
+  def remove_from_cart
+    if current_order
+      order = current_order
+      item = OrderItem.find_by(order_id: current_order.id, 
+        book_id: params[:book_id]).destroy
+      order.destroy unless order.order_items[0]
+      redirect_to :back, notice: "\"#{Book.find(params[:book_id]).title}\" " \
+                                 "was removed from the cart"
+    else
+      interact_with_cookies(true)
+    end
+  end
+
+  
 
   # GET /order_items
   # GET /order_items.json
   def index
-    @order_items = read_from_cookies
+    @order_items = compact_order_items(current_order.try(:order_items) || read_from_cookies)
   end
 
   # GET /order_items/1
@@ -81,6 +108,15 @@ class OrderItemsController < ApplicationController
       params.require(:order_item).permit(:price, :quantity, :book_id)
     end
 
+    def interact_with_cookies(pop)
+      order_items = read_from_cookies
+      order_items = pop ? pop_from_cookies(order_items) : push_to_cookies(order_items)
+      write_to_cookies(order_items)    
+      added_or_removed = params[:pop] ? 'removed from' : 'added to'
+      redirect_to :back, notice: "\"#{Book.find(params[:book_id]).title}\" " \
+                                 "was #{added_or_removed} cart"
+    end
+
     def push_to_cookies(order_items)
       order_items << OrderItem.new(book_id: params[:book_id], quantity: params[:quantity])
     end
@@ -107,15 +143,6 @@ class OrderItemsController < ApplicationController
         cookies[:order_items].split(' ').
           partition.with_index{ |v, index| index.even? }.transpose.each do |item|
             order_items << OrderItem.new(book_id: item[0], quantity: item[1])
-        end
-
-        order_items = order_items.group_by{|h| h.book_id}.values.map do |a| 
-          OrderItem.new(book_id: a.first.book_id, 
-                        quantity: a.inject(0){|sum,h| sum + h.quantity})
-        end
-
-        order_items.each do |item| 
-          item.price = Book.find(item.book_id).price * item.quantity
         end
       end
       order_items

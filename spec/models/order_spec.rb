@@ -4,7 +4,7 @@ RSpec.describe Order, type: :model do
   let(:order) { FactoryGirl.create :order, created_at: DateTime.now,
     completed_date: Date.today.next_day }
 
-  [:total_price, :completed_date, :state].each do |item|
+  [:total_price, :state].each do |item|
     it "is invalid without #{item}" do
       expect(order).to validate_presence_of item
     end
@@ -18,24 +18,18 @@ RSpec.describe Order, type: :model do
 
   it "is valid only when total_price is numerical and greater than 0" do
     expect(order).to validate_numericality_of(:total_price).
-      is_greater_than 0
+      is_greater_than(0)
   end
   
-  it "is invalid when state is mot included in permitted states list" do
+  it "is invalid when state is not included in permitted states list" do
     expect(order).to validate_inclusion_of(:state).in_array(Order::STATE_LIST)
   end
 
-  it "is invalid when completed_date is invalid" do
-    order.completed_date = "incorrect date"
-    expect{ order.valid? }.to change{ order.errors.messages[:completed_date] }
-  end
+  # it "is invalid when completed_date is invalid" do
+  #   order.completed_date = "incorrect date"
+  #   expect{ order.valid? }.to change{ order.errors.messages[:completed_date] }
+  # end
 
-  it "is invalid when completed_date is before order creation date" do
-    order.completed_date = Date.today.prev_day
-    expect{ order.valid? }.
-      to change{ order.errors.messages[:completed_date] }.
-      to contain_exactly(Order::DATE_COMPLETE_BEFORE_CREATE_MESSAGE)
-  end
 
   it "has many order_items" do
     expect(order).to have_many :order_items
@@ -66,28 +60,6 @@ RSpec.describe Order, type: :model do
     end 
   end
 
-  context "#add_book" do
-    let(:books) { FactoryGirl.create_list(:book, 2) }
-    
-    before { order.send(:add_book, books[0]) }
-
-    it "adds new book as order_item" do
-      order.send(:add_book, books[1])
-      expect(order.order_items.size).to eq 2
-    end
-
-    it "does not add new book if it was added early" do
-      order.send(:add_book, books[0])
-      expect(order.order_items.size).to eq 1
-    end
-
-    it "increments book quantity if book was added early" do
-      expect{ order.send(:add_book, books[0]) }.to change{ 
-        OrderItem.find_by(order_id: order.id, book_id: books[0].id).quantity 
-        }.from(1).to(2)
-    end
-  end
-
   # context "before saving the order" do
     
   #   let(:unsaved_order) { FactoryGirl.build :order }
@@ -100,16 +72,17 @@ RSpec.describe Order, type: :model do
 
   context "#update_total_price" do
 
-    let(:order) { FactoryGirl.create :order }
+    let(:order) { FactoryGirl.build :order }
 
     it "sets total_price of the order equal to sum of all the order_items" do
       order_items = FactoryGirl.create_list :order_item, 2, order: order
       order.order_items << order_items
       
 
-      ttl_prc = order_items.collect { |item| (item.quantity * item.price) }.sum
+      ttl_prc = order_items[0].price * order_items[0].quantity + order_items[1].price * order_items[1].quantity
 
-      expect{order.update_total_price}.to change{order.total_price}.to ttl_prc
+
+      expect{order.send(:update_total_price)}.to change{order.total_price}.to ttl_prc
     end
   end
 end

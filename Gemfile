@@ -55,6 +55,10 @@ gem 'faker', '1.4.3'
 gem 'factory_girl_rails', '4.5.0'
 gem 'bootstrap-slider-rails', '6.1.4'
 gem 'kaminari', '0.16.3'
+# gem 'virtus', '1.0.5'
+gem 'wicked', '1.2.1'
+gem 'reform', '2.1.0'
+gem 'reform-rails', '0.1.0'
   
   
 group :development, :test do

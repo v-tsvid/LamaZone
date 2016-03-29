@@ -8,7 +8,7 @@
 = book.description
 %br/
 %p
-  = form_tag(controller: 'order_items', action: 'interact_with_cookies', method: :post) do
+  = form_tag(controller: 'order_items', action: 'add_to_cart', method: :post) do
     %strong= book.price
     = hidden_field_tag 'book_id', book.id
     = number_field_tag 'quantity', '1', in: 1..book.books_in_stock, id: "book_quantity" 

@@ -9,8 +9,20 @@ class ApplicationController < ActionController::Base
   helper_method :current_order
 
   def current_order
-    # cookies[:order_items] = Array.new
-    cookies[:order] ||= JSON.generate(Order.new.attributes)
+    current_customer ? current_customer.current_order : nil
+  end
+
+  def compact_order_items(order_items)
+    order_items = order_items.group_by{|h| h.book_id}.values.map do |a| 
+      OrderItem.new(book_id: a.first.book_id, 
+                    quantity: a.inject(0){|sum,h| sum + h.quantity})
+    end
+
+    order_items.each do |item| 
+      item.price = Book.find(item.book_id).price * item.quantity
+    end
+
+    order_items
   end
 
   protected

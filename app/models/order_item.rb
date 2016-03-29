@@ -1,6 +1,8 @@
 class OrderItem < ActiveRecord::Base
+  before_save :update_price
+
   validates :price, :quantity, presence: true
-  validates :price, numericality: { greater_than_or_equal_to: 0 }
+  validates :price, numericality: { greater_than: 0 }
   validates :quantity, numericality: { only_integer: true,
                                        greater_than_or_equal_to: 0 }
 
@@ -13,7 +15,15 @@ class OrderItem < ActiveRecord::Base
     end
   end
 
+  def price
+    book.price
+  end
+
   private
+
+    def update_price
+      self.price = price
+    end
 
     def custom_label_method
       "#{Book.find(self.book_id).title}"

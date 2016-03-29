@@ -8,7 +8,8 @@
 # }
 
 Rails.application.routes.draw do
-
+  
+  resources :checkouts
   
   # get 'static_pages/cart', path: 'cart'
 
@@ -38,8 +39,10 @@ Rails.application.routes.draw do
   resources :credit_cards
   resources :countries
 
-  post 'order_items/interact_with_cookies'
-  get 'order_items/index', path: 'cart'
+  post 'order_items/add_to_cart'
+  post 'order_items/remove_from_cart'
+  
+  get 'order_items/index', path: 'checkout/cart'
   
   resources :order_items
   resources :orders

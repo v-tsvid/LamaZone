@@ -5,15 +5,20 @@
 %table
   %thead
     %tr
-      %th Book
-      %th Price
-      %th Quantity
-      %th Total
-      %th{:colspan => "3"}
+      %th{colspan: '2'} BOOK
+      %th PRICE
+      %th QTY
+      %th TOTAL
 
   %tbody
     = render @order_items
   
 %br/
 
-= link_to 'Back to shopping', books_path
+= button_to 'EMPTY CART'
+= button_to 'CONTINUE SHOPPING', books_path
+
+= text_field_tag 'Coupon code', 'Coupon code'
+
+= button_to 'UPDATE'
+= button_to 'CHECKOUT', { controller: "checkouts", action: "create", checkout: {order_items_attrs: (current_customer ? nil : @order_items.map {|item| {book_id: item.book_id, quantity: item.quantity, price: item.price}}) }}, method: :post

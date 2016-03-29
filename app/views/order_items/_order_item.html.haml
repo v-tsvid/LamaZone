@@ -1,4 +1,5 @@
 %tr
+  %td= image_tag order_item.book.images, size: '30x40'
   %td= link_to "#{order_item.book.title}", order_item.book
   %td= order_item.book.price
   %td 
@@ -6,6 +7,6 @@
     = hidden_field_tag "book_#{order_item.book_id}_id"
   %td= order_item.price
   %td
-    = form_tag(controller: 'order_items', action: 'interact_with_cookies', pop: true, method: :post) do
+    = form_tag(controller: 'order_items', action: 'remove_from_cart', pop: true, method: :post) do
       = hidden_field_tag 'book_id', order_item.book_id
       = submit_tag "X", id: "book_#{order_item.book_id}_remove"
