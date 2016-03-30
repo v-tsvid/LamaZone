@@ -1,5 +1,20 @@
 %h4 Address
-= @checkout.inspect
-%p
-= @billing_address.inspect 
-= @shipping_address.inspect
+
+- flash.each do |name, msg|
+  = content_tag :div, msg
+
+
+
+%h4 BILLING ADDRESS
+
+= form_for(@checkout, url: wizard_path, html: { method: :put }) do |checkout|
+  =checkout.fields_for(:model, @checkout.model) do |model|
+    = model.fields_for(:billing_address, @checkout.model.billing_address) do |bil_addr_f|
+      = render 'address_form', f: bil_addr_f, kountry: @billing_address.try(:country_id)
+    %h4 SHIPPING ADDRESS
+    = check_box_tag 'use_billing', 'use billing', true 
+    = label_tag 'Use billing address'
+    %br/
+
+  .actions
+    = checkout.submit "SAVE AND CONTINUE"

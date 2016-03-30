@@ -45,6 +45,6 @@
                 =link_to "Admin Panel", rails_admin_path
     = yield
     %p
-    = params.inspect
+    = params.inspect if Rails.env == 'development'
     %br/
-    = cookies[:order_items].inspect
+    = cookies[:order_items].inspect if Rails.env == 'development'

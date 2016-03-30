@@ -1,2 +1,7 @@
 %h4 Delivery
-= @order.inspect
+
+- flash.each do |name, msg|
+  = content_tag :div, msg
+  
+= @checkout.model.inspect
+= @checkout.model.shipping_address

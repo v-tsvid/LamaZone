@@ -25,7 +25,7 @@ RSpec.describe Order, type: :model do
     expect(order).to validate_inclusion_of(:state).in_array(Order::STATE_LIST)
   end
 
-  # it "is invalid when completed_date is invalid" do
+  it "is invalid when completed_date is invalid" #do
   #   order.completed_date = "incorrect date"
   #   expect{ order.valid? }.to change{ order.errors.messages[:completed_date] }
   # end
@@ -60,15 +60,16 @@ RSpec.describe Order, type: :model do
     end 
   end
 
-  # context "before saving the order" do
+  context "before saving the order" do
     
-  #   let(:unsaved_order) { FactoryGirl.build :order }
+    let(:unsaved_order) { FactoryGirl.create :order_with_order_items }
     
-  #   it "update total_price for the order" do
-  #     expect(unsaved_order).to receive(:update_total_price)
-  #     unsaved_order.save
-  #   end
-  # end
+    it "update total_price for the order" #do
+    #   expect(unsaved_order).to receive(:update_total_price)
+
+    #   unsaved_order.save!
+    # end
+  end
 
   context "#update_total_price" do
 
