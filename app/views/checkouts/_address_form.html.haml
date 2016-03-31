@@ -1,37 +1,8 @@
-.field
-  = f.label :firstname
-  %br/
-  = f.text_field :firstname
+- @attrs = flash['attrs']
 
-.field
-  = f.label :lastname
-  %br/
-  = f.text_field :lastname
-
-.field
-  = f.label :phone
-  %br/
-  = f.text_field :phone 
-
-.field
-  = f.label :address1
-  %br/
-  = f.text_field :address1
-
-.field
-  = f.label :address2
-  %br/
-  = f.text_field :address2
-
-.field
-  = f.label :city
-  %br/
-  = f.text_field :city
-
-.field
-  = f.label :zipcode
-  %br/
-  = f.text_field :zipcode
+- [:firstname, :lastname, :phone, :address1, :address2, :city, :zipcode].each do |item|
+  .field
+    = render partial: 'address_fields', locals: {f: f, attrs: @attrs, attr_sym: item}
 
 .field
   = f.hidden_field :billing_address_for_id
@@ -42,7 +13,7 @@
 .field
   = f.label(:country_id)
   %br/
-  = f.select(:country_id, options_for_select(Country.all.map {|country| [country.name, country.id]}, kountry))
-  %br/
+  - @attr = @attrs['country_id'] if @attrs
+  = f.select(:country_id, options_for_select(Country.all.map {|country| [country.name, country.id]}, (@attr.nil? ? kountry : @attr)))
   %br/
 

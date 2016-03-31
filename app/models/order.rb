@@ -6,27 +6,16 @@ class Order < ActiveRecord::Base
                 "shipping", 
                 "completed", 
                 "canceled"]
-  
-  DATE_COMPLETE_BEFORE_CREATE_MESSAGE = "can't be before created date"
 
-  # before_save :total_price
+  SHIPPING_METHOD_LIST = ["UPS Ground", 
+                          "UPS One Day", 
+                          "UPS Two Days"]
 
-  validates :total_price, :state, presence: true
-  validates :total_price, numericality: { greater_than: 0 }
-  validates :state, inclusion: { in: STATE_LIST }
-  #provided by validates_timeliness gem
-  #validates value as a date
-  validates_date :completed_date, allow_blank: true
- 
   belongs_to :customer
   belongs_to :credit_card
   belongs_to :billing_address, :class_name => 'Address'
   belongs_to :shipping_address, :class_name => 'Address'
   has_many :order_items
-
-  before_validation :update_total_price
-
-  scope :in_progress, -> { where(state: 'in_progress') }
 
   aasm column: 'state', whiny_transitions: false do 
     state :in_progress, initial: true
@@ -50,15 +39,20 @@ class Order < ActiveRecord::Base
     end
   end
 
-  # def total_price
-  #   order_items.collect { |item| (item.quantity * item.price) }.sum
-  # end
-
-  private 
-
-    def update_total_price
-      self.total_price = self.order_items.collect { |item| (item.quantity * item.price) }.sum
+  def calc_shipping_price(method)
+    case method
+    when SHIPPING_METHOD_LIST[0]
+      5.00
+    when SHIPPING_METHOD_LIST[1]
+      15.00
+    when SHIPPING_METHOD_LIST[2]
+      10.00
+    when nil
+      0
     end
+  end
+
+  private
 
     def custom_label_method
       "#{self.id}"

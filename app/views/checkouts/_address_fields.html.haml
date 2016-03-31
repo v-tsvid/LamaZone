@@ -1,0 +1,4 @@
+= f.label attr_sym
+%br/
+- attr_val = attrs[attr_sym.to_s] if attrs
+= attr_val ? f.text_field(attr_sym, value: attr_val) : f.text_field(attr_sym)

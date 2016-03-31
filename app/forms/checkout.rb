@@ -1,6 +1,14 @@
 class Checkout < Reform::Form
 
+  extend ::ActiveModel::Callbacks
+
   model :order
+  
+  define_model_callbacks :validation
+
+  before_validation :update_shipping_price
+  before_validation :update_total_price
+  
 
   property :total_price
   property :completed_date
@@ -8,6 +16,8 @@ class Checkout < Reform::Form
   property :customer
   property :credit_card
   property :next_step
+  property :shipping_method
+  property :shipping_price
 
   property :billing_address, populate_if_empty: Address do
     property :firstname
@@ -71,7 +81,7 @@ class Checkout < Reform::Form
     validates :zipcode, zipcode: { country_code: :country_code }
   end
 
-  collection :order_items do
+  collection :order_items, populate_if_empty: OrderItem do
     property :price
     property :quantity
     property :book 
@@ -90,56 +100,83 @@ class Checkout < Reform::Form
             :next_step, 
             presence: true
   
-  validates :total_price, numericality: { greater_than: 0 }, unless: :on_address_step?
-  validates :credit_card, presence: true, unless: Proc.new { :on_address_step? || :on_delivery_step? }
-  validates :billing_address, :shipping_address, presence: true, unless: :on_address_step?
-  validates :order_items, presence: true
-  validates :completed_date, timeliness: {type: :date}, allow_blank: true
+  validates(:total_price, numericality: { greater_than: 0 }, 
+    unless: :next_step_address?)
 
+  validates(:credit_card, presence: true, 
+    unless: Proc.new { :next_step_address? || :next_step_shipping? })
+
+  validates(:billing_address, :shipping_address, presence: true, 
+    unless: :next_step_address?)
+
+  validates(:shipping_method, inclusion: { in: Order::SHIPPING_METHOD_LIST },
+    if: :next_step_confirm_or_complete?)
+
+  
+  validates :shipping_price, numericality: { greater_than_or_equal: 0 }
+  validates :order_items, presence: true
+  validates :state, inclusion: { in: Order::STATE_LIST }
+  
+  # provided by validates_timeliness gem
+  # validates value as a date
+  validates :completed_date, timeliness: {type: :date}, allow_blank: true
   
 
   def persisted?
     false
   end
 
+  # def save
+  #   super
+  #   model.save!
+  # end
+
   def save
     super
     model.save!
   end
 
+  def valid?
+    run_callbacks :validation do
+      super
+    end
+  end
+
+  def calc_shipping_price(method)
+    case method
+    when Order::SHIPPING_METHOD_LIST[0]
+      5.00
+    when Order::SHIPPING_METHOD_LIST[1]
+      15.00
+    when Order::SHIPPING_METHOD_LIST[2]
+      10.00
+    when nil
+      0
+    end
+  end
+
   private
+    def update_total_price
+      self.total_price = self.order_items.collect { |item| (item.quantity * item.price) }.sum
+    end
 
-  # def persist!
+    def update_shipping_price
+      self.shipping_price = self.calc_shipping_price(self.shipping_method)
+    end 
 
-  #   # order_items.each do |item|
-  #   #   OrderItem.create!(item)
-  #   # end
+    def next_step_confirm_or_complete?
+      self.next_step == 'confirm' || self.next_step == 'complete'
+    end
 
-  #   @order = Order.create!(
-  #     total_price: total_price,
-  #     completed_date: completed_date,
-  #     customer: customer,
-  #     credit_card: credit_card,
-  #     shipping_address: shipping_address,
-  #     billing_address: billing_address,
-  #     state: state,
-  #     next_step: next_step,
-  #     order_items: order_items)
+    def next_step_address_or_shipping?
+      next_step_address? || next_step_shipping?
+    end
 
-  #   # @order_items = Array.new
+    def next_step_address?
+      self.next_step == 'address'
+    end
 
-
-  #   # @order.order_items << order_items
-
-  #   @order.save!
-
-  # end
-
-  def on_address_step?
-    self.next_step == 'address'
-  end
-
-  def on_delivery_step?
-    self.next_step == 'delivery'
-  end
+    def next_step_shipping?
+      self.next_step == 'shipping'
+    end
 end
