@@ -1,7 +1,7 @@
 class CheckoutsController < ApplicationController
   include Wicked::Wizard
 
-  steps :address, :shipping, :payment, :confirm, :complete
+  steps :address, :shipment, :payment, :confirm, :complete
 
   def new
     @checkout = Checkout.new(Order.new)
@@ -38,7 +38,7 @@ class CheckoutsController < ApplicationController
     case step
     when :address
       @checkout.model.billing_address ||= Address.new
-    when :shipping
+    when :shipment
     when :payment
       @checkout.model.credit_card ||= CreditCard.new
     end
@@ -57,7 +57,7 @@ class CheckoutsController < ApplicationController
 
       save_and_render
     
-    when :shipping
+    when :shipment
       @validation_hash = @checkout.model.attributes.merge(
         {next_step: 'payment'}.merge(
           checkout_params['model']))
@@ -74,6 +74,12 @@ class CheckoutsController < ApplicationController
 
       save_and_render
 
+    when :confirm
+      @validation_hash = @checkout.model.attributes.merge(
+        {next_step: 'complete', state: "processing"})
+      @return_hash = nil
+
+      save_and_render
     end
   end
 
@@ -82,7 +88,7 @@ class CheckoutsController < ApplicationController
 
     def save_and_render
       if @checkout.validate(@validation_hash)
-        render_wizard @checkout
+        render_wizard @checkout, notice: @validation_hash
       else
         redirect_to :back, {flash: { 
           errors: @checkout.errors, attrs: @return_hash, notice: @validation_hash } } 
