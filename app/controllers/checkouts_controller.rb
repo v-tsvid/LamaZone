@@ -39,6 +39,8 @@ class CheckoutsController < ApplicationController
     when :address
       @checkout.model.billing_address ||= Address.new
     when :shipping
+    when :payment
+      @checkout.model.credit_card ||= CreditCard.new
     end
     render_wizard
   end  
@@ -54,6 +56,7 @@ class CheckoutsController < ApplicationController
       @return_hash = @validation_hash['billing_address']
 
       save_and_render
+    
     when :shipping
       @validation_hash = @checkout.model.attributes.merge(
         {next_step: 'payment'}.merge(
@@ -62,6 +65,15 @@ class CheckoutsController < ApplicationController
         shipping_price: checkout_params['model']['shipping_price']}
 
       save_and_render
+
+    when :payment
+      @validation_hash = @checkout.model.attributes.merge(
+        {next_step: 'confirm'}.merge(
+          checkout_params['model']))
+      @return_hash = @validation_hash['credit_card']
+
+      save_and_render
+
     end
   end
 
@@ -73,7 +85,7 @@ class CheckoutsController < ApplicationController
         render_wizard @checkout
       else
         redirect_to :back, {flash: { 
-          errors: @checkout.errors, attrs: @return_hash } } 
+          errors: @checkout.errors, attrs: @return_hash, notice: @validation_hash } } 
       end 
     end
 
@@ -82,7 +94,6 @@ class CheckoutsController < ApplicationController
         model: [:total_price,
                 :completed_date,
                 :customer_id,
-                :credit_card,
                 :state,
                 :next_step,
                 :shipping_price,
@@ -106,7 +117,14 @@ class CheckoutsController < ApplicationController
                                   :zipcode,
                                   :country_id,
                                   :billing_address_for_id,
-                                  :shipping_address_for_id]], 
+                                  :shipping_address_for_id],
+                credit_card:     [:number, 
+                                  :cvv, 
+                                  :firstname, 
+                                  :lastname,
+                                  :expiration_month, 
+                                  :expiration_year,
+                                  :customer_id]], 
         order_items_attrs: [:book_id, :quantity, :price])
     end
 end

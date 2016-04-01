@@ -1,2 +1,16 @@
 %h4 Payment
-= @order.inspect
+
+= notice
+
+- flash.each do |name, msg|
+  = content_tag :div, msg
+
+%h4 CREDIT CARD
+
+= form_for(@checkout, url: wizard_path, html: { method: :put }) do |checkout|
+  = checkout.fields_for(:model, @checkout.model) do |model|
+    = model.fields_for(:credit_card, @checkout.model.credit_card) do |c_card_f|
+      = render 'credit_card_form', f: c_card_f    
+
+  .actions
+    = checkout.submit "SAVE AND CONTINUE"

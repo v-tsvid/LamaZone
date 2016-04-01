@@ -1,16 +1,16 @@
 class Address < ActiveRecord::Base
 
-  validates :firstname, :lastname, :phone, :address1, presence: true
-  validates :city, :zipcode, :country_id, presence: true
+  # validates :firstname, :lastname, :phone, :address1, presence: true
+  # validates :city, :zipcode, :country_id, presence: true
   
-  # provided by phony_rails gem
-  # validates phone number to be correct and plausible 
-  # without country accordance
-  validates :phone, phony_plausible: { ignore_record_country_code: true }
+  # # provided by phony_rails gem
+  # # validates phone number to be correct and plausible 
+  # # without country accordance
+  # validates :phone, phony_plausible: { ignore_record_country_code: true }
   
-  # provided by validates_zipcode gem
-  # validates zipcode to be correct due to country alpha2 code
-  validates :zipcode, zipcode: { country_code: :country_code }
+  # # provided by validates_zipcode gem
+  # # validates zipcode to be correct due to country alpha2 code
+  # validates :zipcode, zipcode: { country_code: :country_code }
 
   belongs_to :country
   

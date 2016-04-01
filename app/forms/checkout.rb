@@ -1,5 +1,4 @@
 class Checkout < Reform::Form
-
   extend ::ActiveModel::Callbacks
 
   model :order
@@ -9,15 +8,26 @@ class Checkout < Reform::Form
   before_validation :update_shipping_price
   before_validation :update_total_price
   
-
   property :total_price
   property :completed_date
   property :state
   property :customer
-  property :credit_card
   property :next_step
   property :shipping_method
   property :shipping_price
+
+  collection :order_items, populate_if_empty: OrderItem do
+    property :price
+    property :quantity
+    property :book 
+    property :order
+
+    validates :price, :quantity, :book, presence: true
+    validates :order, presence: true
+    validates :price, numericality: { greater_than: 0 }
+    validates :quantity, numericality: { only_integer: true,
+                                         greater_than: 0 }
+  end
 
   property :billing_address, populate_if_empty: Address do
     property :firstname
@@ -81,18 +91,57 @@ class Checkout < Reform::Form
     validates :zipcode, zipcode: { country_code: :country_code }
   end
 
-  collection :order_items, populate_if_empty: OrderItem do
-    property :price
-    property :quantity
-    property :book 
-    property :order
+  property :credit_card, populate_if_empty: CreditCard do
+    VALID_EXP_MONTH_REGEX = /\A([0][1-9]|[1][0-2])\z/
+    VALID_EXP_YEAR_REGEX = /\A[2][0]([1][5-9]|[2][0-9])\z/
+    VALID_CVV_REGEX = /\A[0-9]{3,4}\z/
 
-    validates :price, :quantity, :book, presence: true
-    validates :order, presence: true
-    validates :price, numericality: { greater_than: 0 }
-    validates :quantity, numericality: { only_integer: true,
-                                         greater_than: 0 }
+    INVALID_MESSAGE = "is not valid"
+    EXPIRED_MESSAGE = "is expired"
+
+    property :firstname
+    property :lastname
+    property :number
+    property :cvv
+    property :expiration_month
+    property :expiration_year
+    property :customer_id
+
+    validates :number, 
+              :cvv, 
+              :firstname, 
+              :lastname,
+              :expiration_month, 
+              :expiration_year, 
+              :customer_id,
+              presence: true
+
+    validates :expiration_month, format: { with: VALID_EXP_MONTH_REGEX, 
+      message: INVALID_MESSAGE }
+    validates :expiration_year, format: { with: VALID_EXP_YEAR_REGEX, 
+      message: INVALID_MESSAGE }
+    validates :cvv, format: { with: VALID_CVV_REGEX, message: INVALID_MESSAGE }
+
+    validate :validate_number, :validate_exp_date
+
+    private
+
+      def validate_number
+        # CreditCardValidator::Validator.valid? 
+        # is provided by credit_card_validator gem
+        errors.add(:credit_card, INVALID_MESSAGE) unless 
+          self.number && CreditCardValidator::Validator.valid?(self.number)
+      end
+
+      def validate_exp_date
+        errors[:base] << EXPIRED_MESSAGE unless 
+          self.expiration_month && self.expiration_year && 
+          (self.expiration_year > Date.today.strftime("%Y") || 
+            self.expiration_year == Date.today.strftime("%Y") &&
+            self.expiration_month >= Date.today.strftime("%m"))
+      end
   end
+  
 
   validates :total_price, 
             :customer,  
@@ -156,6 +205,7 @@ class Checkout < Reform::Form
   end
 
   private
+
     def update_total_price
       self.total_price = self.order_items.collect { |item| (item.quantity * item.price) }.sum
     end

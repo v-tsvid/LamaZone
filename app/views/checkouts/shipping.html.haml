@@ -5,7 +5,7 @@
 
 
 
-%h4 BILLING ADDRESS
+%h4 SHIPPING METHOD
 
 = form_for(@checkout, url: wizard_path, html: { method: :put }) do |checkout|
   = checkout.fields_for(:model, @checkout.model) do |model|
