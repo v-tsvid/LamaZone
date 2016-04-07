@@ -1,11 +1,14 @@
 class Checkout < Reform::Form
   extend ::ActiveModel::Callbacks
 
+  NEXT_STEPS = [:address, :shipment, :payment, :confirm, :complete]
+
   model :order
   
   define_model_callbacks :validation
 
   before_validation :update_shipping_price
+  before_validation :update_subtotal
   before_validation :update_total_price
   
   property :total_price
@@ -15,6 +18,7 @@ class Checkout < Reform::Form
   property :next_step
   property :shipping_method
   property :shipping_price
+  property :subtotal
 
   collection :order_items, populate_if_empty: OrderItem do
     property :price
@@ -143,26 +147,27 @@ class Checkout < Reform::Form
   end
   
 
-  validates :total_price, 
+  validates :subtotal,
+            :total_price, 
             :customer,  
             :state, 
             :next_step, 
             presence: true
   
-  validates(:total_price, numericality: { greater_than: 0 }, 
+  validates(:subtotal, :total_price, numericality: { greater_than: 0 }, 
     unless: :next_step_address?)
 
   validates(:credit_card, presence: true, 
-    unless: Proc.new { :next_step_address? || :next_step_shipping? })
+    if: :next_step_confirm_or_complete?)
 
   validates(:billing_address, :shipping_address, presence: true, 
     unless: :next_step_address?)
 
   validates(:shipping_method, inclusion: { in: Order::SHIPPING_METHOD_LIST },
-    if: :next_step_confirm_or_complete?)
+    unless: :next_step_address_or_shipment?)
+  validates(:shipping_price, numericality: { greater_than_or_equal: 0 },
+    unless: :next_step_address_or_shipment?)
 
-  
-  validates :shipping_price, numericality: { greater_than_or_equal: 0 }
   validates :order_items, presence: true
   validates :state, inclusion: { in: Order::STATE_LIST }
   
@@ -206,27 +211,31 @@ class Checkout < Reform::Form
 
   private
 
+    def update_subtotal
+      self.subtotal = self.order_items.collect { |item| (item.quantity * item.price) }.sum
+    end
+
     def update_total_price
-      self.total_price = self.order_items.collect { |item| (item.quantity * item.price) }.sum
+      self.subtotal / 100 * (100 - (self.coupon.discount || 0)) + self.shipping_price
     end
 
     def update_shipping_price
       self.shipping_price = self.calc_shipping_price(self.shipping_method)
-    end 
+    end
 
     def next_step_confirm_or_complete?
       self.next_step == 'confirm' || self.next_step == 'complete'
     end
 
-    def next_step_address_or_shipping?
-      next_step_address? || next_step_shipping?
+    def next_step_address_or_shipment?
+      next_step_address? || next_step_shipment?
     end
 
     def next_step_address?
       self.next_step == 'address'
     end
 
-    def next_step_shipping?
-      self.next_step == 'shipping'
+    def next_step_shipment?
+      self.next_step == 'shipment'
     end
 end

@@ -1,8 +1,6 @@
-- @attrs = flash['attrs']
-
 - [:firstname, :lastname, :phone, :address1, :address2, :city, :zipcode].each do |item|
   .field
-    = render partial: 'address_fields', locals: {f: f, attrs: @attrs, attr_sym: item}
+    = render partial: 'address_fields', locals: {f: f, attrs: attrs, attr_sym: item}
 
 .field
   = f.hidden_field :billing_address_for_id
@@ -16,4 +14,3 @@
   - @attr = @attrs['country_id'] if @attrs
   = f.select(:country_id, options_for_select(Country.all.map {|country| [country.name, country.id]}, (@attr.nil? ? kountry : @attr)))
   %br/
-

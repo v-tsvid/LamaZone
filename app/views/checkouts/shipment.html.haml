@@ -1,27 +1,24 @@
-%h4 Shipment
+= render layout: 'step' do
+  %h4 Shipment
 
-- flash.each do |name, msg|
-  = content_tag :div, msg
+  %h4 SHIPPING METHOD
 
-
-
-%h4 SHIPPING METHOD
-
-= form_for(@checkout, url: wizard_path, html: { method: :put }) do |checkout|
-  = checkout.fields_for(:model, @checkout.model) do |model|
-    .field
-      - @method = Order::SHIPPING_METHOD_LIST[0]
-      = model.radio_button(:shipping_method, @method, checked: true)
-      = model.label :shipping_method, "#{@method} +$#{@checkout.model.calc_shipping_price(@method)}"
-    
-    .field
-      - @method = Order::SHIPPING_METHOD_LIST[1]
-      = model.radio_button(:shipping_method, @method)
-      = model.label :shipping_method, "#{@method} +$#{@checkout.model.calc_shipping_price(@method)}"
-    
-    .field
-      - @method = Order::SHIPPING_METHOD_LIST[2]
-      = model.radio_button(:shipping_method, @method)
-      = model.label :shipping_method, "#{@method} +$#{@checkout.model.calc_shipping_price(@method)}"
-  .actions
-    = checkout.submit "SAVE AND CONTINUE"
+  = form_for(@checkout, url: wizard_path, html: { method: :put }) do |checkout|
+    = checkout.fields_for(:model, @checkout.model) do |model|
+      - @current_method = @checkout.model.shipping_method
+      .field
+        - @method = Order::SHIPPING_METHOD_LIST[0]
+        = model.radio_button(:shipping_method, @method, checked: @method == @current_method)
+        = model.label :shipping_method, "#{@method} +$#{@checkout.model.calc_shipping_price(@method)}"
+      
+      .field
+        - @method = Order::SHIPPING_METHOD_LIST[1]
+        = model.radio_button(:shipping_method, @method, checked: @method == @current_method)
+        = model.label :shipping_method, "#{@method} +$#{@checkout.model.calc_shipping_price(@method)}"
+      
+      .field
+        - @method = Order::SHIPPING_METHOD_LIST[2]
+        = model.radio_button(:shipping_method, @method, checked: @method == @current_method)
+        = model.label :shipping_method, "#{@method} +$#{@checkout.model.calc_shipping_price(@method)}"
+    .actions
+      = checkout.submit "SAVE AND CONTINUE"

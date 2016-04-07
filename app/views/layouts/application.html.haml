@@ -43,6 +43,8 @@
             - if current_admin  
               %li{class: current_page?(rails_admin_path) ? "active" : nil}
                 =link_to "Admin Panel", rails_admin_path
+    - flash.each do |name, msg|
+      = content_tag :div, msg
     = yield
     %p
     = params.inspect if Rails.env == 'development'

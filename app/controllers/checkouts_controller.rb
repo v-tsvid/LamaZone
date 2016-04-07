@@ -29,20 +29,26 @@ class CheckoutsController < ApplicationController
     if @checkout.save
       redirect_to checkout_path(:address)
     else
-      redirect_to :back, notice: @checkout.inspect
+      redirect_to root_path, notice: @checkout.inspect
     end
   end
 
   def show
-    @checkout = Checkout.new(current_order)
+    @checkout = Checkout.new(current_order) if current_order
     case step
     when :address
-      @checkout.model.billing_address ||= Address.new
+      if @checkout
+        @checkout.model.billing_address ||= Address.new
+        @checkout.model.shipping_address ||= Address.new
+      end
     when :shipment
     when :payment
-      @checkout.model.credit_card ||= CreditCard.new
+      @checkout.model.credit_card ||= CreditCard.new if @checkout
+    when :confirm
+    when :complete
+      @checkout = Checkout.new(last_processing_order) if last_processing_order
     end
-    render_wizard
+    redirect_if_nil(step, @checkout)
   end  
 
   def update
@@ -50,10 +56,16 @@ class CheckoutsController < ApplicationController
     case step
     when :address
       @validation_hash = @checkout.model.attributes.merge(
-        {next_step: 'shipping'}.merge(
-          checkout_params['model'].merge(
-            {shipping_address: checkout_params['model']['billing_address']})))
-      @return_hash = @validation_hash['billing_address']
+          {next_step: 'shipment'}.merge(
+            checkout_params['model']))
+      @return_hash = { billing_address: @validation_hash['billing_address'], 
+                       shipping_address: @validation_hash['shipping_address'] }
+
+      if params['use_billing']
+        @validation_hash.merge!(
+              {shipping_address: checkout_params['model']['billing_address']})
+        @return_hash['shipping_address'] = @validation_hash['billing_address']
+      end
 
       save_and_render
     
@@ -84,18 +96,42 @@ class CheckoutsController < ApplicationController
   end
 
 
-  private 
+  private
+    # def render_or_redirect(current_step)
+    #   if @checkout.model.next_step == 
+    # end
 
     def save_and_render
       if @checkout.validate(@validation_hash)
-        render_wizard @checkout, notice: @validation_hash
+        render_wizard @checkout, notice: params
       else
         redirect_to :back, {flash: { 
-          errors: @checkout.errors, attrs: @return_hash, notice: @validation_hash } } 
+          errors: @checkout.errors, attrs: @return_hash } } 
       end 
     end
 
+    def redirect_if_nil(step, checkout)
+      if checkout
+        render_wizard 
+      elsif step == :complete
+        redirect_to root_path, notice: "You have no orders in processing"
+      else
+        redirect_to root_path, notice: "You have no orders in progress"
+      end
+    end
+
     def checkout_params
+      address = [:firstname,
+                 :lastname,
+                 :address1,
+                 :address2,
+                 :phone,
+                 :city,
+                 :zipcode,
+                 :country_id,
+                 :billing_address_for_id,
+                 :shipping_address_for_id]
+
       params.require(:order).permit(
         model: [:total_price,
                 :completed_date,
@@ -104,26 +140,8 @@ class CheckoutsController < ApplicationController
                 :next_step,
                 :shipping_price,
                 :shipping_method,
-                billing_address: [:firstname,
-                                  :lastname,
-                                  :address1,
-                                  :address2,
-                                  :phone,
-                                  :city,
-                                  :zipcode,
-                                  :country_id,
-                                  :billing_address_for_id,
-                                  :shipping_address_for_id],
-                shipping_address: [:firstname,
-                                  :lastname,
-                                  :address1,
-                                  :address2,
-                                  :phone,
-                                  :city,
-                                  :zipcode,
-                                  :country_id,
-                                  :billing_address_for_id,
-                                  :shipping_address_for_id],
+                billing_address: address,
+                shipping_address: address,
                 credit_card:     [:number, 
                                   :cvv, 
                                   :firstname, 

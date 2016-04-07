@@ -1,5 +1,5 @@
 class OrderItem < ActiveRecord::Base
-  before_save :update_price
+  before_validation :update_price
 
   validates :price, :quantity, presence: true
   validates :price, numericality: { greater_than: 0 }
@@ -15,14 +15,14 @@ class OrderItem < ActiveRecord::Base
     end
   end
 
-  def price
-    book.price
-  end
+  # def price
+  #   book.price
+  # end
 
   private
 
     def update_price
-      self.price = price
+      self.price = self.book.price
     end
 
     def custom_label_method

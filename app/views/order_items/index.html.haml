@@ -16,9 +16,9 @@
 %br/
 
 = button_to 'EMPTY CART'
-= button_to 'CONTINUE SHOPPING', books_path
+= link_to 'CONTINUE SHOPPING', root_path
 
 = text_field_tag 'Coupon code', 'Coupon code'
 
 = button_to 'UPDATE'
-= button_to 'CHECKOUT', { controller: "checkouts", action: "create", checkout: {order_items_attrs: (current_customer ? nil : @order_items.map {|item| {book_id: item.book_id, quantity: item.quantity, price: item.price}}) }}, method: :post
+= button_to 'CHECKOUT', { controller: "checkouts", action: "create", order: { coupon_id: Coupon.find_by_code(), order_items_attrs: (current_customer ? nil : @order_items.map {|item| {book_id: item.book_id, quantity: item.quantity, price: item.price}}) }}, method: :post

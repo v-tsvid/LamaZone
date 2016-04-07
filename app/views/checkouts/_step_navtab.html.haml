@@ -1,0 +1,7 @@
+- @text = item.to_s.upcase
+- if Checkout::NEXT_STEPS.index(next_step.to_sym) < Checkout::NEXT_STEPS.index(item) || (next_step.to_sym == :complete && item != :complete)
+  %li{role: "presentation", class: "disabled"}
+    = link_to @text
+- else  
+  %li{role: "presentation", class: (step == item ? "active" : nil)}
+    = link_to @text, checkout_path(item)

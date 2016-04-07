@@ -12,6 +12,11 @@ class ApplicationController < ActionController::Base
     current_customer ? current_customer.current_order : nil
   end
 
+  def last_processing_order
+    current_customer ? Order.where(
+      customer: current_customer, state: 'processing').last : nil
+  end
+
   def compact_order_items(order_items)
     order_items = order_items.group_by{|h| h.book_id}.values.map do |a| 
       OrderItem.new(book_id: a.first.book_id, 
@@ -19,7 +24,7 @@ class ApplicationController < ActionController::Base
     end
 
     order_items.each do |item| 
-      item.price = Book.find(item.book_id).price * item.quantity
+      item.price = item.book.price
     end
 
     order_items

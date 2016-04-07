@@ -9,6 +9,12 @@
 
 Rails.application.routes.draw do
   
+  resources :coupons
+  resources :coupons
+  resources :coupons
+  resources :coupons
+  resources :coupons
+  resources :coupons
   resources :checkouts
   
   # get 'static_pages/cart', path: 'cart'

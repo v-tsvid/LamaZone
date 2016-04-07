@@ -22,6 +22,14 @@ class Address < ActiveRecord::Base
     end
   end
 
+  def attributes_short
+    self.attributes.except('created_at', 
+                           'updated_at', 
+                           'id', 
+                           'billing_address_for_id', 
+                           'shipping_address_for_id')
+  end
+
   private
 
     def custom_label_method

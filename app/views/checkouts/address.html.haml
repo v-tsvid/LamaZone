@@ -1,22 +1,26 @@
-%h4 Address
+= render layout: 'step' do
+  %h4 Address
 
-- flash.each do |name, msg|
-  = content_tag :div, msg
+  = form_for(@checkout, url: wizard_path, html: { method: :put }) do |checkout|
+    = checkout.fields_for(:model, @checkout.model) do |model|
+      - @attrs = flash['attrs'] || {'billing_address' => nil, 'shipping_address' => nil }
+      %h4 BILLING ADDRESS
+      #billing_form
+      = model.fields_for(:billing_address, @checkout.model.billing_address) do |bil_addr_f|
+        = render 'address_form', f: bil_addr_f, attrs: @attrs['billing_address'], kountry: @checkout.model.billing_address.try(:country_id)
+      %br/
 
-= @checkout.model.billing_address.inspect
+      %h4 SHIPPING ADDRESS
+      - if @checkout.model.billing_address.attributes_short == @checkout.model.shipping_address.attributes_short
+        = check_box_tag 'use_billing', 'use billing', true 
+      - else
+        = check_box_tag 'use_billing', 'use billing', false
+      = label_tag 'Use billing address'
 
-
-
-%h4 BILLING ADDRESS
-
-= form_for(@checkout, url: wizard_path, html: { method: :put }) do |checkout|
-  = checkout.fields_for(:model, @checkout.model) do |model|
-    = model.fields_for(:billing_address, @checkout.model.billing_address) do |bil_addr_f|
-      = render 'address_form', f: bil_addr_f, kountry: @checkout.model.billing_address.try(:country_id)
-    %h4 SHIPPING ADDRESS
-    = check_box_tag 'use_billing', 'use billing', true 
-    = label_tag 'Use billing address'
-    %br/
-
-  .actions
-    = checkout.submit "SAVE AND CONTINUE"
+      #shipping_form
+        = model.fields_for(:shipping_address, @checkout.model.shipping_address) do |ship_addr_f|
+          = render 'address_form', f: ship_addr_f, attrs: @attrs['shipping_address'], kountry: @checkout.model.shipping_address.try(:country_id)
+      %br/
+      %br/
+    .actions
+      = checkout.submit "SAVE AND CONTINUE"

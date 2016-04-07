@@ -1,4 +1,2 @@
-%h4 Complete
-= notice
-
-= @order.inspect
+= render layout: 'step' do
+  = render partial: 'order_summary', locals: { checkout: @checkout, view: 'complete' }

@@ -1,10 +1,14 @@
 FactoryGirl.define do
   factory :order do
     state { Order::STATE_LIST.sample }
+    shipping_method { Order::SHIPPING_METHOD_LIST.sample }
+    shipping_price { 0 }
+    subtotal { 0.01 }
     total_price { 0.01 }
     completed_date { Date.today.next_day }
     customer
     credit_card
+    coupon_id { [true, false].sample ? Coupon.all.sample.id : nil }
     created_at { DateTime.now }
     association :billing_address, factory: :address
     association :shipping_address, factory: :address

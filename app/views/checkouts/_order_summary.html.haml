@@ -1,0 +1,64 @@
+%h4= view == 'complete' ? "COMPLETE" : "CONFIRM"
+
+%h3
+  ORDER 
+  = "%07d" % checkout.model.id 
+%h4 
+  Billing address
+  - if view == 'confirm'
+    (#{link_to 'edit', checkout_path(:address)})
+- item = checkout.model.billing_address
+= render partial: 'confirm_address_fields', locals: {item: item}
+
+%h4 
+  Shipping address
+  - if view == 'confirm'
+    (#{link_to 'edit', checkout_path(:address)})
+- item = checkout.model.shipping_address
+= render partial: 'confirm_address_fields', locals: {item: item}
+
+%h4 
+  Shipment
+  - if view == 'confirm'
+    (#{link_to 'edit', checkout_path(:shipment)})
+- item = checkout.model
+%p= item.shipping_method
+%p
+  = "$#{item.shipping_price}"
+%br/
+
+%h4
+  Payment
+  - if view == 'confirm'
+    (#{link_to 'edit', checkout_path(:payment)})
+- item = checkout.model.credit_card
+%p= item.number
+%p= "#{item.expiration_month}/#{item.expiration_year}"
+%br/
+
+- item = checkout.model
+%table
+  %thead
+    %tr
+      %th{colspan: '2'} BOOK
+      %th PRICE
+      %th QTY
+      %th TOTAL
+
+  %tbody
+    = render item.order_items
+%br/
+
+%p= "Subtotal: $#{item.total_price}"
+%p= "Shipping: $#{item.shipping_price}"
+%p= "Order total: $#{item.total_price + item.shipping_price}"
+%br/
+
+
+
+- if view == 'confirm'
+  = form_for(checkout, url: wizard_path, html: { method: :put }) do |checkout|
+    .actions
+      = checkout.submit "PLACE ORDER"
+- else
+  = button_to "GO BACK TO STORE", books_path, method: :get

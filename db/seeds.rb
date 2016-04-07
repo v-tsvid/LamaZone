@@ -31,6 +31,8 @@ if Rails.env == 'development' || Rails.env == 'production'
     lastname: 'Lama',
     biography: "The 14th Dalai Lama (religious name: Tenzin Gyatso, shortened from Jetsun Jamphel Ngawang Lobsang Yeshe Tenzin Gyatso, born Lhamo Thondup, 6 July 1935) is the current Dalai Lama. The 14th Dalai Lama was born in Taktser village (administratively in Qinghai province, Republic of China), Amdo, Tibet, and was selected as the tulku of the 13th Dalai Lama in 1937 and formally recognized as the 14th Dalai Lama at a public declaration near the town of Bumchen in 1939. His enthronement ceremony as the Dalai Lama was held in Lhasa on February 22, 1940, and he eventually assumed full temporal (political) power over Tibet on 17 November 1950, at the age of 15, after China's invasion of Tibet. The Gelug school's government administered an area roughly corresponding to the Tibet Autonomous Region just as the nascent People's Republic of China wished to assert central control over it. During the 1959 Tibetan uprising, the Dalai Lama fled to India, where he currently lives as a political refugee. He has since traveled the world, advocating for the welfare of Tibetans, teaching Tibetan Buddhism, investigating the interface between Buddhism and science and talking about the importance of compassion as the source of a happy life. Around the world, institutions face pressure from China not to accept him. Various governments have likewise been pressured to not meet the Dalai Lama: In South Africa, he was denied a visa for Desmond Tutu's birthday celebrations, Australia's Prime Minister refused to meet with him, and ministers in the United Kingdom were also pressured to not meet with him.")
 
+  coupons = FactoryGirl.create_list(:coupon, 5)
+
   best_category = FactoryGirl.create :category, title: 'bestsellers'
 
   best_books = Array.new
@@ -131,23 +133,21 @@ if Rails.env == 'development' || Rails.env == 'production'
 
   rand(10..50).times do 
     order = FactoryGirl.build :order
-    order_items = Array.new
+    # order_items = Array.new
     
     rand(1..3).times do
-      order_items << FactoryGirl.build(:order_item, 
+      order.order_items << FactoryGirl.build(:order_item, 
         book: Book.all.sample, order: order, quantity: rand(1..3))
     end
-    
-    price = 0
-    
-    order_items.each do |item|
-      item.price = item.book.price * item.quantity
-      price += item.price
-    end
-    
-    order.total_price = price
 
+    order.order_items.each do |item|
+      item.send(:update_price)
+      item.save!
+    end
+
+    order.send(:update_shipping_price)
+    order.send(:update_subtotal)
+    order.send(:update_total_price)
     order.save!
-    order_items.each { |item| item.save! }
   end
 end

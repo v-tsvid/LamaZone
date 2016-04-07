@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160331071555) do
+ActiveRecord::Schema.define(version: 20160406115625) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -93,6 +93,15 @@ ActiveRecord::Schema.define(version: 20160331071555) do
     t.string   "alpha2"
   end
 
+  create_table "coupons", force: :cascade do |t|
+    t.string   "code"
+    t.integer  "discount"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  add_index "coupons", ["code"], name: "index_coupons_on_code", unique: true, using: :btree
+
   create_table "credit_cards", force: :cascade do |t|
     t.string   "number"
     t.string   "cvv"
@@ -160,8 +169,11 @@ ActiveRecord::Schema.define(version: 20160331071555) do
     t.string   "next_step"
     t.string   "shipping_method"
     t.decimal  "shipping_price"
+    t.decimal  "subtotal"
+    t.integer  "coupon_id"
   end
 
+  add_index "orders", ["coupon_id"], name: "index_orders_on_coupon_id", using: :btree
   add_index "orders", ["credit_card_id"], name: "index_orders_on_credit_card_id", using: :btree
   add_index "orders", ["customer_id"], name: "index_orders_on_customer_id", using: :btree
 
@@ -183,6 +195,7 @@ ActiveRecord::Schema.define(version: 20160331071555) do
   add_foreign_key "credit_cards", "customers"
   add_foreign_key "order_items", "books"
   add_foreign_key "order_items", "orders"
+  add_foreign_key "orders", "coupons"
   add_foreign_key "orders", "credit_cards"
   add_foreign_key "orders", "customers"
   add_foreign_key "ratings", "books"
