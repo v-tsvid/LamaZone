@@ -3,10 +3,8 @@
   %td= link_to "#{order_item.book.title}", order_item.book
   %td= order_item.book.price
   %td 
-    = number_field_tag 'quantity', order_item.quantity, min: 1, id: "book_#{order_item.book_id}_quantity"
-    = hidden_field_tag "book_#{order_item.book_id}_id"
-  %td= order_item.price
+    = number_field_tag "order_items_attrs[][quantity]", order_item.quantity, min: 1
+    = hidden_field_tag "order_items_attrs[][book_id]", order_item.book.id
+  %td= text_field_tag "order_items_attrs[][price]", order_item.price
   %td
-    = form_tag(controller: 'order_items', action: 'remove_from_cart', pop: true, method: :post) do
-      = hidden_field_tag 'book_id', order_item.book_id
-      = submit_tag "X", id: "book_#{order_item.book_id}_remove"
+    = link_to 'X', url_for(controller: 'order_items', action: 'remove_from_cart', book_id: order_item.book.id),  method: :post

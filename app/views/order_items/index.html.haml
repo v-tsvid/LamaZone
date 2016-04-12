@@ -1,24 +1,33 @@
-%p#notice= notice
-
 %h1 Shopping cart
 
-%table
-  %thead
-    %tr
-      %th{colspan: '2'} BOOK
-      %th PRICE
-      %th QTY
-      %th TOTAL
+= form_tag controller: 'order_items', action: 'update_cart', method: :post do 
 
-  %tbody
-    = render @order_items
+  %table
+    %thead
+      %tr
+        %th{colspan: '2'} BOOK
+        %th PRICE
+        %th QTY
+        %th TOTAL
+      
+    %tbody  
+      = render @order.order_items
+
+  %p= "SUBTOTAL: $#{@order.send(:update_subtotal)}"
+
+  = link_to 'EMPTY CART', order_items_empty_cart_path, method: :delete, data: { confirm: "Are you sure?" } 
+  = link_to 'CONTINUE SHOPPING', books_path
+  = submit_tag 'UPDATE'
+
+= form_tag controller: "checkouts", action: "create", method: :post do
+  - @order.order_items.each do |item|
+    = render partial: "hidden_order_item", locals: {order_item: item}
+  = text_field_tag "order[coupon_id]", nil, placeholder: 'Coupon code'
+  = submit_tag 'CHECKOUT'
+
+
   
-%br/
 
-= button_to 'EMPTY CART'
-= link_to 'CONTINUE SHOPPING', root_path
+  
 
-= text_field_tag 'Coupon code', 'Coupon code'
 
-= button_to 'UPDATE'
-= button_to 'CHECKOUT', { controller: "checkouts", action: "create", order: { coupon_id: Coupon.find_by_code(), order_items_attrs: (current_customer ? nil : @order_items.map {|item| {book_id: item.book_id, quantity: item.quantity, price: item.price}}) }}, method: :post

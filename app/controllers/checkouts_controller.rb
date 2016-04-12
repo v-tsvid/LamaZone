@@ -1,6 +1,8 @@
 class CheckoutsController < ApplicationController
   include Wicked::Wizard
 
+  before_action :authenticate_customer!
+
   steps :address, :shipment, :payment, :confirm, :complete
 
   def new
@@ -12,17 +14,18 @@ class CheckoutsController < ApplicationController
     
     if checkout_params[:order_items_attrs]
       checkout_params[:order_items_attrs].each do |prms|
-        @order_items << OrderItem.new(prms)
+        @order_items << OrderItem.new(
+          {book_id: prms['book_id'], quantity: prms['quantity']})
       end
     end
 
     @order = current_order || Order.new(customer: current_customer)
 
     @order.next_step = 'address'
+    @order.coupon_id = checkout_params[:coupon_id]
 
-    @temp_items = @order.order_items + @order_items
     @order.order_items.each { |item| item.destroy }
-    @order.order_items = compact_order_items(@temp_items)
+    @order.order_items = compact_order_items(@order_items)
 
     @checkout = Checkout.new(@order)
     
@@ -38,8 +41,10 @@ class CheckoutsController < ApplicationController
     case step
     when :address
       if @checkout
-        @checkout.model.billing_address ||= Address.new
-        @checkout.model.shipping_address ||= Address.new
+        @checkout.model.billing_address ||= Address.new(
+          current_customer.billing_address.attributes)
+        @checkout.model.shipping_address ||= Address.new(
+          current_customer.shipping_address.attributes)
       end
     when :shipment
     when :payment
@@ -97,10 +102,7 @@ class CheckoutsController < ApplicationController
 
 
   private
-    # def render_or_redirect(current_step)
-    #   if @checkout.model.next_step == 
-    # end
-
+    
     def save_and_render
       if @checkout.validate(@validation_hash)
         render_wizard @checkout, notice: params
@@ -133,6 +135,7 @@ class CheckoutsController < ApplicationController
                  :shipping_address_for_id]
 
       params.require(:order).permit(
+        :coupon_id,
         model: [:total_price,
                 :completed_date,
                 :customer_id,

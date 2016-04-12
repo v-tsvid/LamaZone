@@ -10,11 +10,6 @@
 Rails.application.routes.draw do
   
   resources :coupons
-  resources :coupons
-  resources :coupons
-  resources :coupons
-  resources :coupons
-  resources :coupons
   resources :checkouts
   
   # get 'static_pages/cart', path: 'cart'
@@ -47,6 +42,8 @@ Rails.application.routes.draw do
 
   post 'order_items/add_to_cart'
   post 'order_items/remove_from_cart'
+  delete 'order_items/empty_cart'
+  post 'order_items/update_cart'
   
   get 'order_items/index', path: 'checkout/cart'
   

@@ -22,7 +22,7 @@ class OrderItem < ActiveRecord::Base
   private
 
     def update_price
-      self.price = self.book.price
+      self.price = self.book.price * self.quantity
     end
 
     def custom_label_method

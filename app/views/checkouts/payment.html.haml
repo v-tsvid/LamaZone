@@ -1,6 +1,8 @@
 = render layout: 'step' do
   %h4 Payment
 
+  = render partial: "order_summary", locals: {order: @checkout.model}
+
   %h4 CREDIT CARD
 
   = form_for(@checkout, url: wizard_path, html: { method: :put }) do |checkout|

@@ -1,6 +1,8 @@
 = render layout: 'step' do
   %h4 Address
 
+  = render partial: "order_summary", locals: {order: @checkout.model}
+
   = form_for(@checkout, url: wizard_path, html: { method: :put }) do |checkout|
     = checkout.fields_for(:model, @checkout.model) do |model|
       - @attrs = flash['attrs'] || {'billing_address' => nil, 'shipping_address' => nil }

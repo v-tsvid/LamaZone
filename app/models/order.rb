@@ -22,8 +22,6 @@ class Order < ActiveRecord::Base
   before_validation :update_subtotal
   before_validation :update_total_price
 
-  validates_associated :order_items
-
   aasm column: 'state', whiny_transitions: false do 
     state :in_progress, initial: true
     state :processing
@@ -65,10 +63,8 @@ class Order < ActiveRecord::Base
 
   private
 
-    
-
     def update_subtotal
-      self.subtotal = self.order_items.collect { |item| (item.quantity * item.price) }.sum
+      self.subtotal = self.order_items.collect { |item| item.price }.sum
     end
 
     def update_total_price

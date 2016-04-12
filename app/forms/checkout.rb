@@ -145,6 +145,14 @@ class Checkout < Reform::Form
             self.expiration_month >= Date.today.strftime("%m"))
       end
   end
+
+  property :coupon, populate_if_empty: Coupon do
+    property :code
+    property :discount
+
+    validates :code, :discount, presence: true
+    validates :discount, inclusion: { in: 1..99 }
+  end
   
 
   validates :subtotal,
@@ -180,11 +188,6 @@ class Checkout < Reform::Form
     false
   end
 
-  # def save
-  #   super
-  #   model.save!
-  # end
-
   def save
     super
     model.save!
@@ -209,14 +212,18 @@ class Checkout < Reform::Form
     end
   end
 
+  def calc_total_price
+    (self.subtotal / 100 * (100 - (self.coupon ? self.coupon.discount : 0)) + self.shipping_price)
+  end
+
   private
 
     def update_subtotal
-      self.subtotal = self.order_items.collect { |item| (item.quantity * item.price) }.sum
+      self.subtotal = self.order_items.collect { |item| item.price }.sum
     end
 
     def update_total_price
-      self.subtotal / 100 * (100 - (self.coupon.discount || 0)) + self.shipping_price
+      self.total_price = self.calc_total_price
     end
 
     def update_shipping_price

@@ -1,10 +1,40 @@
 class OrderItemsController < ApplicationController
   before_action :set_order_item, only: [:show, :edit, :update, :destroy]
 
+  def update_cart
+    @order_items = Array.new
+    if current_order
+      current_order.order_items.destroy_all
+      params[:order_items_attrs].each do |item|
+        @order_items << OrderItem.create(
+          book_id: item[:book_id], quantity: item[:quantity], order: current_order)
+      end
+    else
+      params[:order_items_attrs].each do |item|
+        @order_items << OrderItem.new(
+          book_id: item[:book_id], quantity: item[:quantity])
+      end
+      write_to_cookies(@order_items)
+    end
+
+    redirect_to order_items_path
+  end
+
+  def empty_cart
+    if current_order
+      current_order.order_items.destroy_all
+      current_order.destroy
+    else
+      cookies.delete('order_items')
+    end
+    redirect_to order_items_path
+  end
+
   def add_to_cart
     if current_customer
       order = current_order || Order.new(customer: current_customer)
-      order.order_items << OrderItem.create!(book_id: params[:book_id], quantity: params[:quantity], order: order)
+      order.order_items << OrderItem.create(
+        book_id: params[:book_id], quantity: params[:quantity], order: order)
       if order.order_items != compact_order_items(order.order_items)
         temp_items = order.order_items
         order.order_items.each { |item| item.destroy }
@@ -18,7 +48,7 @@ class OrderItemsController < ApplicationController
         redirect_to :back, notice: "can't save order"
       end
     else
-      interact_with_cookies
+      interact_with_cookies(false)
     end
   end
 
@@ -40,7 +70,22 @@ class OrderItemsController < ApplicationController
   # GET /order_items
   # GET /order_items.json
   def index
-    @order_items = compact_order_items(current_order.try(:order_items) || read_from_cookies)
+    if current_order
+      @order = current_order
+      @order.order_items = compact_order_items(@order.order_items + read_from_cookies)
+      cookies.delete('order_items')
+    elsif cookies['order_items']
+      if current_customer
+        @order = Order.create(customer: current_customer, state: 'in_progress')
+        @order.order_items = compact_order_items(read_from_cookies)
+        cookies.delete('order_items')
+      else
+        @order = Order.new
+        @order.order_items = compact_order_items(read_from_cookies)
+      end
+    else
+      redirect_to root_path, notice: 'Your cart is empty'
+    end
   end
 
   # GET /order_items/1
@@ -109,10 +154,10 @@ class OrderItemsController < ApplicationController
     end
 
     def interact_with_cookies(pop)
-      order_items = read_from_cookies
+      order_items = compact_order_items(read_from_cookies)
       order_items = pop ? pop_from_cookies(order_items) : push_to_cookies(order_items)
       write_to_cookies(order_items)    
-      added_or_removed = params[:pop] ? 'removed from' : 'added to'
+      added_or_removed = pop ? 'removed from' : 'added to'
       redirect_to :back, notice: "\"#{Book.find(params[:book_id]).title}\" " \
                                  "was #{added_or_removed} cart"
     end
