@@ -72,7 +72,10 @@ class OrderItemsController < ApplicationController
   def index
     if current_order
       @order = current_order
-      @order.order_items = compact_order_items(@order.order_items + read_from_cookies)
+      @temp_items = Array.new
+      @order.order_items.each { |item| @temp_items << OrderItem.new(item.attributes) }
+      @order.order_items.destroy_all
+      @order.order_items = compact_order_items(@temp_items + read_from_cookies)
       cookies.delete('order_items')
     elsif cookies['order_items']
       if current_customer
