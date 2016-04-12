@@ -38,7 +38,7 @@
 
           %ul.nav.navbar-nav.navbar-right
             %li{class: current_page?(order_items_path) || current_page?('/cart')? "active" : nil}
-              =link_to "CART: ()", '/checkout/cart'
+              =link_to (cart_total_quantity == 0 ? "CART: (EMPTY)" : "CART: (#{cart_total_quantity}) $#{cart_subtotal}"), '/checkout/cart'
 
             - if current_admin  
               %li{class: current_page?(rails_admin_path) ? "active" : nil}

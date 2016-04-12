@@ -7,7 +7,39 @@ class ApplicationController < ActionController::Base
 
   alias_method :current_user, :current_customer
 
-  helper_method :current_order
+  helper_method :current_order, :cart_subtotal, :cart_total_quantity
+
+  def cart_subtotal
+    if current_order
+      current_order.send(:update_subtotal)
+    else
+      @order = Order.new
+      @order.order_items = read_from_cookies
+      @order.order_items.each { |item| item.send(:update_price)}
+      @order.send(:update_subtotal)
+    end
+  end
+
+  def cart_total_quantity
+    if current_order
+      current_order.order_items.collect { |item| item.quantity }.sum
+    else
+      @order = Order.new
+      @order.order_items = read_from_cookies
+      @order.order_items.collect { |item| item.quantity }.sum
+    end
+  end
+
+  def read_from_cookies
+    order_items = Array.new
+    if cookies[:order_items]
+      cookies[:order_items].split(' ').
+        partition.with_index{ |v, index| index.even? }.transpose.each do |item|
+          order_items << OrderItem.new(book_id: item[0], quantity: item[1])
+      end
+    end
+    order_items
+  end
 
   def current_order
     current_customer ? current_customer.current_order : nil

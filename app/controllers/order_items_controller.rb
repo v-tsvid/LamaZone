@@ -82,6 +82,7 @@ class OrderItemsController < ApplicationController
       else
         @order = Order.new
         @order.order_items = compact_order_items(read_from_cookies)
+        @order.order_items.each { |item| item.send(:update_price) }
       end
     else
       redirect_to root_path, notice: 'Your cart is empty'
@@ -182,14 +183,4 @@ class OrderItemsController < ApplicationController
       end
     end
 
-    def read_from_cookies
-      order_items = Array.new
-      if cookies[:order_items]
-        cookies[:order_items].split(' ').
-          partition.with_index{ |v, index| index.even? }.transpose.each do |item|
-            order_items << OrderItem.new(book_id: item[0], quantity: item[1])
-        end
-      end
-      order_items
-    end
 end
