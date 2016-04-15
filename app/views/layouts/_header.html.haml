@@ -9,7 +9,7 @@
       %ul.nav.navbar-nav
         %li{class: current_page?(root_path) ? "active" : nil}
           =link_to "HOME", root_path
-        %li{class: (resource.class == Book || Category) && !current_page?(root_path) ? "active" : nil}
+        %li{class: (controller.controller_name == 'books' || 'categories' || 'ratings') && !current_page?(root_path) ? "active" : nil}
           =link_to "SHOP", books_path
 
       - if !current_customer && !current_admin
@@ -29,7 +29,7 @@
             =link_to "Sign Out", destroy_customer_session_path, method: "delete"
 
       %ul.nav.navbar-nav.navbar-right
-        %li{class: current_page?(order_items_path) || current_page?('/cart')? "active" : nil}
+        %li{class: current_page?(order_items_path) || current_page?(order_items_index_path)? "active" : nil}
           =link_to (cart_total_quantity == 0 ? "CART: (EMPTY)" : "CART: (#{cart_total_quantity}) #{cool_price cart_subtotal}"), '/checkout/cart'
 
         - if current_admin  

@@ -7,6 +7,17 @@ $bgDarkDefault: #422020;
 $bgDarkLighter: #523535;
 
 
+span.stars, span.stars span {
+    display: inline-block;
+    background: url(stars.png) 0 -16px repeat-x;
+    width: 80px;
+    height: 16px;
+}
+
+span.stars span {
+    background-position: 0 0;
+}
+
 .image {
   padding-top: 10px;
   padding-right: 10px;

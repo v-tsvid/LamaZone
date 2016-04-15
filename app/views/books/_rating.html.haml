@@ -1,7 +1,8 @@
 - if rating.state == 'approved'
   %tr.active
     %td.small
-      = "#{rating.rate} by #{rating.customer.send(:full_name)} #{rating.updated_at}"
+      %span.stars= "#{(rating.rate / 2.0)}"
+      = " by #{rating.customer.send(:full_name)}, #{cool_date(rating.updated_at)}"
   %tr
     %td
       = rating.review.to_s

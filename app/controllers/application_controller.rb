@@ -12,7 +12,12 @@ class ApplicationController < ActionController::Base
                 :cart_total_quantity, 
                 :cool_id, 
                 :cool_card_number,
-                :cool_price
+                :cool_price,
+                :cool_date
+
+  def cool_date(date)
+    "#{date.strftime("%B %d, %Y")}"
+  end
 
   def cool_price(price)
     "$#{price}"
