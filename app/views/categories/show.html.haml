@@ -6,10 +6,10 @@
 %span >> 
 =link_to "#{@category.title}", category_path(@category)
 
-%p
-  %strong= @category.title
+%h4= "Category - #{@category.title.humanize}"
 
-= render @books
-= paginate @books
+.row-fluid
+  = render @books
+  = paginate @books
 
 = link_to 'Back', root_path

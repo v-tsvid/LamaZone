@@ -1,6 +1,7 @@
 = render layout: 'step' do
   %h4 Payment
-
+  
+  %h4 ORDER SUMMARY
   = render partial: "order_summary", locals: {order: @checkout.model}
 
   %h4 CREDIT CARD

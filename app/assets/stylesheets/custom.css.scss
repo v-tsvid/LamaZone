@@ -1,0 +1,93 @@
+$textLightDefault: #F2F2CB;
+$textLightLighter: #F2F2E9;
+
+$bgLightDefault: #FFFFE6;
+
+$bgDarkDefault: #422020;
+$bgDarkLighter: #523535;
+
+
+.image {
+  padding-top: 10px;
+  padding-right: 10px;
+  padding-bottom: 20px;
+}
+
+.image-thumb {
+  padding-top: 5px;
+  padding-right: 5px;
+  padding-bottom: 10px;
+}
+
+.image-xs {
+  padding-top: 3px;
+  padding-right: 3px;
+  padding-bottom: 5px;
+}
+
+.book-form-left {
+  text-align: left;
+}
+
+.book-form-right {
+  text-align: right;
+}
+
+form {
+  padding-bottom: 50px;
+}
+
+body {
+  background-color: $bgLightDefault;
+}
+
+.book-col {
+  text-align: center;
+  padding-bottom: 10px;
+}
+
+.pagin {
+  text-align: center;
+}
+
+.navbar-inverse {
+  background-color: $bgDarkDefault;
+  border-color: $bgDarkDefault;
+
+  .navbar-brand {
+    color: $textLightDefault;
+    &:hover, &:focus { 
+      color: $textLightDefault; 
+    }
+  }
+
+  .navbar-text {
+    color: $textLightDefault; 
+  }
+
+  .navbar-nav {
+    > li {
+      > a {
+        color: $textLightDefault;
+        &:hover,  &:focus {
+          color: $textLightLighter; }}}
+    > .active {
+      > a, > a:hover, > a:focus {
+        color: $textLightLighter;
+        background-color: $bgDarkLighter; }}
+    > .open {
+      > a, > a:hover, > a:focus {
+        color: $textLightLighter;
+        background-color: $bgDarkLighter; }}}
+}
+
+.carousel {
+  /*position: absolute;*/
+  top: 0;
+  left: 0;
+  min-width: 100%;
+  min-height: 100%;
+}
+
+
+

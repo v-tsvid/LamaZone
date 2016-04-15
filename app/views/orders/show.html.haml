@@ -1,0 +1,14 @@
+%h4= "Order #{cool_id(@order.id)}"
+%p= @order.state.humanize
+
+%table
+  %thead
+    %tr
+      %th{colspan: '2'} BOOK
+      %th PRICE
+      %th QTY
+      %th TOTAL
+
+  %tbody
+    = render @order.order_items
+= render partial: "checkouts/order_summary", locals: {order: @order}

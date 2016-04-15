@@ -11,7 +11,7 @@ class CategoriesController < ApplicationController
   # GET /categories/1
   # GET /categories/1.json
   def show
-    @books = Category.find(params[:id]).books.page(params[:page]).per(3)
+    @books = Category.find(params[:id]).books.page(params[:page]).per(6)
   end
 
   private

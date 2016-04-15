@@ -1,6 +1,7 @@
 = render layout: 'step' do
   %h4 Shipment
-
+  
+  %h4 ORDER SUMMARY
   = render partial: "order_summary", locals: {order: @checkout.model}
 
   %h4 SHIPPING METHOD
@@ -8,19 +9,15 @@
   = form_for(@checkout, url: wizard_path, html: { method: :put }) do |checkout|
     = checkout.fields_for(:model, @checkout.model) do |model|
       - @current_method = @checkout.model.shipping_method
-      .field
-        - @method = Order::SHIPPING_METHOD_LIST[0]
-        = model.radio_button(:shipping_method, @method, checked: (@method == @current_method || @current_method.nil?))
-        = model.label :shipping_method, "#{@method} +$#{@checkout.model.calc_shipping_price(@method)}"
+
+      - @method = Order::SHIPPING_METHOD_LIST[0]  
+      = render partial: 'shipping_method_field', locals: {model: model, method: @method, current_method: @current_method, checkout: @checkout}
+        
+      - @method = Order::SHIPPING_METHOD_LIST[1]  
+      = render partial: 'shipping_method_field', locals: {model: model, method: @method, current_method: @current_method, checkout: @checkout}
       
-      .field
-        - @method = Order::SHIPPING_METHOD_LIST[1]
-        = model.radio_button(:shipping_method, @method, checked: @method == @current_method)
-        = model.label :shipping_method, "#{@method} +$#{@checkout.model.calc_shipping_price(@method)}"
+      - @method = Order::SHIPPING_METHOD_LIST[2]  
+      = render partial: 'shipping_method_field', locals: {model: model, method: @method, current_method: @current_method, checkout: @checkout}
       
-      .field
-        - @method = Order::SHIPPING_METHOD_LIST[2]
-        = model.radio_button(:shipping_method, @method, checked: @method == @current_method)
-        = model.label :shipping_method, "#{@method} +$#{@checkout.model.calc_shipping_price(@method)}"
     .actions
       = checkout.submit "SAVE AND CONTINUE"

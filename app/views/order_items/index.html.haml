@@ -13,7 +13,7 @@
     %tbody  
       = render @order.order_items
 
-  %p= "SUBTOTAL: $#{@order.send(:update_subtotal)}"
+  %p= "SUBTOTAL: #{cool_price @order.send(:update_subtotal)}"
 
   = link_to 'EMPTY CART', order_items_empty_cart_path, method: :delete, data: { confirm: "Are you sure?" } 
   = link_to 'CONTINUE SHOPPING', books_path

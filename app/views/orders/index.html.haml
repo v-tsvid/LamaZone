@@ -1,0 +1,29 @@
+%h1 Orders
+
+- @state = Order::STATE_LIST[0]
+%h4= @state.humanize.upcase
+- @order = @orders.find_by(state: @state)
+%table
+  %thead
+    %tr
+      %th{colspan: '2'} BOOK
+      %th PRICE
+      %th QTY
+      %th TOTAL
+
+  %tbody
+    = render @order.order_items
+%br/
+%p
+  = link_to 'GO TO CART', order_items_path
+  = "SUBTOTAL: #{cool_price @order.subtotal}"
+
+- Order::STATE_LIST.drop(1).each do |state|
+  %h4= state.humanize.upcase
+  - @actual_orders = @orders.where(state: state)
+  = render partial: 'orders_list', locals: {orders: @actual_orders}
+  %br/
+
+= render partial: 'orders_list', locals: {orders: @orders}
+
+

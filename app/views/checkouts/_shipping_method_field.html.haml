@@ -1,0 +1,3 @@
+.field
+  = model.radio_button(:shipping_method, method, checked: (method == current_method || current_method.nil? && method == Order::SHIPPING_METHOD_LIST[0]))
+  = model.label :shipping_method, "#{method} +#{cool_price(checkout.model.calc_shipping_price(method))}"

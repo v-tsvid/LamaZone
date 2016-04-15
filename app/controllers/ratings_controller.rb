@@ -98,8 +98,4 @@ class RatingsController < ApplicationController
     def rating_params
       params.require(:rating).permit(:id, :rate, :review, :book_id)
     end
-
-    # def authenticate_customer_if_exists
-    #   authenticate_customer! if params[:customer_id]
-    # end
 end

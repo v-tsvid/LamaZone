@@ -1,6 +1,4 @@
-%h4 ORDER SUMMARY
-
-%p= "SUBTOTAL: $#{order.subtotal}"
+%p= "SUBTOTAL: #{cool_price order.subtotal}"
 %p= "DISCOUNT: #{order.coupon ? order.coupon.discount : 0}%"
-%p= "SHIPPING: $#{order.shipping_price}"
-%p= "TOTAL: $#{order.total_price}"
+%p= "SHIPPING: #{cool_price order.shipping_price}"
+%p= "TOTAL: #{cool_price order.total_price}"

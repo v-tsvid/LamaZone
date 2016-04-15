@@ -1,50 +1,43 @@
-.field
-  = f.label :firstname
-  %br/
-  = f.text_field :firstname
+.form
+  .form-group
+    .field
+      = f.text_field :firstname, placeholder: 'Firstname', class: "form-control"
+    %br/
 
-.field
-  = f.label :lastname
-  %br/
-  = f.text_field :lastname
+    .field
+      = f.text_field :lastname, placeholder: 'Lastname', class: "form-control"
+    %br/
 
-.field
-  = f.label :phone
-  %br/
-  = f.text_field :phone 
+    .field
+      = f.text_field :phone, placeholder: 'Phone', class: "form-control"
+    %br/
 
-.field
-  = f.label :address1
-  %br/
-  = f.text_field :address1
-
-.field
-  = f.label :address2
-  %br/
-  = f.text_field :address2
-
-.field
-  = f.label :city
-  %br/
-  = f.text_field :city
-
-.field
-  = f.label :zipcode
-  %br/
-  = f.text_field :zipcode
-
-.field
-  = f.hidden_field :billing_address_for_id
-
-.field
-  = f.hidden_field :shipping_address_for_id
-
-.field
-  = f.label(:country_id)
-  %br/
-  = f.select(:country_id, options_for_select(Country.all.map {|country| [country.name, country.id]}, kountry))
-  %br/
+  .field
+    = f.text_field :address1, placeholder: 'Address1', class: "form-control"
   %br/
 
-  .actions
-    = f.submit "SAVE"
+  .field
+    = f.text_field :address2, placeholder: 'Address2', class: "form-control"
+  %br/
+
+  .field
+    = f.text_field :city, placeholder: 'City', class: "form-control"
+  %br/
+
+  .field
+    = f.text_field :zipcode, placeholder: 'Zipcode', class: "form-control"
+  %br/
+
+  .field
+    = f.hidden_field :billing_address_for_id
+
+  .field
+    = f.hidden_field :shipping_address_for_id
+
+  .field
+    = f.select(:country_id, options_for_select(Country.all.map {|country| [country.name, country.id]}, kountry), class: "form-control")
+    %br/
+    %br/
+
+    .actions
+      = f.submit "SAVE", class: "btn btn-default"

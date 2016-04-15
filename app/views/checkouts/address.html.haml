@@ -1,6 +1,7 @@
 = render layout: 'step' do
   %h4 Address
-
+  
+  %h4 ORDER SUMMARY
   = render partial: "order_summary", locals: {order: @checkout.model}
 
   = form_for(@checkout, url: wizard_path, html: { method: :put }) do |checkout|

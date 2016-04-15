@@ -1,0 +1,18 @@
+- if orders.empty?
+  %p NO ORDERS
+- else
+  %table
+    %thead
+      %tr
+        %th NUMBER
+        %th COMPLETED
+        %th TOTAL
+        %th
+
+    %tbody
+      - orders.each do |order|
+        %tr
+          %td= cool_id(order.id)
+          %td= order.completed_date
+          %td= cool_price(order.total_price)
+          %td= link_to 'View', order

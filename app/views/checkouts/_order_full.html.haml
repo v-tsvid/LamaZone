@@ -2,7 +2,7 @@
 
 %h3
   ORDER 
-  = "%07d" % checkout.model.id 
+  = cool_id(checkout.model.id)
 %h4 
   Billing address
   - if view == 'confirm'
@@ -24,7 +24,7 @@
 - item = checkout.model
 %p= item.shipping_method
 %p
-  = "$#{item.shipping_price}"
+  = cool_price(item.shipping_price)
 %br/
 
 %h4
@@ -32,7 +32,7 @@
   - if view == 'confirm'
     (#{link_to 'edit', checkout_path(:payment)})
 - item = checkout.model.credit_card
-%p= item.number
+%p= cool_card_number(item.number)
 %p= "#{item.expiration_month}/#{item.expiration_year}"
 %br/
 

@@ -1,26 +1,37 @@
-%span #{@book.title}
-%span by 
-= link_to "#{@book.author.full_name}", author_path(@book.author)
-%br/
-%br/
+.row-fluid
+  .col-md-12.col-md-offset-1
+    %h4 
+      = "#{@book.title} by "
+      = link_to(@book.author.full_name, author_path(@book.author))
 
-= image_tag @book.images
-%br/
-%br/
+.row-fluid
+  .col-md-3.col-md-offset-1
+    .image
+      = image_tag @book.images
 
-%p
-  = form_tag(controller: 'order_items', action: 'add_to_cart', method: :post) do
-    = @book.price
-    = hidden_field_tag 'book_id', @book.id
-    = number_field_tag 'quantity', '1', in: 1..@book.books_in_stock, id: "book_quantity" 
-    = submit_tag "Add to Cart", id: "add_to_cart"
+  .col-md-7
+    %p
+      = form_tag(controller: 'order_items', action: 'add_to_cart', method: :post) do
+        .form-inline
+          .col-md-4
+            %h4= cool_price @book.price
+          .col-md-4.col-md-offset-4
+            .book-form-right
+              = number_field_tag 'quantity', '1', in: 1..@book.books_in_stock, id: "book_quantity", class: 'form-control' 
+              = hidden_field_tag 'book_id', @book.id
+              = submit_tag "Add to Cart", id: "add_to_cart", class: 'btn btn-warning'
 
-%p
-  = @book.description
+    %p= @book.description
 
-%p
-  %strong Reviews
-
-= link_to 'Add review for this book', new_book_rating_path(@book)
-
-= render partial: "books/rating", collection: @book.ratings
+.row-fluid
+  .col-md-10.col-md-offset-1
+    .row
+      .col-md-1
+        %h4 Reviews
+      .col-md-2
+        = link_to 'Add review for this book', new_book_rating_path(@book), class: 'btn btn-warning'
+    .row
+      .col-md-12
+        %table.table
+          %body
+            = render partial: "books/rating", collection: @book.ratings

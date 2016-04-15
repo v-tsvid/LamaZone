@@ -1,15 +1,20 @@
-%aside
-  %h1 SHOP BY CATEGORIES
+.container-fluid
+  .row-fluid
+    .col-md-9
+      %h4 Category - All
+      = render @books
 
-  %table
-    %tbody
-      - @categories.each do |category|
-        %tr
-          %td= link_to "#{category.title}", category
-  %br
-
-%h1 Shop
-    
-= render @books
-= paginate @books
+    .col-md-3
+      %h4 SHOP BY CATEGORIES
+      %table
+        %tbody
+          - @categories.each do |category|
+            %tr
+              %td= link_to "#{category.title.humanize}", category
+      %br
+.container-fluid
+  .row-fluid 
+    .col-md-9
+      .pagin
+        = paginate @books
 

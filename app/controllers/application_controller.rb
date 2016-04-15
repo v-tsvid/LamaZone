@@ -7,7 +7,24 @@ class ApplicationController < ActionController::Base
 
   alias_method :current_user, :current_customer
 
-  helper_method :current_order, :cart_subtotal, :cart_total_quantity
+  helper_method :current_order, 
+                :cart_subtotal, 
+                :cart_total_quantity, 
+                :cool_id, 
+                :cool_card_number,
+                :cool_price
+
+  def cool_price(price)
+    "$#{price}"
+  end
+
+  def cool_card_number(number)
+    "**** **** **** #{number.split("").last(4).join("")}"
+  end
+
+  def cool_id(id)
+    "%07d" % id
+  end
 
   def cart_subtotal
     if current_order
@@ -69,10 +86,6 @@ class ApplicationController < ActionController::Base
       devise_parameter_sanitizer.for(:sign_up) << :firstname << :lastname
     end
 
-    # def current_ability
-    #   @current_ability ||= Ability.new(current_customer)
-    # end
-
   private
 
     def store_location
@@ -90,6 +103,10 @@ class ApplicationController < ActionController::Base
     end
 
     def after_sign_in_path_for(resource)
-      session[:previous_url] || root_path
+      if session[:previous_url] == order_items_index_path
+        session[:previous_url] || root_path 
+      else
+        super
+      end
     end
 end

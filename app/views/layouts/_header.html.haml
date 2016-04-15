@@ -1,0 +1,37 @@
+%nav.navbar.navbar-inverse
+  .container-fluid
+    .navbar-header
+      %a.navbar-brand{href: root_path}
+        %img{alt: "LZ", src: ""}
+      %p.navbar-text 
+        = "Hi#{current_customer ? ", #{current_customer.firstname}" : " there"}! You're in LamaZone now!"
+    .collapse.navbar-collapse#bs-example-navbar-collapse-1
+      %ul.nav.navbar-nav
+        %li{class: current_page?(root_path) ? "active" : nil}
+          =link_to "HOME", root_path
+        %li{class: (resource.class == Book || Category) && !current_page?(root_path) ? "active" : nil}
+          =link_to "SHOP", books_path
+
+      - if !current_customer && !current_admin
+        %ul.nav.navbar-nav.navbar-right
+          %li{class: current_page?(new_customer_registration_path) ? "active" : nil}
+            =link_to "Sign Up", new_customer_registration_path
+          %li{class: current_page?(new_customer_session_path) ? "active" : nil}
+            =link_to "Sign In", new_customer_session_path
+
+      - else
+        %ul.nav.navbar-nav.navbar-right
+          %li{class: current_page?(edit_customer_registration_path) ? "active" : nil}
+            =link_to "Settings", edit_customer_registration_path
+          %li{class: current_page?(orders_path) ? "active" : nil}
+            =link_to "Orders", orders_path
+          %li{class: current_page?(destroy_customer_session_path) ? "active" : nil}
+            =link_to "Sign Out", destroy_customer_session_path, method: "delete"
+
+      %ul.nav.navbar-nav.navbar-right
+        %li{class: current_page?(order_items_path) || current_page?('/cart')? "active" : nil}
+          =link_to (cart_total_quantity == 0 ? "CART: (EMPTY)" : "CART: (#{cart_total_quantity}) #{cool_price cart_subtotal}"), '/checkout/cart'
+
+        - if current_admin  
+          %li{class: current_page?(rails_admin_path) ? "active" : nil}
+            =link_to "Admin Panel", rails_admin_path
