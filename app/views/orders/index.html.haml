@@ -22,7 +22,7 @@
               .cart-left-col
                 = "SUBTOTAL: "
             %td.cart-right-col
-              = cool_price(@order.subtotal)
+              = cool_price(@order.send(:update_subtotal))
       = link_to 'GO TO CART', order_items_path, class: 'btn btn-warning'
       %br/
     - else
