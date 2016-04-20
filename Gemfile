@@ -79,5 +79,9 @@ group :test do
   gem "codeclimate-test-reporter", '0.4.8', require: nil
 end
 
-gem 'rails_12factor', '0.0.3', group: :production
-
+group :production do
+  gem 'rails_12factor', '0.0.3'
+  gem 'unicorn', '5.1.0'
+  gem 'rails_log_stdout',           github: 'heroku/rails_log_stdout'
+  gem 'rails3_serve_static_assets', github: 'heroku/rails3_serve_static_assets'
+end
