@@ -30,7 +30,7 @@ class ApplicationController < ActionController::Base
   end
 
   def cool_price(price)
-    "$#{price}"
+    "$#{'%.2f' % price}"
   end
 
   def cool_card_number(number)
