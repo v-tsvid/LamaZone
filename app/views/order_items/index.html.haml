@@ -25,10 +25,10 @@
               = cool_price(@order.send(:update_subtotal))
 
       .row
-        .col-md-4
+        .col-md-6
           = link_to 'CONTINUE SHOPPING', books_path, class: 'btn btn-warning'
           = link_to 'EMPTY CART', order_items_empty_cart_path, method: :delete, data: { confirm: "Are you sure?" }, class: 'btn btn-danger'
-        .col-md-2.col-md-offset-6.col-righted
+        .col-md-2.col-md-offset-4.col-righted
           = submit_tag 'UPDATE', class: 'btn btn-warning'
 
 .row-fluid
