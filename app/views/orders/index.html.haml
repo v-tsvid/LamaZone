@@ -1,29 +1,36 @@
-%h1 Orders
+.row-fluid
+  .col-md-8.col-md-offset-2
+    - @state = Order::STATE_LIST[0]
+    %h4= @state.humanize.upcase
+    - @order = @orders.find_by(state: @state)
+    - if @order
+      %table.table
+        %thead
+          %tr.active
+            %th{colspan: '2'} BOOK
+            %th PRICE
+            %th QTY
+            %th TOTAL
+            %th
 
-- @state = Order::STATE_LIST[0]
-%h4= @state.humanize.upcase
-- @order = @orders.find_by(state: @state)
-%table
-  %thead
-    %tr
-      %th{colspan: '2'} BOOK
-      %th PRICE
-      %th QTY
-      %th TOTAL
+        %tbody
+          - @order.order_items.each do |item|
+            = render partial: 'checkouts/cart_item', locals: {cart_item: item}
+          %tr
+            %td{colspan: '2'}
+            %td{colspan: '2'}
+              .cart-left-col
+                = "SUBTOTAL: "
+            %td.cart-right-col
+              = cool_price(@order.subtotal)
+      = link_to 'GO TO CART', order_items_path, class: 'btn btn-warning'
+      %br/
+    - else
+      %p NO ORDERS
 
-  %tbody
-    = render @order.order_items
-%br/
-%p
-  = link_to 'GO TO CART', order_items_path
-  = "SUBTOTAL: #{cool_price @order.subtotal}"
-
-- Order::STATE_LIST.drop(1).each do |state|
-  %h4= state.humanize.upcase
-  - @actual_orders = @orders.where(state: state)
-  = render partial: 'orders_list', locals: {orders: @actual_orders}
-  %br/
-
-= render partial: 'orders_list', locals: {orders: @orders}
-
-
+    - Order::STATE_LIST.drop(1).each do |state|
+      .row-fluid
+        %br/
+        %h4= state.humanize.upcase
+        - @actual_orders = @orders.where(state: state)
+        = render partial: 'orders_list', locals: {orders: @actual_orders}

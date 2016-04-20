@@ -12,33 +12,11 @@ class RatingsController < ApplicationController
   
   skip_load_resource only: [:index, :new]
   load_and_authorize_resource
-  
-
-  # GET /ratings
-  # GET /ratings.json
-  def index
-    if params[:book_id]
-      @ratings = Rating.where(state: 'approved', book_id: params[:book_id]) 
-    elsif params[:customer_id] 
-      @ratings = Rating.where(
-        state: 'approved', customer_id: params[:customer_id]) 
-    end
-  end
-
-  # GET /ratings/1
-  # GET /ratings/1.json
-  def show
-  end
 
   # GET /ratings/new
   def new
     @book = Book.find(params[:book_id])
     @rating = Rating.new(book: @book, customer: current_customer)
-  end
-
-  # GET /ratings/1/edit
-  def edit
-    @book = Book.find(@rating.book_id)
   end
 
   # POST /ratings
@@ -56,35 +34,6 @@ class RatingsController < ApplicationController
         format.html { render :new }
         format.json { render json: @rating.errors, status: :unprocessable_entity }
       end
-    end
-  end
-
-  # PATCH/PUT /ratings/1
-  # PATCH/PUT /ratings/1.json
-  def update
-    # @rating = Rating.find(params[:id])
-    @rating.state = 'pending'
-    respond_to do |format|
-      if @rating.update(rating_params)
-
-        format.html { redirect_to @rating, notice: NOTICE_UPDATE_SUCCESS }
-        format.json { render :show, status: :ok, location: @rating }
-      else
-        format.html { render :edit }
-        format.json { 
-          render json: @rating.errors, status: :unprocessable_entity }
-      end
-    end
-  end
-
-  # DELETE /ratings/1
-  # DELETE /ratings/1.json
-  def destroy
-    @rating.destroy
-    respond_to do |format|
-      format.html { 
-        redirect_to book_url(@rating.book), notice: NOTICE_DESTROY_SUCCESS }
-      format.json { head :no_content }
     end
   end
 

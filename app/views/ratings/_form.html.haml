@@ -1,13 +1,4 @@
-- if @rating.errors.any?
-  #error_explanation
-    %h2
-      = pluralize(@rating.errors.count, "error") 
-      prohibited this rating from being saved:
-    %ul
-      - @rating.errors.full_messages.each do |message|
-        %li= message
-
-  = f.hidden_field :book_id, readonly: true, value: @book.id
+= f.hidden_field :book_id, readonly: true, value: @book.id
 .field
   = f.label :rate, 'Rating'
   = f.number_field :rate, in: 1..10, value: 10
@@ -16,6 +7,6 @@
   %br/
   = f.text_area :review
 .actions
-  = f.submit "Add"
+  = f.submit "Add", class: 'btn btn-warning'
   %span or
   = link_to 'Cancel', @book

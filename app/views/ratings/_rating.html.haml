@@ -1,6 +1,0 @@
-%tr
-  %td= rating.rate
-  %td= rating.review
-  %td= link_to 'Show', rating
-  %td= link_to 'Edit', edit_rating_path(rating) if can? :update, rating
-  %td= link_to 'Destroy', rating, method: :delete, data: { confirm: 'Are you sure?' } if can? :destroy, rating

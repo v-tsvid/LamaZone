@@ -1,4 +1,22 @@
-= f.label attr_sym
 %br/
-- attr_val = attrs[attr_sym.to_s] if attrs
-= attr_val ? f.text_field(attr_sym, value: attr_val) : f.text_field(attr_sym)
+- if flash[:errors] && flash[:errors]["credit_card.#{attr_sym}"]
+  .has-error
+    = render partial: 'address_field', locals: {f: f, attrs: attrs, attr_sym: attr_sym}
+    %span.help-block
+      = "#{flash[:errors]["credit_card.#{attr_sym}"].uniq.join(', ')}"
+
+- elsif attr_sym == :number && flash[:errors] && flash[:errors]["credit_card.credit_card"]
+  .has-error
+    = render partial: 'address_field', locals: {f: f, attrs: attrs, attr_sym: attr_sym}
+    %span.help-block
+      = "#{flash[:errors]["credit_card.credit_card"].uniq.join(', ')}"
+
+- elsif [:expiration_year, :expiration_month].include?(attr_sym) && flash[:errors] && flash[:errors]["base"]
+  .has-error
+    = render partial: 'address_field', locals: {f: f, attrs: attrs, attr_sym: attr_sym}
+    %span.help-block
+      = "#{flash[:errors]["base"].uniq.join(', ')}"
+
+- else
+  %div
+    = render partial: 'credit_card_field', locals: {f: f, attrs: attrs, attr_sym: attr_sym}

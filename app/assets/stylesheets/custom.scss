@@ -6,10 +6,108 @@ $bgLightDefault: #FFFFE6;
 $bgDarkDefault: #422020;
 $bgDarkLighter: #523535;
 
+$textDarkDefault: #966D33;
+$textDarkLighter: #BA9765;
+
+textarea {
+  width: 100%;
+}
+
+.form-control {
+  min-width: 70px;
+}
+
+.col-centered {
+  text-align: center;
+}
+
+.col-righted {
+  text-align: right;
+}
+
+.cart-price-col, .cart-quantity-col, .cart-total-col {
+  text-align: right;
+}
+
+.cart-title-col {
+  width: 78%;
+}
+
+th, td {
+  padding: 5px;
+}
+
+.table.orders-list {
+  th {
+    text-align: center;
+  }
+  td {
+    text-align: center;
+  }
+}
+
+.table > tbody > tr > td {
+  vertical-align: baseline;
+}
+
+table > tbody > tr > td {
+  vertical-align: baseline;
+}
+
+th {
+  text-align: center;
+}
+
+/*.btn.btn-success-custom {
+  color: #fff;
+  background-color: #ec971f;
+  border-color: #d58512;
+}*/
+
+.cart-left-col {
+  font-weight: bolder;
+  text-align: right;
+  margin-right: 10px;
+}
+
+.cart-right-col {
+  font-weight: bolder;
+  text-align: right;
+}
+
+.summary-left-col {
+  font-weight: bolder;
+  width: 80px;
+  text-align: right;
+  margin-right: 10px;
+}
+
+.summary-right-col {
+  padding-left: 20px;
+  text-align: right;
+}
+
+/*.co-summary-left-col {
+  font-weight: bolder;
+  text-align: right;
+  margin-right: 10px;
+}*/
+
+a {
+  color: $textDarkDefault;
+}
+
+.row-fluid {
+  display: table;
+  table-layout: fixed;
+  height: 100%;
+  width: 100%;
+}
+
 
 span.stars, span.stars span {
     display: inline-block;
-    background: url(stars.png) 0 -16px repeat-x;
+    background: url(dharmacakras.png) 0 -16px repeat-x;
     width: 80px;
     height: 16px;
 }

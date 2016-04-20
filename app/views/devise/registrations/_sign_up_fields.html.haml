@@ -1,0 +1,10 @@
+.field
+  %br
+  - if resource.errors.messages && resource.errors.messages[item]
+    .has-error
+      = render partial: 'sign_up_field', locals: {f: f, item: item}
+      %span.help-block
+        = "#{resource.errors.messages[item].uniq.join(', ')}"
+  - else
+    %div
+      = render partial: 'sign_up_field', locals: {f: f, item: item}

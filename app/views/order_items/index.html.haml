@@ -1,33 +1,41 @@
-%h1 Shopping cart
+.row-fluid
+  .col-md-8.col-md-offset-2
+    %h4 SHOPPING CART
+.row-fluid
+  .col-md-8.col-md-offset-2
+    = form_tag controller: 'order_items', action: 'update_cart', method: :post do 
 
-= form_tag controller: 'order_items', action: 'update_cart', method: :post do 
+      %table.table
+        %thead
+          %tr.active
+            %th{colspan: '2'} BOOK
+            %th PRICE
+            %th QTY
+            %th TOTAL
+            %th
+          
+        %tbody  
+          = render @order.order_items
+          %tr
+            %td{colspan: '2'}
+            %td{colspan: '2'}
+              .cart-left-col
+                = "SUBTOTAL: "
+            %td.cart-right-col
+              = cool_price(@order.send(:update_subtotal))
 
-  %table
-    %thead
-      %tr
-        %th{colspan: '2'} BOOK
-        %th PRICE
-        %th QTY
-        %th TOTAL
-      
-    %tbody  
-      = render @order.order_items
+      .row
+        .col-md-4
+          = link_to 'CONTINUE SHOPPING', books_path, class: 'btn btn-warning'
+          = link_to 'EMPTY CART', order_items_empty_cart_path, method: :delete, data: { confirm: "Are you sure?" }, class: 'btn btn-danger'
+        .col-md-2.col-md-offset-6.col-righted
+          = submit_tag 'UPDATE', class: 'btn btn-warning'
 
-  %p= "SUBTOTAL: #{cool_price @order.send(:update_subtotal)}"
-
-  = link_to 'EMPTY CART', order_items_empty_cart_path, method: :delete, data: { confirm: "Are you sure?" } 
-  = link_to 'CONTINUE SHOPPING', books_path
-  = submit_tag 'UPDATE'
-
-= form_tag controller: "checkouts", action: "create", method: :post do
-  - @order.order_items.each do |item|
-    = render partial: "hidden_order_item", locals: {order_item: item}
-  = text_field_tag "order[coupon_id]", nil, placeholder: 'Coupon code'
-  = submit_tag 'CHECKOUT'
-
-
-  
-
-  
-
-
+.row-fluid
+  .col-md-4.col-md-offset-6.col-righted
+    = form_tag controller: "checkouts", action: "create", method: :post do
+      .form-inline
+        - @order.order_items.each do |item|
+          = render partial: "hidden_order_item", locals: {order_item: item}
+        = text_field_tag "order[coupon_id]", nil, placeholder: 'Coupon code', class: 'form-control'
+        = submit_tag 'CHECKOUT', class: 'btn btn-success'

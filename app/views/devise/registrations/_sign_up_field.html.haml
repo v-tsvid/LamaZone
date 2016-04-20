@@ -1,0 +1,4 @@
+- if item == :email
+  = f.email_field item, placeholder: item.to_s.humanize, class: 'form-control'
+- else
+  = f.password_field item, placeholder: item.to_s.humanize, class: 'form-control'

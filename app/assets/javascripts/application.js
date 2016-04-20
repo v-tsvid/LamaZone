@@ -16,7 +16,6 @@
 //= require turbolinks
 //= require_tree .
 //= require bootstrap-slider
-//= require jquery-star-rating
 
 $.fn.stars = function() {
   return $(this).each(function() {

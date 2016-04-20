@@ -1,0 +1,22 @@
+.container-fluid
+  .row-fluid
+    .col-md-9
+      - if category_show
+        = link_to "HOME", root_path
+        %span >>
+        = link_to "SHOP", books_path
+        %span >> 
+        = link_to "#{category.title}", category_path(category)
+    
+        %h4= "Category - #{category.title.humanize}"
+      - else
+        %h4 Category - All
+      = render @books
+
+    = render partial: 'categories/categories'
+.container-fluid
+  .row-fluid 
+    .col-md-9
+      .pagin
+        = paginate @books
+

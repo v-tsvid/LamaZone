@@ -1,4 +1,8 @@
-%p= "SUBTOTAL: #{cool_price order.subtotal}"
-%p= "DISCOUNT: #{order.coupon ? order.coupon.discount : 0}%"
-%p= "SHIPPING: #{cool_price order.shipping_price}"
-%p= "TOTAL: #{cool_price order.total_price}"
+- {"SUBTOTAL: " => "#{cool_price(item.subtotal)}", "DISCOUNT: " => "#{item.coupon ? item.coupon.discount : 0}%", "SHIPPING: " => "#{cool_price(item.shipping_price)}", "TOTAL: " => "#{cool_price(item.total_price)}"}.each do |key, val|
+  %tr
+  %td{colspan: '2'}
+  %td{colspan: '2'}
+    .summary-left-col
+      = key
+  %td.summary-right-col
+    = val

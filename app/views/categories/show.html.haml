@@ -1,15 +1,1 @@
-%p{:id => "notice"}= notice
-
-=link_to "HOME", root_path
-%span >>
-=link_to "SHOP", books_path
-%span >> 
-=link_to "#{@category.title}", category_path(@category)
-
-%h4= "Category - #{@category.title.humanize}"
-
-.row-fluid
-  = render @books
-  = paginate @books
-
-= link_to 'Back', root_path
+= render partial: 'books/books', locals: { category_show: true, category: @category }

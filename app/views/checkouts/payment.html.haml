@@ -1,15 +1,20 @@
 = render layout: 'step' do
-  %h4 Payment
-  
-  %h4 ORDER SUMMARY
-  = render partial: "order_summary", locals: {order: @checkout.model}
+  .row-fluid
+    .col-md-3
 
-  %h4 CREDIT CARD
+      %h4 CREDIT CARD
 
-  = form_for(@checkout, url: wizard_path, html: { method: :put }) do |checkout|
-    = checkout.fields_for(:model, @checkout.model) do |model|
-      = model.fields_for(:credit_card, @checkout.model.credit_card) do |c_card_f|
-        = render 'credit_card_form', f: c_card_f    
+      = form_for(@checkout, url: wizard_path, html: { method: :put }) do |checkout|
+        = checkout.fields_for(:model, @checkout.model) do |model|
+          = model.fields_for(:credit_card, @checkout.model.credit_card) do |c_card_f|
+            = render 'credit_card_form', f: c_card_f    
+        
+        %br/
+        .actions
+          = checkout.submit "SAVE AND CONTINUE", class: "btn btn-warning"
 
-    .actions
-      = checkout.submit "SAVE AND CONTINUE"
+    .col-md-3.col-md-offset-5
+      %h4 ORDER SUMMARY
+      %table
+        %body
+          = render partial: "order_summary", locals: {item: @checkout.model}

@@ -57,7 +57,6 @@ gem 'kaminari', '0.16.3'
 gem 'wicked', '1.2.1'
 gem 'reform', '2.1.0'
 gem 'reform-rails', '0.1.0'
-gem 'jquery-star-rating-rails', '4.0.4'
   
   
 group :development, :test do

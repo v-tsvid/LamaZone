@@ -1,14 +1,24 @@
-%h4= "Order #{cool_id(@order.id)}"
-%p= @order.state.humanize
+.row-fluid
+  .col-md-8.col-md-offset-2
+    .row
+      .col-md-4
+        %table
+          %tbody
+            %tr
+              %td
+                %h4= "Order #{cool_id(@order.id)}"
+              %td
+                %p= "(#{@order.state.humanize})"
 
-%table
-  %thead
-    %tr
-      %th{colspan: '2'} BOOK
-      %th PRICE
-      %th QTY
-      %th TOTAL
+    %table.table
+      %thead
+        %tr.active
+          %th{colspan: '2'} BOOK
+          %th PRICE
+          %th QTY
+          %th TOTAL
 
-  %tbody
-    = render @order.order_items
-= render partial: "checkouts/order_summary", locals: {order: @order}
+      %tbody
+        - @order.order_items.each do |item|
+          = render partial: 'checkouts/cart_item', locals: {cart_item: item}
+        = render partial: "checkouts/order_summary", locals: {item: @order}

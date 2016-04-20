@@ -1,10 +1,11 @@
 %tr
   %td= image_tag order_item.book.images, size: '30x40'
-  %td= link_to "#{order_item.book.title}", order_item.book
-  %td= order_item.book.price
+  %td.cart-title-col
+    = link_to "#{order_item.book.title}", order_item.book
+  %td= cool_price order_item.book.price
   %td 
-    = number_field_tag "order_items_attrs[][quantity]", order_item.quantity, min: 1
+    = number_field_tag "order_items_attrs[][quantity]", order_item.quantity, min: 1, class: 'form-control'
     = hidden_field_tag "order_items_attrs[][book_id]", order_item.book.id
-  %td= text_field_tag "order_items_attrs[][price]", order_item.price
+  %td= label_tag "order_items_attrs[][price]", cool_price(order_item.price)
   %td
-    = link_to 'X', url_for(controller: 'order_items', action: 'remove_from_cart', book_id: order_item.book.id),  method: :post
+    = link_to 'X', url_for(controller: 'order_items', action: 'remove_from_cart', book_id: order_item.book.id),  method: :post, class: 'btn btn-danger'

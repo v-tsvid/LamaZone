@@ -11,16 +11,11 @@
     .container-fluid
       .row-fluid
         .col-md-12
-          %p#notice= notice
-          - if flash[:errors] && flash[:errors].any?
-            #error_explanation
-              %h2
-                = pluralize(flash[:errors].count, "error")
-                prohibited this address from being saved:
-              %ul
-                - flash[:errors].each do |key, values|
-                  - values.each do |value|
-                    %li= "#{key.capitalize} #{value}"
+          - flash.each do |key, value|
+            - unless key == 'errors' || key == 'attrs'
+              %div{class: flash_class(key)}
+                = value
+          
           = yield
     %p
     = params.inspect if Rails.env == 'development'

@@ -22,7 +22,8 @@ class CheckoutsController < ApplicationController
     @order = current_order || Order.new(customer: current_customer)
 
     @order.next_step = 'address'
-    @order.coupon_id = checkout_params[:coupon_id]
+
+    @order.coupon_id = Coupon.exists?(id: checkout_params[:coupon_id]) ? checkout_params[:coupon_id] : nil
 
     @order.order_items.each { |item| item.destroy }
     @order.order_items = compact_order_items(@order_items)
@@ -105,7 +106,7 @@ class CheckoutsController < ApplicationController
     
     def save_and_render
       if @checkout.validate(@validation_hash)
-        render_wizard @checkout, notice: params
+        render_wizard @checkout
       else
         redirect_to :back, {flash: { 
           errors: @checkout.errors, attrs: @return_hash } } 

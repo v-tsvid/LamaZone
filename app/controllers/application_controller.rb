@@ -13,7 +13,17 @@ class ApplicationController < ActionController::Base
                 :cool_id, 
                 :cool_card_number,
                 :cool_price,
-                :cool_date
+                :cool_date,
+                :flash_class
+
+  def flash_class(level)
+    case level
+      when 'notice' then "alert alert-warning"
+      when 'success' then "alert alert-success"
+      when 'error' then "alert alert-danger"
+      when 'alert' then "alert alert-danger"
+    end
+  end
 
   def cool_date(date)
     "#{date.strftime("%B %d, %Y")}"

@@ -1,0 +1,9 @@
+.col-md-3
+  %h4 SHOP BY CATEGORIES
+  %table
+    %tbody
+      %td= link_to "All", books_path
+      - @categories.each do |category|
+        %tr
+          %td= link_to "#{category.title.humanize}", category
+  %br

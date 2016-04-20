@@ -1,23 +1,20 @@
 = render layout: 'step' do
-  %h4 Shipment
   
-  %h4 ORDER SUMMARY
-  = render partial: "order_summary", locals: {order: @checkout.model}
+  .row-fluid
+    .col-md-3
+      %h4 SHIPPING METHOD
+      = form_for(@checkout, url: wizard_path, html: { method: :put }) do |checkout|
+        = checkout.fields_for(:model, @checkout.model) do |model|
+          - @current_method = @checkout.model.shipping_method
+          
+          - Order::SHIPPING_METHOD_LIST.each do |method|
+            = render partial: 'shipping_method_field', locals: {model: model, method: method, current_method: @current_method, checkout: @checkout}
+          
+        .actions
+          = checkout.submit "SAVE AND CONTINUE", class: 'btn btn-warning'
 
-  %h4 SHIPPING METHOD
-
-  = form_for(@checkout, url: wizard_path, html: { method: :put }) do |checkout|
-    = checkout.fields_for(:model, @checkout.model) do |model|
-      - @current_method = @checkout.model.shipping_method
-
-      - @method = Order::SHIPPING_METHOD_LIST[0]  
-      = render partial: 'shipping_method_field', locals: {model: model, method: @method, current_method: @current_method, checkout: @checkout}
-        
-      - @method = Order::SHIPPING_METHOD_LIST[1]  
-      = render partial: 'shipping_method_field', locals: {model: model, method: @method, current_method: @current_method, checkout: @checkout}
-      
-      - @method = Order::SHIPPING_METHOD_LIST[2]  
-      = render partial: 'shipping_method_field', locals: {model: model, method: @method, current_method: @current_method, checkout: @checkout}
-      
-    .actions
-      = checkout.submit "SAVE AND CONTINUE"
+    .col-md-3.col-md-offset-5
+      %h4 ORDER SUMMARY
+      %table
+        %body
+          = render partial: "order_summary", locals: {item: @checkout.model}
