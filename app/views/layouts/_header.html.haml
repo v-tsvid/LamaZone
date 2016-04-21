@@ -2,36 +2,42 @@
   .container-fluid
     .navbar-header
       %a.navbar-brand{href: root_path}
-        %img{alt: "LZ", src: ""}
+        = image_tag "dalailama.png", size: "73x62", alt: "LZ" 
       %p.navbar-text 
-        = "Hi#{current_customer ? ", #{current_customer.firstname}" : " there"}! You're in LamaZone now!"
+        = "#{t :hello}#{current_customer ? ", #{current_customer.firstname}" : nil}! #{t :in_lamazone}"
     .collapse.navbar-collapse#bs-example-navbar-collapse-1
       %ul.nav.navbar-nav
         %li{class: current_page?(root_path) ? "active" : nil}
-          =link_to "HOME", root_path
+          =link_to t(:home), root_path
         %li{class: (controller.controller_name == 'books' || 'categories' || 'ratings') && !current_page?(root_path) ? "active" : nil}
-          =link_to "SHOP", books_path
-
-      - if !current_customer && !current_admin
-        %ul.nav.navbar-nav.navbar-right
-          %li{class: current_page?(new_customer_registration_path) ? "active" : nil}
-            =link_to "Sign Up", new_customer_registration_path
-          %li{class: current_page?(new_customer_session_path) ? "active" : nil}
-            =link_to "Sign In", new_customer_session_path
-
-      - else
-        %ul.nav.navbar-nav.navbar-right
-          %li{class: current_page?(edit_customer_registration_path) ? "active" : nil}
-            =link_to "Settings", edit_customer_registration_path
-          %li{class: current_page?(orders_path) ? "active" : nil}
-            =link_to "Orders", orders_path
-          %li{class: current_page?(destroy_customer_session_path) ? "active" : nil}
-            =link_to "Sign Out", destroy_customer_session_path, method: "delete"
+          =link_to t(:shop), books_path
 
       %ul.nav.navbar-nav.navbar-right
-        %li{class: current_page?(order_items_path) || current_page?(order_items_index_path)? "active" : nil}
-          =link_to (cart_total_quantity == 0 ? "CART: (EMPTY)" : "CART: (#{cart_total_quantity}) #{cool_price cart_subtotal}"), order_items_index_path
-
-        - if current_admin  
+        - if current_admin 
           %li{class: current_page?(rails_admin_path) ? "active" : nil}
-            =link_to "Admin Panel", rails_admin_path
+            =link_to t(:admin_panel), rails_admin_path
+
+        - if !current_admin
+          %li{class: current_page?(order_items_path) || current_page?(order_items_index_path)? "active" : nil}
+            =link_to (cart_total_quantity == 0 ? "#{t :cart}: (#{t :is_empty})" : "#{t :cart}: (#{cart_total_quantity}) #{cool_price cart_subtotal}"), order_items_index_path
+
+        - if current_customer
+          %li{class: current_page?(edit_customer_registration_path) ? "active" : nil}
+            =link_to t(:settings), edit_customer_registration_path
+          %li{class: current_page?(orders_path) ? "active" : nil}
+            =link_to t(:orders), orders_path
+        
+        - if !current_customer && !current_admin
+          %li{class: current_page?(new_customer_registration_path) ? "active" : nil}
+            =link_to t(:sign_up), new_customer_registration_path
+          %li{class: current_page?(new_customer_session_path) ? "active" : nil}
+            =link_to t(:sign_in), new_customer_session_path
+
+        - if current_customer || current_admin
+          %li{class: current_page?(destroy_customer_session_path) ? "active" : nil}
+            =link_to t(:sign_out), destroy_customer_session_path, method: "delete"
+
+        %li{class: I18n.locale == :en ? "active" : nil}
+          =link_to image_tag("UK.png"), url_for( :locale => 'en' )
+        %li{class: I18n.locale == :uk ? "active" : nil}
+          =link_to image_tag("Ukraine.png"), url_for( :locale => 'uk' )

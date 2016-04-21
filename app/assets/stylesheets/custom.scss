@@ -9,6 +9,20 @@ $bgDarkLighter: #523535;
 $textDarkDefault: #966D33;
 $textDarkLighter: #BA9765;
 
+/*.navbar-nav > li > a {padding-top:5px !important; padding-bottom:5px !important;}*/
+.navbar-brand,
+.navbar-nav li a {
+  line-height: 61px;
+  height: 61px;
+  padding-top: 0;
+}
+
+.navbar-inverse .navbar-text {
+  vertical-align: middle;
+  line-height: 31px;
+  height: 31px;
+}
+
 textarea {
   width: 100%;
 }

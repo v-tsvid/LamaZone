@@ -1,0 +1,13 @@
+uk:
+  hello: "Привіт"
+  in_lamazone: "Тепер ти у LamaZone!"
+  home: "ГОЛОВНА"
+  shop: "МАГАЗИН"
+  cart: "КОШИК"
+  is_empty: "НІЧОГО"
+  admin_panel: "ПАНЕЛЬ АДМІНІСТРАТОРА"
+  settings: "НАЛАШТУВАННЯ"
+  orders: "ЗАМОВЛЕННЯ"
+  sign_up: "РЕЄСТРАЦІЯ"
+  sign_in: "УВІЙТИ"
+  sign_out: "ВИЙТИ"

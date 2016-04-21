@@ -2,7 +2,10 @@ class ApplicationController < ActionController::Base
   # Prevent CSRF attacks by raising an exception.
   # For APIs, you may want to use :null_session instead.
   protect_from_forgery with: :exception
+
   before_action :configure_permitted_parameters, if: :devise_controller?
+  before_action :set_locale
+
   after_filter :store_location
 
   alias_method :current_user, :current_customer
@@ -15,6 +18,14 @@ class ApplicationController < ActionController::Base
                 :cool_price,
                 :cool_date,
                 :flash_class
+
+  def set_locale
+    I18n.locale = params[:locale] || I18n.default_locale
+  end
+
+  def default_url_options(options = {})
+    { locale: I18n.locale }.merge options
+  end
 
   def flash_class(level)
     case level
@@ -78,8 +89,12 @@ class ApplicationController < ActionController::Base
   end
 
   def last_processing_order
-    current_customer ? Order.where(
-      customer: current_customer, state: 'processing').last : nil
+    if current_order
+      nil
+    else
+      current_customer ? Order.where(
+        customer: current_customer, state: 'processing').last : nil
+    end
   end
 
   def compact_order_items(order_items)

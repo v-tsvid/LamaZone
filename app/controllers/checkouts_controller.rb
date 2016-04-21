@@ -21,17 +21,16 @@ class CheckoutsController < ApplicationController
 
     @order = current_order || Order.new(customer: current_customer)
 
-    @order.next_step = 'address'
-
-    @order.coupon_id = Coupon.exists?(id: checkout_params[:coupon_id]) ? checkout_params[:coupon_id] : nil
-
+    @order.next_step = 'address' unless @order.next_step
+    @order.coupon_id = Coupon.exists?(
+      id: checkout_params[:coupon_id]) ? checkout_params[:coupon_id] : nil
     @order.order_items.each { |item| item.destroy }
     @order.order_items = compact_order_items(@order_items)
 
     @checkout = Checkout.new(@order)
     
     if @checkout.save
-      redirect_to checkout_path(:address)
+      redirect_to checkout_path(@order.next_step.to_sym)
     else
       redirect_to root_path, notice: @checkout.inspect
     end
@@ -41,18 +40,23 @@ class CheckoutsController < ApplicationController
     @checkout = Checkout.new(current_order) if current_order
     case step
     when :address
-      if @checkout
+      if @checkout  
+        redirect_if_wrong_step(:address) or return
         @checkout.model.billing_address ||= Address.new(
           current_customer.billing_address.attributes)
         @checkout.model.shipping_address ||= Address.new(
           current_customer.shipping_address.attributes)
       end
     when :shipment
+      redirect_if_wrong_step(:shipment) or return
     when :payment
+      redirect_if_wrong_step(:payment) or return
       @checkout.model.credit_card ||= CreditCard.new if @checkout
     when :confirm
+      redirect_if_wrong_step(:confirm) or return
     when :complete
       @checkout = Checkout.new(last_processing_order) if last_processing_order
+      redirect_if_wrong_step(:complete) or return
     end
     redirect_if_nil(step, @checkout)
   end  
@@ -61,9 +65,9 @@ class CheckoutsController < ApplicationController
     @checkout = Checkout.new(current_order)
     case step
     when :address
-      @validation_hash = @checkout.model.attributes.merge(
-          {next_step: 'shipment'}.merge(
-            checkout_params['model']))
+      @validation_hash = set_next_step(@checkout.model.next_step, 'shipment')
+      @validation_hash = @validation_hash.merge(
+          checkout_params['model'])
       @return_hash = { billing_address: @validation_hash['billing_address'], 
                        shipping_address: @validation_hash['shipping_address'] }
 
@@ -72,38 +76,40 @@ class CheckoutsController < ApplicationController
               {shipping_address: checkout_params['model']['billing_address']})
         @return_hash['shipping_address'] = @validation_hash['billing_address']
       end
-
-      save_and_render
-    
     when :shipment
-      @validation_hash = @checkout.model.attributes.merge(
-        {next_step: 'payment'}.merge(
-          checkout_params['model']))
+      @validation_hash = set_next_step(@checkout.model.next_step, 'payment')
+      @validation_hash = @validation_hash.merge(
+        checkout_params['model'])
       @return_hash = {shipping_method: checkout_params['model']['shipping_method'],
         shipping_price: checkout_params['model']['shipping_price']}
-
-      save_and_render
-
     when :payment
       @validation_hash = @checkout.model.attributes.merge(
         {next_step: 'confirm'}.merge(
           checkout_params['model']))
       @return_hash = @validation_hash['credit_card']
-
-      save_and_render
-
     when :confirm
       @validation_hash = @checkout.model.attributes.merge(
         {next_step: 'complete', state: "processing"})
       @return_hash = nil
-
-      save_and_render
     end
+    save_and_render
   end
 
 
   private
-    
+
+    def redirect_if_wrong_step(step)
+      next_step = @checkout.model.next_step
+      if next_step.nil?
+        # if step != :address
+        redirect_to order_items_index_path, notice: "Please checkout first" and return
+        # end
+      elsif next_step.to_sym != step
+        redirect_to checkout_path(@checkout.model.next_step.to_sym), notice: "Please proceed checkout from this step" and return
+      end
+      return true
+    end
+
     def save_and_render
       if @checkout.validate(@validation_hash)
         render_wizard @checkout
@@ -120,6 +126,26 @@ class CheckoutsController < ApplicationController
         redirect_to root_path, notice: "You have no orders in processing"
       else
         redirect_to root_path, notice: "You have no orders in progress"
+      end
+    end
+
+    def set_next_step(prev_step, next_step)
+      val_hash = @checkout.model.attributes
+      if next_step_next?(prev_step, next_step)
+        val_hash = val_hash.merge({next_step: next_step}) 
+      end
+      val_hash
+    end
+
+    def next_step_next?(prev_step, next_step)
+      prev_index = Checkout::NEXT_STEPS.index(prev_step.to_sym)
+      next_index = Checkout::NEXT_STEPS.index(next_step.to_sym)
+      if prev_index.nil?
+        true
+      elsif prev_index < next_index
+        true
+      else
+        false
       end
     end
 

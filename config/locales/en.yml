@@ -20,4 +20,16 @@
 # available at http://guides.rubyonrails.org/i18n.html.
 
 en:
-  hello: "Hello world"
+  hello: "Hello"
+  in_lamazone: "You're in LamaZone now!"
+  home: "HOME"
+  shop: "SHOP"
+  cart: "CART"
+  is_empty: "EMPTY"
+  admin_panel: "ADMIN PANEL"
+  settings: "SETTINGS"
+  orders: "ORDERS"
+  sign_up: "SIGN UP"
+  sign_in: "SIGN IN"
+  sign_out: "SIGN OUT"
+

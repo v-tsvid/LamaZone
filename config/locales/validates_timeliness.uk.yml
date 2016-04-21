@@ -1,0 +1,16 @@
+uk:
+  errors:
+    messages:
+      invalid_date: "не є коректною датою"
+      invalid_time: "не є коректним часом"
+      invalid_datetime: "не є коректними датою і часом"
+      is_at: "має бути у діапазоні %{restriction}"
+      before: "має бути до %{restriction}"
+      on_or_before: "має бути до або у діапазоні %{restriction}"
+      after: "має бути після %{restriction}"
+      on_or_after: "має бути після або у діапазоні %{restriction}"
+  validates_timeliness:
+    error_value_formats:
+      date: '%Y-%m-%d'
+      time: '%H:%M:%S'
+      datetime: '%Y-%m-%d %H:%M:%S'
