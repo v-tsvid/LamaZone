@@ -48,15 +48,17 @@ class CheckoutsController < ApplicationController
           current_customer.shipping_address.attributes)
       end
     when :shipment
-      redirect_if_wrong_step(:shipment) or return
+      redirect_if_wrong_step(:shipment) or return if @checkout
     when :payment
-      redirect_if_wrong_step(:payment) or return
-      @checkout.model.credit_card ||= CreditCard.new if @checkout
+      if @checkout
+        redirect_if_wrong_step(:payment) or return
+        @checkout.model.credit_card ||= CreditCard.new 
+      end
     when :confirm
-      redirect_if_wrong_step(:confirm) or return
+      redirect_if_wrong_step(:confirm) or return if @checkout
     when :complete
       @checkout = Checkout.new(last_processing_order) if last_processing_order
-      redirect_if_wrong_step(:complete) or return
+      redirect_if_wrong_step(:complete) or return if @checkout
     end
     redirect_if_nil(step, @checkout)
   end  
@@ -104,7 +106,7 @@ class CheckoutsController < ApplicationController
         # if step != :address
         redirect_to order_items_index_path, notice: "Please checkout first" and return
         # end
-      elsif next_step.to_sym != step
+      elsif next_step_next?(next_step, step)
         redirect_to checkout_path(@checkout.model.next_step.to_sym), notice: "Please proceed checkout from this step" and return
       end
       return true
