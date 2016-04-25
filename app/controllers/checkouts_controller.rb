@@ -22,9 +22,8 @@ class CheckoutsController < ApplicationController
     @order = current_order || Order.new(customer: current_customer)
 
     @order.next_step = 'address' unless @order.next_step
-    @order.coupon_id = Coupon.exists?(
-      id: checkout_params[:coupon_id]) ? checkout_params[:coupon_id] : nil
-    @order.order_items.each { |item| item.destroy }
+    @order.coupon_id = checkout_params[:coupon_id] if Coupon.exists?(id: checkout_params[:coupon_id])
+    @order.order_items.destroy_all
     @order.order_items = compact_order_items(@order_items)
 
     @checkout = Checkout.new(@order)
@@ -42,10 +41,8 @@ class CheckoutsController < ApplicationController
     when :address
       if @checkout  
         redirect_if_wrong_step(:address) or return
-        @checkout.model.billing_address ||= Address.new(
-          current_customer.billing_address.attributes)
-        @checkout.model.shipping_address ||= Address.new(
-          current_customer.shipping_address.attributes)
+        @checkout.model.billing_address ||= init_address(:billing_address)
+        @checkout.model.shipping_address ||= init_address(:shipping_address)
       end
     when :shipment
       redirect_if_wrong_step(:shipment) or return if @checkout
@@ -100,12 +97,16 @@ class CheckoutsController < ApplicationController
 
   private
 
+    def init_address(address)
+      attrs = nil
+      attrs = current_customer.send(address).attributes if current_customer.send(address)
+      Address.new(attrs)
+    end
+
     def redirect_if_wrong_step(step)
       next_step = @checkout.model.next_step
       if next_step.nil?
-        # if step != :address
         redirect_to order_items_index_path, notice: "Please checkout first" and return
-        # end
       elsif next_step_next?(next_step, step)
         redirect_to checkout_path(@checkout.model.next_step.to_sym), notice: "Please proceed checkout from this step" and return
       end

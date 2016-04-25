@@ -18,7 +18,7 @@ class Ability
     end
 
     can :read, Author
-    can :manage, Book
+    can :read, Book
     can :read, Category
     can :read, Rating
   end

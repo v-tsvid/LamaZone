@@ -1,5 +1,4 @@
 class OrderItemsController < ApplicationController
-  before_action :set_order_item, only: [:show, :edit, :update, :destroy]
 
   def update_cart
     @order_items = Array.new
@@ -72,8 +71,8 @@ class OrderItemsController < ApplicationController
   def index
     if current_order
       @order = current_order
-      @temp_items = Array.new
-      @order.order_items.each { |item| @temp_items << OrderItem.new(item.attributes) }
+      # @temp_items = Array.new
+      @temp_items = @order.order_items.map { |item| OrderItem.new(item.attributes) }
       @order.order_items.destroy_all
       @order.order_items = compact_order_items(@temp_items + read_from_cookies)
       cookies.delete('order_items')
@@ -87,21 +86,13 @@ class OrderItemsController < ApplicationController
         @order.order_items = compact_order_items(read_from_cookies)
         @order.order_items.each { |item| item.send(:update_price) }
       end
-    else
-      redirect_to root_path, notice: 'Your cart is empty'
+    end
+    if !@order || @order.order_items.empty?
+      redirect_to root_path, notice: 'Your cart is empty' 
     end
   end
 
   private
-    # Use callbacks to share common setup or constraints between actions.
-    def set_order_item
-      @order_item = OrderItem.find(params[:id])
-    end
-
-    # Never trust parameters from the scary internet, only allow the white list through.
-    def order_item_params
-      params.require(:order_item).permit(:price, :quantity, :book_id)
-    end
 
     def interact_with_cookies(pop)
       order_items = compact_order_items(read_from_cookies)

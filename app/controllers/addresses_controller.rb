@@ -1,12 +1,10 @@
 class AddressesController < ApplicationController
-  before_action :set_address, only: [:update]
   before_action :authenticate_customer!
+  load_and_authorize_resource
 
   # # # POST /addresses
   # # # POST /addresses.json
   def create
-    @address = Address.new(address_params)
-
     respond_to do |format|
       if @address.save
         format.html { redirect_to edit_customer_registration_path(current_customer), notice: 'Address was successfully created.' }
@@ -33,10 +31,6 @@ class AddressesController < ApplicationController
   end
 
   private
-    # Use callbacks to share common setup or constraints between actions.
-    def set_address
-      @address = Address.find(params[:id])
-    end
 
     # # Never trust parameters from the scary internet, only allow the white list through.
     def address_params

@@ -6,7 +6,7 @@
         %span >>
         = link_to "SHOP", books_path
         %span >> 
-        = link_to "#{category.title}", category_path(category)
+        = link_to "#{category.title.humanize}", category_path(category)
     
         %h4= "Category - #{category.title.humanize}"
       - else
