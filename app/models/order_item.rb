@@ -15,10 +15,6 @@ class OrderItem < ActiveRecord::Base
     end
   end
 
-  # def price
-  #   book.price
-  # end
-
   private
 
     def update_price

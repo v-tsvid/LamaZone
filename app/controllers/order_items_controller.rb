@@ -1,21 +1,14 @@
 class OrderItemsController < ApplicationController
+  include CookiesHandling
 
   def update_cart
-    @order_items = Array.new
     if current_order
       current_order.order_items.destroy_all
-      params[:order_items_attrs].each do |item|
-        @order_items << OrderItem.create(
-          book_id: item[:book_id], quantity: item[:quantity], order: current_order)
-      end
+      @order_items = current_order_items_from_params
     else
-      params[:order_items_attrs].each do |item|
-        @order_items << OrderItem.new(
-          book_id: item[:book_id], quantity: item[:quantity])
-      end
+      @order_items = order_items_from_params
       write_to_cookies(@order_items)
     end
-
     redirect_to order_items_path
   end
 
@@ -34,21 +27,13 @@ class OrderItemsController < ApplicationController
       order = current_order || Order.new(customer: current_customer)
       order.order_items << OrderItem.create(
         book_id: params[:book_id], quantity: params[:quantity], order: order)
-      if order.order_items != compact_order_items(order.order_items)
-        temp_items = order.order_items
-        order.order_items.each { |item| item.destroy }
-        order.order_items << compact_order_items(temp_items)
-      end
-      
-      if order.save!
-        redirect_to :back, notice: "\"#{Book.find(params[:book_id]).title}\" " \
-                                   "was added to the cart"
-      else
-        redirect_to :back, notice: "can't save order"
-      end
+      compact_if_not_compacted(order.order_items)
+      redirect_to :back, alert: "Can't add book" and return unless order.save!
     else
-      interact_with_cookies(false)
+      interact_with_cookies { |order_items| push_to_cookies(order_items) }
     end
+    redirect_to :back, notice: "\"#{Book.find(params[:book_id]).title}\" " \
+                                   "was added to the cart"
   end
 
   def remove_from_cart
@@ -57,36 +42,18 @@ class OrderItemsController < ApplicationController
       item = OrderItem.find_by(order_id: current_order.id, 
         book_id: params[:book_id]).destroy
       order.destroy unless order.order_items[0]
-      redirect_to :back, notice: "\"#{Book.find(params[:book_id]).title}\" " \
-                                 "was removed from the cart"
     else
-      interact_with_cookies(true)
+      interact_with_cookies { |order_items| pop_from_cookies(order_items) }
     end
+    redirect_to :back, notice: "\"#{Book.find(params[:book_id]).title}\" " \
+                                 "was removed from the cart"
   end
-
-  
 
   # GET /order_items
   # GET /order_items.json
   def index
-    if current_order
-      @order = current_order
-      # @temp_items = Array.new
-      @temp_items = @order.order_items.map { |item| OrderItem.new(item.attributes) }
-      @order.order_items.destroy_all
-      @order.order_items = compact_order_items(@temp_items + read_from_cookies)
-      cookies.delete('order_items')
-    elsif cookies['order_items']
-      if current_customer
-        @order = Order.create(customer: current_customer, state: 'in_progress')
-        @order.order_items = compact_order_items(read_from_cookies)
-        cookies.delete('order_items')
-      else
-        @order = Order.new
-        @order.order_items = compact_order_items(read_from_cookies)
-        @order.order_items.each { |item| item.send(:update_price) }
-      end
-    end
+    @order = order_with_order_items
+
     if !@order || @order.order_items.empty?
       redirect_to root_path, notice: 'Your cart is empty' 
     end
@@ -94,33 +61,53 @@ class OrderItemsController < ApplicationController
 
   private
 
-    def interact_with_cookies(pop)
-      order_items = compact_order_items(read_from_cookies)
-      order_items = pop ? pop_from_cookies(order_items) : push_to_cookies(order_items)
-      write_to_cookies(order_items)    
-      added_or_removed = pop ? 'removed from' : 'added to'
-      redirect_to :back, notice: "\"#{Book.find(params[:book_id]).title}\" " \
-                                 "was #{added_or_removed} cart"
+    def order_with_order_items
+      if current_order
+        order = current_order
+        order.order_items = combine_with_cookies(order.order_items)
+      elsif cookies['order_items']
+        if current_customer
+          order = Order.create(customer: current_customer, state: 'in_progress')
+          order.order_items = compact_order_items(read_from_cookies)
+          cookies.delete('order_items')
+        else
+          order = Order.new
+          order.order_items = compact_order_items(read_from_cookies)
+          order.order_items.each { |item| item.send(:update_price) }
+        end
+      end
+      order || Order.new
     end
 
-    def push_to_cookies(order_items)
-      order_items << OrderItem.new(book_id: params[:book_id], quantity: params[:quantity])
+    def combine_with_cookies(order_items)
+      temp_items = order_items.map { |item| OrderItem.new(item.attributes) }
+      order_items.destroy_all
+      order_items = compact_order_items(temp_items + read_from_cookies)
+      cookies.delete('order_items')
+
+      order_items
     end
 
-    def pop_from_cookies(order_items)
-      order_items.each do |item|
-        order_items.delete(item) if item.book_id.to_s == params[:book_id]
+
+    def compact_if_not_compacted(order_items)
+      if order_items != compact_order_items(order_items)
+        temp_items = order_items
+        order_items.each { |item| item.destroy }
+        order_items << compact_order_items(temp_items)
       end
     end
 
-    def write_to_cookies(items)
-      cookies[:order_items] = ''
-      items.each do |item|
-        cookies[:order_items] = { value: [cookies[:order_items],
-                                          item[:book_id],
-                                          item[:quantity]].join(' '),
-                                  expires: 30.days.from_now }
+    def current_order_items_from_params
+      params[:order_items_attrs].map do |item|
+        OrderItem.create(book_id:  item[:book_id], 
+                         quantity: item[:quantity], 
+                         order:    current_order)
       end
     end
 
+    def order_items_from_params
+      params[:order_items_attrs].map do |item|
+        OrderItem.new(book_id: item[:book_id], quantity: item[:quantity])
+      end
+    end
 end

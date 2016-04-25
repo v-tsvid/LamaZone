@@ -37,5 +37,5 @@
       .form-inline
         - @order.order_items.each do |item|
           = render partial: "hidden_order_item", locals: {order_item: item}
-        = text_field_tag "order[coupon_id]", nil, placeholder: 'Coupon code', class: 'form-control'
+        = text_field_tag "order[coupon_code]", nil, placeholder: 'Coupon code', class: 'form-control'
         = submit_tag 'CHECKOUT', class: 'btn btn-success'

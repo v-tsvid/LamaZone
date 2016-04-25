@@ -28,4 +28,6 @@ Rails.application.routes.draw do
     resources :order_items, only: :index
     resources :orders, only: [:index, :show]
   end
+
+  match "*path", to: "application#routing_error", via: :all
 end

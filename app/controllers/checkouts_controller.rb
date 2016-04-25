@@ -1,5 +1,6 @@
 class CheckoutsController < ApplicationController
   include Wicked::Wizard
+  include CookiesHandling
 
   before_action :authenticate_customer!
 
@@ -10,28 +11,14 @@ class CheckoutsController < ApplicationController
   end
 
   def create
-    @order_items = Array.new
-    
-    if checkout_params[:order_items_attrs]
-      checkout_params[:order_items_attrs].each do |prms|
-        @order_items << OrderItem.new(
-          {book_id: prms['book_id'], quantity: prms['quantity']})
-      end
-    end
-
     @order = current_order || Order.new(customer: current_customer)
-
-    @order.next_step = 'address' unless @order.next_step
-    @order.coupon_id = checkout_params[:coupon_id] if Coupon.exists?(id: checkout_params[:coupon_id])
-    @order.order_items.destroy_all
-    @order.order_items = compact_order_items(@order_items)
-
+    init_order
     @checkout = Checkout.new(@order)
     
     if @checkout.save
       redirect_to checkout_path(@order.next_step.to_sym)
     else
-      redirect_to root_path, notice: @checkout.inspect
+      redirect_to root_path, alert: "Can't create order"
     end
   end
 
@@ -65,8 +52,7 @@ class CheckoutsController < ApplicationController
     case step
     when :address
       @validation_hash = set_next_step(@checkout.model.next_step, 'shipment')
-      @validation_hash = @validation_hash.merge(
-          checkout_params['model'])
+      @validation_hash.merge!(checkout_params['model'])
       @return_hash = { billing_address: @validation_hash['billing_address'], 
                        shipping_address: @validation_hash['shipping_address'] }
 
@@ -77,18 +63,16 @@ class CheckoutsController < ApplicationController
       end
     when :shipment
       @validation_hash = set_next_step(@checkout.model.next_step, 'payment')
-      @validation_hash = @validation_hash.merge(
-        checkout_params['model'])
+      @validation_hash.merge!(checkout_params['model'])
       @return_hash = {shipping_method: checkout_params['model']['shipping_method'],
         shipping_price: checkout_params['model']['shipping_price']}
     when :payment
-      @validation_hash = @checkout.model.attributes.merge(
-        {next_step: 'confirm'}.merge(
-          checkout_params['model']))
+      @validation_hash = set_next_step(@checkout.model.next_step, 'confirm')
+      @validation_hash.merge!(checkout_params['model'])
       @return_hash = @validation_hash['credit_card']
     when :confirm
-      @validation_hash = @checkout.model.attributes.merge(
-        {next_step: 'complete', state: "processing"})
+      @validation_hash = set_next_step(@checkout.model.next_step, 'complete')
+      @validation_hash.merge!({state: "processing"})
       @return_hash = nil
     end
     save_and_render
@@ -97,18 +81,41 @@ class CheckoutsController < ApplicationController
 
   private
 
+    def init_order
+      coupon = Coupon.find_by(code: checkout_params[:coupon_code]) || nil
+
+      if checkout_params[:order_items_attrs]
+        order_items = checkout_params[:order_items_attrs].map do |item|
+          OrderItem.new({book_id: item['book_id'], quantity: item['quantity']})
+        end
+      else
+        order_items = Array.new
+      end
+
+      @order.next_step = 'address' unless @order.next_step
+      @order.coupon = coupon if Coupon.exists?(coupon)
+      @order.order_items.destroy_all
+      @order.order_items = compact_order_items(order_items)
+    end
+
     def init_address(address)
-      attrs = nil
-      attrs = current_customer.send(address).attributes if current_customer.send(address)
+      if current_customer.send(address)
+        attrs = current_customer.send(address).attributes
+      else
+        attrs = nil
+      end
+      
       Address.new(attrs)
     end
 
     def redirect_if_wrong_step(step)
       next_step = @checkout.model.next_step
       if next_step.nil?
-        redirect_to order_items_index_path, notice: "Please checkout first" and return
+        redirect_to(order_items_index_path, 
+          notice: "Please checkout first") and return
       elsif next_step_next?(next_step, step)
-        redirect_to checkout_path(@checkout.model.next_step.to_sym), notice: "Please proceed checkout from this step" and return
+        redirect_to(checkout_path(@checkout.model.next_step.to_sym), 
+          notice: "Please proceed checkout from this step") and return
       end
       return true
     end
@@ -126,9 +133,10 @@ class CheckoutsController < ApplicationController
       if checkout
         render_wizard 
       elsif step == :complete
-        redirect_to root_path, notice: "You have no orders in processing"
+        redirect_to root_path, notice: "Please, check for your orders in processing" \
+                                       "on your Orders page"
       else
-        redirect_to root_path, notice: "You have no orders in progress"
+        redirect_to root_path, notice: "You have no orders to confirm"
       end
     end
 
@@ -164,24 +172,28 @@ class CheckoutsController < ApplicationController
                  :billing_address_for_id,
                  :shipping_address_for_id]
 
+      credit_card = [:number, 
+                     :cvv, 
+                     :firstname, 
+                     :lastname,
+                     :expiration_month, 
+                     :expiration_year,
+                     :customer_id]
+
+      model = [:total_price,
+               :completed_date,
+               :customer_id,
+               :state,
+               :next_step,
+               :shipping_price,
+               :shipping_method,
+               billing_address: address,
+               shipping_address: address,
+               credit_card: credit_card]
+
       params.require(:order).permit(
-        :coupon_id,
-        model: [:total_price,
-                :completed_date,
-                :customer_id,
-                :state,
-                :next_step,
-                :shipping_price,
-                :shipping_method,
-                billing_address: address,
-                shipping_address: address,
-                credit_card:     [:number, 
-                                  :cvv, 
-                                  :firstname, 
-                                  :lastname,
-                                  :expiration_month, 
-                                  :expiration_year,
-                                  :customer_id]], 
+        :coupon_code,
+        model: model, 
         order_items_attrs: [:book_id, :quantity, :price])
     end
 end

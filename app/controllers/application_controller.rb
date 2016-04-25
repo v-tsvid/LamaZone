@@ -1,4 +1,5 @@
 class ApplicationController < ActionController::Base
+  include CookiesHandling
   # Prevent CSRF attacks by raising an exception.
   # For APIs, you may want to use :null_session instead.
   protect_from_forgery with: :exception
@@ -18,6 +19,21 @@ class ApplicationController < ActionController::Base
                 :cool_price,
                 :cool_date,
                 :flash_class
+
+  rescue_from ActionController::RoutingError do
+    redirect_to root_path, alert: "There's no place you tried to visit"
+  end
+
+  rescue_from CanCan::AccessDenied do |exception|
+    respond_to do |format|
+      format.json { head :forbidden }
+      format.html { redirect_to root_path, alert: exception.message }
+    end
+  end
+
+  def routing_error
+    raise ActionController::RoutingError.new(params[:path])
+  end
 
   def set_locale
     I18n.locale = params[:locale] || I18n.default_locale
@@ -52,6 +68,19 @@ class ApplicationController < ActionController::Base
     "%07d" % id
   end
 
+  def compact_order_items(order_items)
+    order_items = order_items.group_by{|h| h.book_id}.values.map do |a| 
+      OrderItem.new(book_id: a.first.book_id, 
+                    quantity: a.inject(0){|sum,h| sum + h.quantity})
+    end
+
+    order_items.each do |item| 
+      item.price = item.book.price
+    end
+
+    order_items
+  end
+
   def cart_subtotal
     if current_order
       current_order.send(:update_subtotal)
@@ -72,20 +101,10 @@ class ApplicationController < ActionController::Base
       @order.order_items.collect { |item| item.quantity }.sum
     end
   end
-
-  def read_from_cookies
-    order_items = Array.new
-    if cookies[:order_items]
-      cookies[:order_items].split(' ').
-        partition.with_index{ |v, index| index.even? }.transpose.each do |item|
-          order_items << OrderItem.new(book_id: item[0], quantity: item[1])
-      end
-    end
-    order_items
-  end
+  
 
   def current_order
-    current_customer ? current_customer.current_order : nil
+    current_customer ? current_customer.current_order_of_customer : nil
   end
 
   def last_processing_order
@@ -95,19 +114,6 @@ class ApplicationController < ActionController::Base
       current_customer ? Order.where(
         customer: current_customer, state: 'processing').last : nil
     end
-  end
-
-  def compact_order_items(order_items)
-    order_items = order_items.group_by{|h| h.book_id}.values.map do |a| 
-      OrderItem.new(book_id: a.first.book_id, 
-                    quantity: a.inject(0){|sum,h| sum + h.quantity})
-    end
-
-    order_items.each do |item| 
-      item.price = item.book.price
-    end
-
-    order_items
   end
 
   protected

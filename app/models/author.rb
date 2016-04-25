@@ -1,4 +1,6 @@
 class Author < ActiveRecord::Base
+  include Human
+
   validates :firstname, :lastname, presence: true
   
   has_many :books
@@ -7,10 +9,6 @@ class Author < ActiveRecord::Base
     object_label_method do
       :custom_label_method
     end
-  end
-
-  def full_name
-    "#{self.firstname} #{self.lastname}"
   end
 
   private

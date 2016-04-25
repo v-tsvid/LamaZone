@@ -1,4 +1,6 @@
 class Customer < ActiveRecord::Base
+  include Human
+
   devise :database_authenticatable, :registerable,
          :recoverable, :rememberable, :trackable, :validatable,          
          :omniauthable, :omniauth_providers => [:facebook]
@@ -23,11 +25,7 @@ class Customer < ActiveRecord::Base
     end
   end
 
-  def full_name
-    "#{self.firstname} #{self.lastname}"
-  end
-
-  def current_order
+  def current_order_of_customer
     Order.find_by(customer: self, state: 'in_progress') || nil
   end
 
@@ -39,10 +37,6 @@ class Customer < ActiveRecord::Base
 
   def downcase_email
     self.email.downcase!
-  end
-
-  def add_order
-    orders.new
   end
 
   def self.from_omniauth(auth)
