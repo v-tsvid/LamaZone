@@ -145,9 +145,9 @@ if Rails.env == 'development' || Rails.env == 'production'
       item.save!
     end
 
-    order.send(:update_shipping_price)
-    order.send(:update_subtotal)
-    order.send(:update_total_price)
-    order.save!
+    checkout = Checkout.new(order)
+    checkout.next_step = 'complete'
+    checkout.valid?  
+    checkout.save
   end
 end
