@@ -1,6 +1,6 @@
 Rails.application.routes.draw do
 
-  filter :locale
+  filter :locale, exclude: /^\/customers\/auth/
 
   root to: 'static_pages#home'
 
