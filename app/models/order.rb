@@ -1,15 +1,12 @@
 class Order < ActiveRecord::Base
   include AASM
+  include PriceCalculator
 
   STATE_LIST = ["in_progress", 
                 "processing", 
                 "shipping", 
                 "completed", 
                 "canceled"]
-
-  SHIPPING_METHOD_LIST = ["UPS Ground", 
-                          "UPS One Day", 
-                          "UPS Two Days"]
 
   belongs_to :customer
   belongs_to :credit_card

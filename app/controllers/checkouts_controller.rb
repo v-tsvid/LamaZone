@@ -15,7 +15,7 @@ class CheckoutsController < ApplicationController
     init_order
     @checkout = Checkout.new(@order)
     
-    if @checkout.save
+    if @checkout.valid? && @checkout.save
       redirect_to checkout_path(@order.next_step.to_sym)
     else
       redirect_to root_path, alert: "Can't create order"

@@ -9,7 +9,7 @@
       %ul.nav.navbar-nav
         %li{class: current_page?(root_path) ? "active" : nil}
           =link_to t(:home), root_path
-        %li{class: (controller.controller_name == 'books' || 'categories' || 'ratings') && !current_page?(root_path) ? "active" : nil}
+        %li{class: (controller == BooksController || CategoriesController || RatingsController) && !current_page?(root_path) ? "active" : nil}
           =link_to t(:shop), books_path
 
       %ul.nav.navbar-nav.navbar-right

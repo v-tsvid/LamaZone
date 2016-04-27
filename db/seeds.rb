@@ -10,6 +10,8 @@ ISO3166::Country.all.map do |item|
   Country.create!(name: item[0], alpha2: item[1])
 end
 
+coupons = FactoryGirl.create_list(:coupon, 5)
+
 if Rails.env == 'development' || Rails.env == 'production' 
   Admin.create!(email: 'admin@mail.com', password: '12345678',
                 password_confirmation: '12345678')
@@ -30,8 +32,6 @@ if Rails.env == 'development' || Rails.env == 'production'
     firstname: 'Dalai',
     lastname: 'Lama',
     biography: "The 14th Dalai Lama (religious name: Tenzin Gyatso, shortened from Jetsun Jamphel Ngawang Lobsang Yeshe Tenzin Gyatso, born Lhamo Thondup, 6 July 1935) is the current Dalai Lama. The 14th Dalai Lama was born in Taktser village (administratively in Qinghai province, Republic of China), Amdo, Tibet, and was selected as the tulku of the 13th Dalai Lama in 1937 and formally recognized as the 14th Dalai Lama at a public declaration near the town of Bumchen in 1939. His enthronement ceremony as the Dalai Lama was held in Lhasa on February 22, 1940, and he eventually assumed full temporal (political) power over Tibet on 17 November 1950, at the age of 15, after China's invasion of Tibet. The Gelug school's government administered an area roughly corresponding to the Tibet Autonomous Region just as the nascent People's Republic of China wished to assert central control over it. During the 1959 Tibetan uprising, the Dalai Lama fled to India, where he currently lives as a political refugee. He has since traveled the world, advocating for the welfare of Tibetans, teaching Tibetan Buddhism, investigating the interface between Buddhism and science and talking about the importance of compassion as the source of a happy life. Around the world, institutions face pressure from China not to accept him. Various governments have likewise been pressured to not meet the Dalai Lama: In South Africa, he was denied a visa for Desmond Tutu's birthday celebrations, Australia's Prime Minister refused to meet with him, and ministers in the United Kingdom were also pressured to not meet with him.")
-
-  coupons = FactoryGirl.create_list(:coupon, 5)
 
   best_category = FactoryGirl.create :category, title: 'bestsellers'
 

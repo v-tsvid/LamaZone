@@ -41,7 +41,7 @@ RSpec.configure do |config|
   end
 
   config.before(:suite) do
-    DatabaseCleaner.clean_with :truncation, except: %w[countries]
+    DatabaseCleaner.clean_with :truncation, except: %w[countries coupons]
   end
 
   config.before(:each) do
