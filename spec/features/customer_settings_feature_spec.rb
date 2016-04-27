@@ -63,7 +63,7 @@ feature "settings of authorized customer" do
     end
   end
 
-  scenario "can remove own account" do
+  scenario "remove own account" do
     find(:css, "#confirm").set(true)   
     click_button 'PLEASE REMOVE MY ACCOUNT'
     expect(page).to have_text(
