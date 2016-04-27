@@ -1,3 +1,7 @@
+def hum_and_down_sym(symbol)
+  symbol.to_s.humanize.downcase
+end
+
 def sign_in_via_capybara(user)
   user.class == Admin ? visit(admin_session_path) : visit(customer_session_path)
 

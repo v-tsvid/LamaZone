@@ -21,11 +21,16 @@ class AddressesController < ApplicationController
   def update
     respond_to do |format|
       if @address.update(address_params)
-        format.html { redirect_to edit_customer_registration_path(current_customer), notice: 'Address was successfully updated.' }
+        format.html { 
+          redirect_to edit_customer_registration_path(current_customer), 
+          notice: 'Address was successfully updated.' }
         format.json { render :show, status: :ok, location: @address }
       else
-        format.html { redirect_to :back, {flash: { errors: @address.errors }} }
-        format.json { render json: @address.errors, status: :unprocessable_entity }
+        format.html { 
+          redirect_to :back, {flash: { 
+          alert: @address.errors.full_messages.join('. ') }} }
+        format.json { 
+          render json: @address.errors, status: :unprocessable_entity }
       end
     end
   end

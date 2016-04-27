@@ -21,10 +21,14 @@ before_filter :configure_account_update_params, only: [:update]
     super
   end
 
-  # # PUT /resource
-  # def update
-  #   super
-  # end
+  # PUT /resource
+  def update
+    @billing_address = resource.billing_address || Address.new(
+      billing_address_for_id: resource.id)
+    @shipping_address = resource.shipping_address || Address.new(
+      shipping_address_for_id: resource.id)
+    super
+  end
 
   # DELETE /resource
   def destroy
