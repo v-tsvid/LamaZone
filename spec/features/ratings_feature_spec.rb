@@ -14,45 +14,19 @@ feature 'rating management' do
                   password:              '12345678',
                   password_confirmation: '12345678'
                   
-      sign_in_via_capybara @customer
+      login_as @customer
     end
 
     # background {  }
 
-    scenario 'add rating to book' do
+    scenario 'add a rating to a book' do
       visit book_path(@book)
-      click_link 'Add review'
-      fill_in 'Rate',   with: '10'
-      fill_in 'Review', with: 'some review'
-      click_button 'Save'
-      expect(page).to have_content 'Rating was successfully created.'
-    end
-
-    background do
-      @rating = FactoryGirl.create :rating,
-               rate: '10',
-               review: 'review', 
-               customer_id: @customer.id, 
-               book_id: @book.id, 
-               state: 'approved'
-    end
-
-    scenario 'update own rating' do     
-      visit edit_rating_path(@rating)
-      fill_in 'Rate',   with: '1'
-      fill_in 'Review', with: 'new review'
-      click_button 'Save'
-      expect(page).to have_content "Rating was successfully updated."
-    end
-
-    scenario 'delete own rating' do
-      rating = FactoryGirl.create :rating, 
-               customer_id: @customer.id,
-               book_id: @book_id, 
-               state: 'approved'
-      visit book_ratings_path(@book)
-      first(:link, 'Destroy').click
-      expect(page).to have_content "Rating was successfully destroyed."
+      click_link 'Add review for this book'
+      fill_in 'Rating',   with: '10'
+      fill_in 'Text review', with: 'some review'
+      click_button 'Add'
+      expect(page).to have_content "Rating was successfully created. " \
+                                   "It will be available soon"
     end
   end
 end

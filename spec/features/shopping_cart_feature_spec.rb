@@ -9,7 +9,7 @@ feature 'order_items management' do
   scenario 'push order_item to cookies' do
     visit book_path(@book)
     click_button 'Add to Cart'
-    expect(page).to have_content "\"#{@book.title}\" was added to cart"
+    expect(page).to have_content "\"#{@book.title}\" was added to the cart"
   end
 
   scenario 'browse order_items in the cart' do
@@ -19,7 +19,7 @@ feature 'order_items management' do
     click_button 'Add to Cart'
     visit book_path(@another_book)
     click_button 'Add to Cart'
-    visit '/cart'
+    visit order_items_index_path
     expect(page).to have_content "#{@book.title}"
     expect(page).to have_content "#{@another_book.title}"
   end

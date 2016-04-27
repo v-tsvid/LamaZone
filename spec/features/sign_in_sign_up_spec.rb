@@ -16,13 +16,15 @@ shared_examples 'sign in or sign up via Facebook' do
                       email: 'vad_1989@mail.ru', password: '12345678',
                       password_confirmation: '12345678',
                       provider: "facebook", uid: "580001345483302") }
+
+  given(:link_to_click) { "/customers/auth/facebook" }
    
   scenario "successfully sign in with Facebook profile of exisitng user" do
     fb_customer.save
     valid_facebook_sign_in
     Rails.application.env_config["omniauth.auth"] = 
       OmniAuth.config.mock_auth[:facebook]
-    first(:link, text: link_to_click).click
+    find(:css, "a[href=\"#{link_to_click}\"]").click
 
     expect(page).
       to have_content 'Successfully authenticated from Facebook account.'
@@ -32,7 +34,7 @@ shared_examples 'sign in or sign up via Facebook' do
     valid_facebook_sign_in
     Rails.application.env_config["omniauth.auth"] = 
       OmniAuth.config.mock_auth[:facebook]
-    first(:link, text: link_to_click).click
+    find(:css, "a[href=\"#{link_to_click}\"]").click
 
     expect(page).
       to have_content 'Successfully authenticated from Facebook account.'
@@ -43,7 +45,7 @@ shared_examples 'sign in or sign up via Facebook' do
     OmniAuth.config.mock_auth[:facebook].info.email = nil
     Rails.application.env_config["omniauth.auth"] = 
       OmniAuth.config.mock_auth[:facebook]
-    first(:link, text: link_to_click).click
+    find(:css, "a[href=\"#{link_to_click}\"]").click
 
     expect(page).
       to have_content 'Successfully authenticated from Facebook account.'
@@ -53,7 +55,7 @@ shared_examples 'sign in or sign up via Facebook' do
     invalid_facebook_sign_in
     Rails.application.env_config["omniauth.auth"] = 
       OmniAuth.config.mock_auth[:facebook]
-    first(:link, text: link_to_click).click
+    find(:css, "a[href=\"#{link_to_click}\"]").click
 
     expect(page).
       to have_content 'Invalid credentials'
@@ -75,32 +77,30 @@ feature "customer signing in" do
   end
 
   scenario "successfully sign in with correct email and password" do
-    fill_in 'Email',    with: customer.email
-    fill_in 'Password', with: customer.password
+    fill_in 'customer_email',    with: customer.email
+    fill_in 'customer_password', with: customer.password
     click_button 'Sign in'
 
     expect(page).to have_content 'Signed in successfully'
   end
 
   scenario "failed to sign in with incorrect email" do
-    fill_in 'Email',    with: 'wrong@mail.com'
-    fill_in 'Password', with: customer.password
+    fill_in 'customer_email',    with: 'wrong@mail.com'
+    fill_in 'customer_password', with: customer.password
     click_button 'Sign in'    
 
     expect(page).to have_content 'Invalid email or password'
   end
 
   scenario "failed to sign in with incorrect password" do
-    fill_in 'Email',    with: customer.email
-    fill_in 'Password', with: 'wrong_password'
+    fill_in 'customer_email',    with: customer.email
+    fill_in 'customer_password', with: 'wrong_password'
     click_button 'Sign in'    
 
     expect(page).to have_content 'Invalid email or password'
   end
 
   context "sign in via Facebook" do
-    given(:link_to_click) { 'Sign in with Facebook' }
-
     it_behaves_like 'sign in or sign up via Facebook'    
   end
 end
@@ -120,24 +120,24 @@ feature "admin signing in" do
   end
 
   scenario "successfully sign in with correct email and password" do
-    fill_in 'Email',    with: admin.email
-    fill_in 'Password', with: admin.password
+    fill_in 'admin_email',    with: admin.email
+    fill_in 'admin_password', with: admin.password
     click_button 'Sign in'
 
     expect(page).to have_content 'Signed in successfully'
   end
 
   scenario "failed to sign in with incorrect email" do
-    fill_in 'Email',    with: 'wrong@mail.com'
-    fill_in 'Password', with: admin.password
+    fill_in 'admin_email',    with: 'wrong@mail.com'
+    fill_in 'admin_password', with: admin.password
     click_button 'Sign in'    
 
     expect(page).to have_content 'Invalid email or password'
   end
 
   scenario "failed to sign in with incorrect password" do
-    fill_in 'Email',    with: admin.email
-    fill_in 'Password', with: 'wrong_password'
+    fill_in 'admin_email',    with: admin.email
+    fill_in 'admin_password', with: 'wrong_password'
     click_button 'Sign in'    
 
     expect(page).to have_content 'Invalid email or password'
@@ -154,26 +154,24 @@ feature 'customer signing up' do
   end
 
   scenario 'successfully sign up with valid credentials' do
-    fill_in 'Email',                 with: 'john_doe@mail.com'
-    fill_in 'Password',              with: 'password'
-    fill_in 'Password confirmation', with: 'password'
+    fill_in 'customer_email',                 with: 'john_doe@mail.com'
+    fill_in 'customer_password',              with: 'password'
+    fill_in 'customer_password_confirmation', with: 'password'
     click_button 'Sign up'
 
     expect(page).to have_content 'Welcome! You have signed up successfully.'
   end
 
   scenario 'failed to sign up with invalid credentials' do
-    fill_in 'Email',                 with: 'invalid@mail'
-    fill_in 'Password',              with: 'wrong'
-    fill_in 'Password confirmation', with: 'wrong1'
+    fill_in 'customer_email',                 with: 'invalid@mail'
+    fill_in 'customer_password',              with: 'wrong'
+    fill_in 'customer_password_confirmation', with: 'wrong1'
     click_button 'Sign up'
 
-    expect(page).to have_content 'prohibited this customer from being saved'
+    expect(page).to have_content 'is invalid is too short (minimum is 8 characters)'
   end
 
   context "sign up via Facebook" do
-    given(:link_to_click) { 'Sign up with Facebook' }
-
     it_behaves_like 'sign in or sign up via Facebook'    
   end
 end
