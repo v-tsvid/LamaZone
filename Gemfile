@@ -71,6 +71,7 @@ group :development, :test do
   gem 'spring'
   gem 'capybara', '2.4.4'
   gem 'capybara-webkit', '1.6.0'
+  gem 'launchy', '2.4.3'
 end
 
 group :test do

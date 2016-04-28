@@ -1,7 +1,7 @@
 module PriceCalculator
   extend ActiveSupport::Concern
 
-  SHIPPING_METHOD_LIST = ["UPS Ground", 
+  SHIPPING_METHOD_LIST ||= ["UPS Ground", 
                           "UPS One Day", 
                           "UPS Two Days"]
 

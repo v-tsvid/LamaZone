@@ -2,6 +2,14 @@ require 'rails_helper'
 
 RSpec.describe "books/show", type: :view do
 
+  shared_context "stub helpers and render" do
+    before do
+      allow(view).to receive(:cool_price)
+      allow(view).to receive(:cool_date)
+      render 
+    end
+  end
+
   before do 
     @book = assign(:book, FactoryGirl.create(:book))
     @ratings = [
@@ -12,14 +20,15 @@ RSpec.describe "books/show", type: :view do
   end
 
   context "book information displaying" do
-
-    before { render }
-
     [:title, :price].each do |item|
       it "displays book #{item}" do
-        expect(rendered).to have_content @book.send(item)
+        allow(view).to receive(:cool_price) { @book.send(item) } if item == :price
+        render
+        expect(rendered).to have_content @book.send(item).to_s
       end
     end
+
+    include_context "stub helpers and render"
 
     it "displays book author's firstname and lastname" do
       expect(rendered).to have_content @book.author.send(:full_name)
@@ -35,9 +44,8 @@ RSpec.describe "books/show", type: :view do
   end
 
   context "only approved book ratings displaying" do
-    before do
-      render
-    end
+    
+    include_context "stub helpers and render"
 
     it "renders _book_ratings partial" do
       expect(view).to render_template(partial: '_rating', count: @book.ratings.count)
@@ -63,6 +71,7 @@ RSpec.describe "books/show", type: :view do
     end
 
     context "for not approved rating" do
+
       subject { @book.ratings[1] }
 
       it "does not display rating rate" do
