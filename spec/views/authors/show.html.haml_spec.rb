@@ -10,7 +10,7 @@ RSpec.describe "authors/show", type: :view do
   end
   
   [:firstname, :lastname, :biography].each do |item|
-    it "displays author's #{hum_and_down_sym(item)}" do
+    it "displays author's #{spaced(item)}" do
       expect(rendered).to have_selector 'p', text: @author.send(item)
     end
   end

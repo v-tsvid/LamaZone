@@ -21,7 +21,7 @@ class ApplicationController < ActionController::Base
                 :flash_class
 
   rescue_from ActionController::RoutingError do
-    redirect_to root_path, alert: "There's no place you tried to visit"
+    redirect_to root_path, alert: "There's no page you tried to visit"
   end
 
   rescue_from CanCan::AccessDenied do |exception|

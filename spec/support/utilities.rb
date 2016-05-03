@@ -9,8 +9,8 @@ CARRIERWAVE_IMAGES = ["app/assets/images/books-images/41OgOIZBVPL.jpg",
                       "app/assets/images/books-images/61KPB4YQnRL.jpg",
                       "app/assets/images/books-images/71-qtQ6xR1L.jpg"]
 
-def hum_and_down_sym(symbol)
-  symbol.to_s.humanize.downcase
+def spaced(symbol)
+  symbol.to_s.tr('_', ' ')
 end
 
 def sign_in_via_capybara(user)

@@ -3,34 +3,51 @@ require 'rails_helper'
 RSpec.describe "devise/registrations/edit", type: :view do
 
   before do 
-    assign(:resource, FactoryGirl.build_stubbed(:customer))
+    @customer = assign(:resource, FactoryGirl.build_stubbed(:customer))
+    assign(:billing_address, FactoryGirl.build_stubbed(:address))
+    assign(:shipping_address, FactoryGirl.build_stubbed(:address))
     render 
+  end
+
+  shared_examples "errors displaying" do |item|
+
+    it "displays error message if #{item} has an error" do
+      allow(@customer).to receive_message_chain("errors.messages") {
+        { item => ["some_#{item}_error", "another_#{item}_error"]} }
+      
+      render
+      expect(rendered).to have_selector(
+        ".help-block", text:"some_#{item}_error, another_#{item}_error")
+    end
   end
 
   shared_examples "address fields displaying" do
     
     it "displays header for address fields" do
-      expect(rendered).to match "My #{subject} address"
+      expect(rendered).to match "#{subject.upcase} ADDRESS"
     end
 
-    ['firstname', 
-     'lastname', 
-     'phone', 
-     'address1', 
-     'address2', 
-     'city', 
-     'zipcode'].each do |item|
+    [:firstname, 
+     :lastname, 
+     :phone, 
+     :address1, 
+     :address2, 
+     :city, 
+     :zipcode].each do |item|
       it "displays fields for address #{item}" do
-        expect(rendered).to match "#{item.capitalize}"
         expect(rendered).to have_selector(
-          "input[type=text][id='customer_#{subject}_address_attributes_#{item}']")
+          ".#{subject}_address_form input[type=text][id='address_#{spaced(item)}']")
       end
     end
 
     it "displays select for address country" do
-      expect(rendered).to match 'Country'
       expect(rendered).to have_selector(
-        "select[id='customer_#{subject}_address_attributes_country_id']")
+        ".#{subject}_address_form select[id='address_country_id']")
+    end
+
+    it "displays SAVE button" do
+      expect(rendered).to have_selector(
+        ".#{subject}_address_form input[type=submit][value='SAVE']")
     end
   end
 
@@ -39,10 +56,10 @@ RSpec.describe "devise/registrations/edit", type: :view do
   end
 
   it "displays caption" do
-    expect(rendered).to match 'Edit Customer'
+    expect(rendered).to match 'Settings'
   end
 
-  context "displaying fields for billing address" do
+  context "fields for billing address" do
 
     subject { 'billing' }
     
@@ -50,7 +67,7 @@ RSpec.describe "devise/registrations/edit", type: :view do
 
   end
 
-  context "displaying fields for shipping address" do
+  context "fields for shipping address" do
 
     subject { 'shipping' }
     
@@ -58,28 +75,48 @@ RSpec.describe "devise/registrations/edit", type: :view do
 
   end
 
-  it "displays field for customer's email" do
-    expect(rendered).to match 'email'
-    expect(rendered).to have_selector("input[type=email][id='customer_email']")
-  end
+  context "fields for email updating" do
 
-  ['password', 'password confirmation', 'current password'].each do |item|
-    it "displays field for customer's #{item}" do
-      expect(rendered).to match item.capitalize
+    it "displays field for customer's email" do
+      expect(rendered).to have_selector("input[type=email][id='customer_email']")
+    end
+
+    it_behaves_like "errors displaying", :email
+
+
+    it "displays SAVE button" do
       expect(rendered).to have_selector(
-        "input[type=password][id='customer_#{item.tr(' ', '_')}']") 
+        ".email_form input[type=submit][value='SAVE']")
     end
   end
 
-  it "displays update button" do
-    expect(rendered).to have_selector("input[type=submit][value='Update']") 
+  context 'fields for password updating' do
+    [:password, :current_password].each do |item|
+      it "displays field for customer's #{item}" do
+        expect(rendered).to have_selector(
+          "input[type=password][id='customer_#{item}']") 
+      end
+
+      it_behaves_like "errors displaying", item 
+    end
+
+    it "displays SAVE button" do
+      expect(rendered).to have_selector(
+        ".password_form input[type=submit][value='SAVE']")
+    end
   end
 
-  it "displays account cancellation button" do
-    expect(rendered).to have_selector("input[type=submit][value='Cancel my account']") 
-  end
+  context "fields for account removing" do
+    it "displays account removing button" do
+      expect(rendered).to have_selector("input[type=submit][value='PLEASE REMOVE MY ACCOUNT']") 
+    end
 
-  it "displays back link" do
-    expect(rendered).to have_link('Back', '/books?category=1')
+    it "displays checkbox for account removing" do
+      expect(rendered).to have_selector("input[type=checkbox][id='confirm']")
+    end
+
+    it "displays label for checkbox" do
+      expect(rendered).to have_text 'I understand that all data will be lost'
+    end
   end
 end

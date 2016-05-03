@@ -31,12 +31,12 @@ feature "settings of authorized customer" do
   background { visit edit_customer_registration_path }
 
   [:billing_address, :shipping_address].each do |item|
-    scenario "see own #{hum_and_down_sym(item)} on the settings page" do
+    scenario "see own #{spaced(item)} on the settings page" do
       expect(page).to have_selector("input[value='#{@customer.send(item).firstname}']")
       expect(page).to have_selector("input[value='#{@customer.send(item).lastname}']")
     end
 
-    scenario "edit own #{hum_and_down_sym(item)} on the settings page" do
+    scenario "edit own #{spaced(item)} on the settings page" do
       new_name = "new" + @customer.send(item).firstname
       
       within(".#{item.to_s}_form") do
@@ -48,7 +48,7 @@ feature "settings of authorized customer" do
   end
 
   [:email, :password].each do |item|
-    scenario "edit own #{hum_and_down_sym(item)}" do
+    scenario "edit own #{spaced(item)}" do
       within(".#{item.to_s}_form") do
         new_param = item == :email ? 'new@mail.com' : 'newpassword'
         if item == :email
