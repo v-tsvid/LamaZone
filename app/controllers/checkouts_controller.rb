@@ -1,14 +1,13 @@
 class CheckoutsController < ApplicationController
   include Wicked::Wizard
   include CookiesHandling
+  
+  WIZARD_STEPS = [:address, :shipment, :payment, :confirm, :complete]
 
   before_action :authenticate_customer!
 
-  steps :address, :shipment, :payment, :confirm, :complete
-
-  def new
-    @checkout = Checkout.new(Order.new)
-  end
+  before_action :set_steps
+  before_action :setup_wizard
 
   def create
     @order = current_order || Order.new(customer: current_customer)
@@ -44,7 +43,7 @@ class CheckoutsController < ApplicationController
       @checkout = Checkout.new(last_processing_order) if last_processing_order
       redirect_if_wrong_step(:complete) or return if @checkout
     end
-    redirect_if_nil(step, @checkout)
+    redirect_if_checkout_is_nil(step) or render_wizard
   end  
 
   def update
@@ -80,6 +79,9 @@ class CheckoutsController < ApplicationController
 
 
   private
+    def set_steps
+      self.steps = WIZARD_STEPS
+    end
 
     def init_order
       coupon = Coupon.find_by(code: checkout_params[:coupon_code]) || nil
@@ -93,7 +95,7 @@ class CheckoutsController < ApplicationController
       end
 
       @order.next_step = 'address' unless @order.next_step
-      @order.coupon = coupon if Coupon.exists?(coupon)
+      @order.coupon = coupon if Coupon.exists?(coupon.to_param)
       @order.order_items.destroy_all
       @order.order_items = compact_order_items(order_items)
     end
@@ -129,15 +131,18 @@ class CheckoutsController < ApplicationController
       end 
     end
 
-    def redirect_if_nil(step, checkout)
-      if checkout
-        render_wizard 
+    def redirect_if_checkout_is_nil(step)
+      if @checkout
+        return false 
       elsif step == :complete
         redirect_to root_path, notice: "Please, check for your orders in processing" \
                                        "on your Orders page"
-      else
+      elsif step == :confirm
         redirect_to root_path, notice: "You have no orders to confirm"
+      else
+        redirect_to root_path, notice: "Please checkout first"
       end
+      return true
     end
 
     def set_next_step(prev_step, next_step)
@@ -194,6 +199,6 @@ class CheckoutsController < ApplicationController
       params.require(:order).permit(
         :coupon_code,
         model: model, 
-        order_items_attrs: [:book_id, :quantity, :price])
+        order_items_attrs: [:book_id, :quantity])
     end
 end

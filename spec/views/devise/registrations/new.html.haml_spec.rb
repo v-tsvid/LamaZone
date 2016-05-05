@@ -47,6 +47,10 @@ RSpec.describe "devise/registrations/new", type: :view do
   it "renders _sign_up_field partial for three times" do
     expect(view).to render_template(partial: "_sign_up_field", count: 3)
   end
+
+  it "renders devise shared links partial" do
+    expect(view).to render_template(partial: "devise/shared/_links")
+  end
   
   it "displays linked facebook logo for facebook sign up" do
     selector = "a[href='#{customer_omniauth_authorize_path(:facebook)}'] "\
