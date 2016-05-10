@@ -88,6 +88,10 @@ RSpec.describe CheckoutsController, type: :controller do
         end
       end
     end
+    
+    it_behaves_like "customer authentication" do
+      after { post :create, { order: order_params } }
+    end
   end
 
   describe "GET #show" do
@@ -198,6 +202,10 @@ RSpec.describe CheckoutsController, type: :controller do
             expect(assigns(:checkout).model).to eq last_proc_order
           end
         end
+
+        it_behaves_like "customer authentication" do
+          after { get :show, { id: step } }
+        end
       end
     end
   end
@@ -257,6 +265,10 @@ RSpec.describe CheckoutsController, type: :controller do
             to receive(:redirect_if_invalid).and_return false
           expect(subject).to redirect_to checkout_path(@next_step.to_s)
         end
+      end
+    
+      it_behaves_like "customer authentication" do
+        after { put :update, { id: step, order: update_order_params } }
       end
     end
 
@@ -345,4 +357,6 @@ RSpec.describe CheckoutsController, type: :controller do
       end
     end
   end
+
+
 end
