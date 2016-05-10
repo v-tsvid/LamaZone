@@ -1,10 +1,11 @@
 FactoryGirl.define do
   factory :order do
     state { Order::STATE_LIST.sample }
+    next_step { CheckoutsController::WIZARD_STEPS.sample }
     shipping_method { Order::SHIPPING_METHOD_LIST.sample }
-    shipping_price { 0 }
-    subtotal { 0.01 }
-    total_price { 0.01 }
+    shipping_price { rand(0.0..100.0) }
+    subtotal { rand(0.0..100.0) }
+    total_price { rand(0.0..100.0) }
     completed_date { Date.today.next_day }
     customer
     credit_card

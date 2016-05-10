@@ -9,6 +9,11 @@ CARRIERWAVE_IMAGES = ["app/assets/images/books-images/41OgOIZBVPL.jpg",
                       "app/assets/images/books-images/61KPB4YQnRL.jpg",
                       "app/assets/images/books-images/71-qtQ6xR1L.jpg"]
 
+
+def stringify_hash(hash)
+  hash.inject(hash){ |h,(key,val)| h[key]=val.to_s; h }.stringify_keys
+end
+
 def spaced(symbol)
   symbol.to_s.tr('_', ' ')
 end

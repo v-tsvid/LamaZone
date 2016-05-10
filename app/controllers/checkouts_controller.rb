@@ -23,6 +23,7 @@ class CheckoutsController < ApplicationController
 
   def show
     @checkout = Checkout.new(current_order) if current_order
+    # byebug
     case step
     when :address
       if @checkout  
@@ -50,31 +51,27 @@ class CheckoutsController < ApplicationController
     @checkout = Checkout.new(current_order)
     case step
     when :address
-      @validation_hash = set_next_step(@checkout.model.next_step, 'shipment')
-      @validation_hash.merge!(checkout_params['model'])
-      @return_hash = { billing_address: @validation_hash['billing_address'], 
-                       shipping_address: @validation_hash['shipping_address'] }
+      @validation_hash = set_next_step('shipment').merge(checkout_params['model'])
+      @return_hash = { 'billing_address' => @validation_hash['billing_address'], 
+                       'shipping_address' => @validation_hash['shipping_address'] }
 
       if params['use_billing']
         @validation_hash.merge!(
-              {shipping_address: checkout_params['model']['billing_address']})
+              {'shipping_address' => checkout_params['model']['billing_address']})
         @return_hash['shipping_address'] = @validation_hash['billing_address']
       end
     when :shipment
-      @validation_hash = set_next_step(@checkout.model.next_step, 'payment')
-      @validation_hash.merge!(checkout_params['model'])
-      @return_hash = {shipping_method: checkout_params['model']['shipping_method'],
-        shipping_price: checkout_params['model']['shipping_price']}
+      @validation_hash = set_next_step('payment').merge(checkout_params['model'])
+      @return_hash = {'shipping_method' => checkout_params['model']['shipping_method'],
+        'shipping_price' => checkout_params['model']['shipping_price']}
     when :payment
-      @validation_hash = set_next_step(@checkout.model.next_step, 'confirm')
-      @validation_hash.merge!(checkout_params['model'])
+      @validation_hash = set_next_step('confirm').merge(checkout_params['model'])
       @return_hash = @validation_hash['credit_card']
     when :confirm
-      @validation_hash = set_next_step(@checkout.model.next_step, 'complete')
-      @validation_hash.merge!({state: "processing"})
+      @validation_hash = set_next_step('complete').merge({'state' => "processing"})
       @return_hash = nil
     end
-    save_and_render
+    redirect_if_invalid or render_wizard(@checkout)
   end
 
 
@@ -122,12 +119,13 @@ class CheckoutsController < ApplicationController
       return true
     end
 
-    def save_and_render
+    def redirect_if_invalid
       if @checkout.validate(@validation_hash)
-        render_wizard @checkout
+        return false
       else
         redirect_to :back, {flash: { 
           errors: @checkout.errors, attrs: @return_hash } } 
+        return true
       end 
     end
 
@@ -145,9 +143,9 @@ class CheckoutsController < ApplicationController
       return true
     end
 
-    def set_next_step(prev_step, next_step)
+    def set_next_step(next_step)
       val_hash = @checkout.model.attributes
-      if next_step_next?(prev_step, next_step)
+      if next_step_next?(@checkout.model.next_step, next_step)
         val_hash = val_hash.merge({next_step: next_step}) 
       end
       val_hash
