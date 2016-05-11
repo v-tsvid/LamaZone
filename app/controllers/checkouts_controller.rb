@@ -90,7 +90,7 @@ class CheckoutsController < ApplicationController
       else
         order_items = Array.new
       end
-
+    
       @order.next_step = 'address' unless @order.next_step
       @order.coupon = coupon if Coupon.exists?(coupon.to_param)
       @order.order_items.destroy_all
@@ -98,8 +98,8 @@ class CheckoutsController < ApplicationController
     end
 
     def init_address(address)
-      if current_customer.send(address)
-        attrs = current_customer.send(address).attributes
+      if current_customer.respond_to? address
+        attrs = current_customer.public_send(address).attributes
       else
         attrs = nil
       end
@@ -133,7 +133,7 @@ class CheckoutsController < ApplicationController
       if @checkout
         return false 
       elsif step == :complete
-        redirect_to root_path, notice: "Please, check for your orders in processing" \
+        redirect_to root_path, notice: "Please, check for your processing orders" \
                                        "on your Orders page"
       elsif step == :confirm
         redirect_to root_path, notice: "You have no orders to confirm"
@@ -146,7 +146,7 @@ class CheckoutsController < ApplicationController
     def set_next_step(next_step)
       val_hash = @checkout.model.attributes
       if next_step_next?(@checkout.model.next_step, next_step)
-        val_hash = val_hash.merge({next_step: next_step}) 
+        val_hash.merge!({next_step: next_step}) 
       end
       val_hash
     end

@@ -297,7 +297,7 @@ RSpec.describe RatingsController, type: :controller do
     end
   end
 
-  describe ".set_rating" do
+  describe "#set_rating" do
     it "receives find on Rating and returns rating with requested id" do
       expect(Rating).to receive(:find).with(rating_params[:id])
       controller.send(:set_rating)

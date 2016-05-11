@@ -74,7 +74,7 @@ class ApplicationController < ActionController::Base
       OrderItem.new(book_id: a.first.book_id, 
                     quantity: a.inject(0){|sum,h| sum + h.quantity})
     end
-
+    
     order_items.each do |item| 
       item.price = item.book.price
     end

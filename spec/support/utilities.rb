@@ -9,6 +9,13 @@ CARRIERWAVE_IMAGES = ["app/assets/images/books-images/41OgOIZBVPL.jpg",
                       "app/assets/images/books-images/61KPB4YQnRL.jpg",
                       "app/assets/images/books-images/71-qtQ6xR1L.jpg"]
 
+def setup_ability
+  @ability = Object.new
+  @ability.extend(CanCan::Ability)
+  allow(controller).to receive(:current_ability).and_return(@ability)
+  @ability.can :manage, :all
+end
+
 
 def stringify_hash(hash)
   hash.inject(hash){ |h,(key,val)| h[key]=val.to_s; h }.stringify_keys
