@@ -125,8 +125,8 @@ RSpec.describe Checkout, type: :model do
     it { is_expected.not_to validate_inclusion_of(:shipping_method).
       in_array(PriceCalculator::SHIPPING_METHOD_LIST) }
 
-    it "doesn't validate that :shipping_price is number greater than 0" do
-      subject.public_send(:shipping_price=, -1)
+    it "doesn't validate that :shipping_price is number greater than or equal to 0" do
+      subject.validate({shipping_price: -1})
       expect(subject.valid?).to eq true
     end
   end
@@ -140,8 +140,8 @@ RSpec.describe Checkout, type: :model do
     it { is_expected.to validate_inclusion_of(:shipping_method).
       in_array(PriceCalculator::SHIPPING_METHOD_LIST) }
 
-    # it "validates that :shipping_price is number greater than 0" do
-    #   subject.shipping_price = -1
+    # it "validates that :shipping_price is number greater than or equal to 0" do
+    #   subject.validate({shipping_price: -1})
     #   expect(subject.valid?).to eq false
     # end
   end

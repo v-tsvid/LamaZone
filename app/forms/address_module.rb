@@ -1,6 +1,8 @@
 module AddressModule
   include Reform::Form::Module
 
+  model :address
+
   property :firstname
   property :lastname
   property :address1
@@ -29,4 +31,15 @@ module AddressModule
   # provided by validates_zipcode gem
   # validates zipcode to be correct due to country alpha2 code
   validates :zipcode, zipcode: { country_code: :country_code }
+
+  private
+    def normalize_phone
+      # provided by phony gem
+      # delete all characters excepting digits
+      Phony.normalize!(self.phone)
+    end
+
+    def country_code
+      Country.find(self.country_id).alpha2
+    end
 end
