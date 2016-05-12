@@ -4,17 +4,14 @@ RSpec.describe "static_pages/home.html.haml", type: :view do
   
   before do
     @books = assign(:books, [
-      stub_model(Book,
-        images: File.open(Rails.root + "app/assets/images/books_images/51AdUxb4frL.jpg")), 
-      stub_model(Book,
-        images: File.open(Rails.root + "app/assets/images/books_images/51KBQZ+S9+L.jpg"))])
+      FactoryGirl.build_stubbed(:book,
+        images: File.open(Rails.root + "app/assets/images/books-images/51AdUxb4frL.jpg")), 
+      FactoryGirl.build_stubbed(:book,
+        images: File.open(Rails.root + "app/assets/images/books-images/51KBQZ+S9+L.jpg"))])
 
-    @books.each do |book|
-      [:firstname, :lastname].each do |item|
-        allow(book).to receive_message_chain(:author, item)
-      end
-    end
 
+    allow(view).to receive(:cool_price)
+    allow_any_instance_of(Author).to receive(:full_name)
     render
   end
   
@@ -29,6 +26,8 @@ RSpec.describe "static_pages/home.html.haml", type: :view do
   [:title, :price].each do |item|
     it "displays books' #{item.to_s.pluralize}" do
       @books.each do |book|
+        allow(view).to receive(:cool_price).and_return(book.price) if item == :price
+        render
         expect(rendered).to match(book.send(item).to_s) 
       end
     end
@@ -40,11 +39,11 @@ RSpec.describe "static_pages/home.html.haml", type: :view do
     end
   end
 
-  [:firstname, :lastname].each do |item|
-    it "displays #{item} of books' authors" do
-      @books.each do |book|
-        expect(rendered).to match(book.author.send(item).to_s) 
-      end
+  it "displays full name of books' authors" do
+    @books.each do |book|
+      allow_any_instance_of(Author).to receive(:full_name).and_return(book.author.full_name)
+      render
+      expect(rendered).to match(book.author.full_name.to_s) 
     end
   end
 end

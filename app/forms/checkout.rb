@@ -1,6 +1,7 @@
+require 'price_calculator'
+
 class Checkout < Reform::Form
   extend ::ActiveModel::Callbacks
-  require 'price_calculator'
   include PriceCalculator
 
   NEXT_STEPS = [:address, :shipment, :payment, :confirm, :complete]

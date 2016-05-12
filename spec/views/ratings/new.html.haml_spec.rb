@@ -15,6 +15,7 @@ RSpec.describe "ratings/new", type: :view do
 
   it "displays link to @book" do
     expect(rendered).to have_selector(
-      "a[href=\"#{book_path(@book)}\"]", text: 'Back')
+      "a[href=\"#{book_path(@book)}\"]", 
+      text: "#{@book.title} by #{@book.author.full_name}")
   end
 end

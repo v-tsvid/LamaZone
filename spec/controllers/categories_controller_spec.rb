@@ -36,24 +36,22 @@ RSpec.describe CategoriesController, type: :controller do
   # CategoriesController. Be sure to keep this updated too.
   # let(:valid_session) { {} }
 
-  let(:category) { FactoryGirl.create :category_with_books}
-
-  describe "GET #index" do
-    it "assigns all categories as @categories" do
-      get :index
-      expect(assigns(:categories)).to eq([category])
-    end
-  end
+  let(:categories) { FactoryGirl.create_list :category_with_books, 2, num: 3}
 
   describe "GET #show" do
-    it "assigns the requested category as @category" do
-      get :show, {id: category.to_param}
-      expect(assigns(:category)).to eq(category)
+    it "assigns all categories as @categoies" do
+      get :show, {id: categories[0].to_param}
+      expect(assigns(:categories)).to eq(categories)
+    end
+
+    it "assigns current category as @categoy" do
+      get :show, {id: categories[0].to_param}
+      expect(assigns(:category)).to eq(categories[0])
     end
 
     it "assigns the books of the category as @books" do
-      get :show, {id: category.to_param}
-      expect(assigns(:books)).to eq category.books
+      get :show, {id: categories[0].to_param}
+      expect(assigns(:books)).to eq categories[0].books
     end
   end
 end

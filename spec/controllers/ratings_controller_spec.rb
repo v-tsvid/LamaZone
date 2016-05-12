@@ -22,60 +22,8 @@ RSpec.describe RatingsController, type: :controller do
   end
 
   shared_examples "customer authentication" do
-    it "receives customer_authenticate!" do
+    it "receives authenticate_customer!" do
       expect(controller).to receive(:authenticate_customer!)
-    end
-  end
-
-  shared_examples "rating setting" do
-    it "receives set_rating" do
-      expect(controller).to receive(:set_rating)
-    end
-  end
-
-  describe "GET #index" do
-    before do
-      rating
-      wrong_rating
-    end
-
-    it "assigns all approved ratings of requested book as @ratings" do
-      get :index, { book_id: book.id }
-      expect(assigns(:ratings)).to match_array([rating])
-    end
-
-    it "assigns as @ratings all approved ratings of current customer "\
-       "when book wasn't requested" do
-      get :index, { customer_id: customer.id }
-      expect(assigns(:ratings)).to match_array([rating])
-    end
-    
-    after { get :index, { book_id: book.id } }
-
-    it "receives where on Rating "\
-       "and returns all approved ratings of requested book" do
-      expect(Rating).
-        to receive(:where).with(state: 'approved', book_id: book.to_param).
-          and_return [rating]
-    end
-
-    # it "receives authenticate_customer_if_exists method" do
-    #   expect(controller).to receive(:authenticate_customer_if_exists)
-    # end
-  end
-
-  describe "GET #show" do
-
-    context "messages receiving" do
-
-      after { get :show, { id: rating.to_param } }
-
-      it_behaves_like "rating setting"
-    end
-
-    it "assigns the requested rating as @rating" do
-      get :show, { id: rating.to_param }
-      expect(assigns(:rating)).to eq(rating)
     end
   end
 
@@ -107,41 +55,12 @@ RSpec.describe RatingsController, type: :controller do
     end
   end
 
-  describe "GET #edit" do
-
-    context "messages receiving" do
-
-      after { get :edit, { id: rating.id.to_param } }
-      
-      it_behaves_like "rating setting"
-      it_behaves_like "customer authentication"
-      
-      it "receives find on Rating with requested id" do
-        expect(Rating).to receive(:find).with(rating.id.to_param).and_return(rating)
-      end
-
-      it "receives find on Book with requested id" do
-        expect(Book).to receive(:find).with(rating.book_id).and_return(rating)
-      end
-    end 
-
-    before { get :edit, { id: rating.to_param } }
-
-    it "assigns the requested rating as @rating" do
-      expect(assigns(:rating)).to eq(rating)
-    end
-
-    it "assigns the requested book as book in @rating" do
-      expect(assigns(:book)).to eq(book)
-    end
-  end
-
   describe "POST #create" do
 
-    it "permits white list parameters" do
-      is_expected.to permit(:id, :rate, :review, :book_id).
-        for(:create, params: rating_params)
-    end
+    # it "permits white list parameters" do
+    #   is_expected.to permit(:id, :rate, :review, :book_id).
+    #     for(:create, params: rating_params)
+    # end
 
     context "messages receiving" do
 
@@ -180,7 +99,7 @@ RSpec.describe RatingsController, type: :controller do
       end
 
       it "redirects to the created rating" do
-        expect(response).to redirect_to(Rating.last)
+        expect(response).to redirect_to(book_path(book))
       end
     end
 
@@ -197,117 +116,4 @@ RSpec.describe RatingsController, type: :controller do
       end
     end
   end
-
-  describe "PUT #update" do
-
-    let(:new_rating_params) { 
-      FactoryGirl.attributes_for(:rating, book_id: book.id).stringify_keys }
-
-    it "permits white list parameters" do
-      is_expected.to permit(:id, :rate, :review, :book_id).
-        for(:update, params: rating.attributes)
-    end
-
-    context "messages receiving" do
-    
-      after { put :update, { id: rating.to_param, rating: new_rating_params } }
-
-      it_behaves_like "rating setting"
-      it_behaves_like "customer authentication"
-    end 
-
-    context "with valid params" do
-      
-      before { put :update, { id: rating.to_param, rating: new_rating_params } }
-
-      it "updates the requested rating" do
-        rating.reload
-        expect(assigns(:rating).review).to eq new_rating_params['review']
-      end
-
-      it "sets state of rating with 'pending' value" do
-        expect(assigns(:rating).state).to eq 'pending'
-      end
-
-      it "assigns the requested rating as @rating" do
-        expect(assigns(:rating)).to eq(rating)
-      end
-
-      it "redirects to the rating" do
-        expect(response).to redirect_to(rating)
-      end
-    end
-
-    context "with invalid params" do
-
-      context "for html format" do
-
-        before do 
-          put :update, { id: rating.to_param, rating: invalid_rating_params } 
-        end
-
-        it "assigns the rating as @rating" do
-          expect(assigns(:rating)).to eq(rating)
-        end
-
-        it "re-renders the 'edit' template" do
-          expect(response).to render_template("edit")
-        end
-      end
-
-      context "for json format" do
-
-        before do 
-          put :update, {
-            id: rating.to_param, rating: invalid_rating_params, format: :json } 
-        end
-
-        it "renders @rating.errors" do
-          expect(response.body).to eq(assigns(:rating).errors.to_json)
-        end
-
-        it "has unprocessable response" do
-          expect(response).to be_unprocessable
-        end
-      end
-    end
-  end
-
-  describe "DELETE #destroy" do
-
-    before { rating }
-
-    context "messages receiving" do
-
-      after { delete :destroy, {:id => rating.to_param} }
-
-      # it_behaves_like "rating setting"
-      it_behaves_like "customer authentication"
-    end
-
-    it "destroys the requested rating" do
-      expect {
-        delete :destroy, {:id => rating.to_param}
-      }.to change(Rating, :count).by(-1)
-    end
-
-    it "redirects to the ratings list" do
-      delete :destroy, {:id => rating.to_param}
-      expect(response).to redirect_to(book_url(rating.book))
-    end
-  end
-
-  describe "#set_rating" do
-    it "receives find on Rating and returns rating with requested id" do
-      expect(Rating).to receive(:find).with(rating_params[:id])
-      controller.send(:set_rating)
-    end
-  end
-
-  # describe ".authenticate_customer_if_exists" do
-  #   it "receives authenticate_customer! if params[:customer_id] exists" do
-  #     expect(controller).to receive(:authenticate_customer!)
-  #     get :index, { customer_id: customer.id }
-  #   end
-  # end
 end

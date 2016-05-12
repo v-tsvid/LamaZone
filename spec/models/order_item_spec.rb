@@ -3,6 +3,8 @@ require 'rails_helper'
 RSpec.describe OrderItem, type: :model do
   let(:order_item) { FactoryGirl.create :order_item }
 
+  before { allow_any_instance_of(OrderItem).to receive(:update_price) }
+
   [:price, :quantity].each do |item|
     it "is invalid without #{item}" do
       expect(order_item).to validate_presence_of item
@@ -11,7 +13,7 @@ RSpec.describe OrderItem, type: :model do
 
   it "is valid only when price is numerical and greater than or equal to 0" do
     expect(order_item).to validate_numericality_of(:price).
-      is_greater_than_or_equal_to 0
+      is_greater_than 0
   end
 
   it "is valid only when quantity is integer and greater than or equal to 0" do

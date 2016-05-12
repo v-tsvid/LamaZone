@@ -4,34 +4,28 @@ RSpec.describe ApplicationController, type: :controller do
   controller {}
 
   describe "#current_order" do
-    before do
-      @order = FactoryGirl.build :order
-      # cookies[:order_items] = nil
-    end
+    let(:customer) { FactoryGirl.create :customer }
+    let(:order) { FactoryGirl.create :order }
 
-    # it "puts to cookies[:order_items] an empty array" do
-    #   controller.current_order
-    #   expect(cookies[:order_items]).to eq []
-    # end
-
-    context "if there is an order in the cookies" do
+    context "if there is current_customer" do
     
-      before { cookies[:order] = @order }
+      before do 
+        allow(controller).to receive(:current_customer).and_return customer
+        allow_any_instance_of(Customer).to receive(
+          :current_order_of_customer).and_return(order)
+      end
 
-      it "returns cookies[:order]" do
-        expect(controller.current_order).to eq @order
+      it "returns current order of current customer" do
+        expect(controller.current_order).to eq order
       end
     end
 
-    context "if there is no order in the cookies" do
+    context "if there is no current_customer" do
 
-      before do
-        allow(Order).to receive(:new).and_return(@order)
-        cookies[:order] = nil
-      end
+      before { allow(controller).to receive(:current_customer).and_return nil }
 
-      it "returns cookies[:order] as a new order JSON serialized attributes" do
-        expect(controller.current_order).to eq JSON.generate(@order.attributes)
+      it "returns nil" do
+        expect(controller.current_order).to eq nil
       end
     end
   end

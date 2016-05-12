@@ -2,6 +2,12 @@ require 'rails_helper'
 
 describe 'layouts/application.html.haml' do
 
+  shared_examples 'has link' do |link|
+    it "has link \"#{I18n.t(link)}\"" do
+      expect(rendered).to have_link I18n.t(link)
+    end
+  end
+
   shared_examples 'any user' do
     before { render }
 
@@ -18,64 +24,51 @@ describe 'layouts/application.html.haml' do
     end
   end
 
-  shared_examples 'authentified user' do
-    before { render }
-
-    ['Sign Out', 'My Profile'].each do |link|
-      it "has link \"#{link}\"" do
-        expect(rendered).to have_link link
-      end
-    end
-  end  
+  let(:customer) { FactoryGirl.create :customer }
+  let(:admin) { FactoryGirl.create :admin }
 
   before do
-    allow(controller).to receive(:current_admin)
-    allow(controller).to receive(:current_customer)
+    allow(view).to receive(:cart_total_quantity)
+    allow(view).to receive(:cart_subtotal)
+    allow(view).to receive(:cool_price)
+    allow(view).to receive(:url_for).and_return(root_path)
   end
 
   context 'unauthentified user' do
     before do
-      allow(controller).to receive(:current_admin) { false }
-      allow(controller).to receive(:current_customer) { false }
+      allow(view).to receive(:current_admin) { nil }
+      allow(view).to receive(:current_customer) { nil }
       render
     end
     
     it_behaves_like 'any user'
 
-    ['Sign In', 'Sign Up'].each do |link|
-      it "has link \"#{link}\"" do
-        expect(rendered).to have_link link
-      end
+    [:sign_in, :sign_up].each do |link|
+      it_behaves_like 'has link', link
     end
   end
   
   context 'authentified customer' do
     before do
-      allow(controller).to receive(:current_admin) { false }
-      allow(controller).to receive(:current_customer) { true }
+      allow(controller).to receive(:current_admin) { nil }
+      allow(controller).to receive(:current_customer) { customer }
       render
     end
 
     it_behaves_like 'any user'
-    it_behaves_like 'authentified user'
-
-    # it "has link 'My Addresses'" do
-    #   expect(rendered).to have_link 'My Addresses'
-    # end
+    it_behaves_like 'has link', :sign_out
+    it_behaves_like 'has link', :settings
   end
 
   context 'authentified admin' do
     before do
-      allow(controller).to receive(:current_admin) { true }
-      allow(controller).to receive(:current_customer) { false }
+      allow(controller).to receive(:current_admin) { admin }
+      allow(controller).to receive(:current_customer) { nil }
       render
     end
 
     it_behaves_like 'any user'
-    it_behaves_like 'authentified user'
-
-    it "has link \"Admin Panel\"" do
-      expect(rendered).to have_link 'Admin Panel'
-    end
+    it_behaves_like 'has link', :sign_out
+    it_behaves_like 'has link', :admin_panel
   end
 end

@@ -18,7 +18,7 @@ RSpec.describe BooksController, type: :controller do
       expect(assigns(:books)).to eq [book, best_book]
     end
 
-    it "assigns alla categories as @categories" do
+    it "assigns all categories as @categories" do
       categories = FactoryGirl.create_list :category, 3
       get :index
       expect(assigns(:categories)).to eq categories
@@ -29,18 +29,6 @@ RSpec.describe BooksController, type: :controller do
     it "assigns the requested book as @book" do
       get :show, {:id => book.to_param}
       expect(assigns(:book)).to eq(book)
-    end
-
-    it "receives set_book" do
-      expect(controller).to receive(:set_book)
-      get :show, {:id => book.to_param}
-    end
-  end
-
-  describe ".set_book" do
-    it "receives find on Book and returns book with requested id" do
-      expect(Book).to receive(:find).with(book_params[:id])
-      controller.send(:set_book)
     end
   end
 end

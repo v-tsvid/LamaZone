@@ -105,20 +105,6 @@ RSpec.describe Customer, type: :model do
     end
   end
 
-  context "#add_order" do
-    it "adds new order" do
-      expect(customer.send(:add_order).new_record?).to be true
-    end
-  end
-
-  # context "#current_order" do
-  #   it "returns customer's order in_progress" do
-  #     order_in_progress = FactoryGirl.create(:order, 
-  #       state: 'in_progress', customer: customer)
-  #     expect(customer.send(:current_order)).to eq order_in_progress
-  #   end
-  # end
-
   context "#full_name" do
     it "returns string wih lastname joined to firstname" do
       expect(customer.send(:full_name)).

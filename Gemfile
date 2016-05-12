@@ -76,8 +76,8 @@ end
 
 group :test do
   gem 'database_cleaner', '1.4.1'
-  gem 'shoulda-matchers', '2.8.0'
-  gem 'shoulda-callback-matchers', '1.1.3'
+  gem 'shoulda-matchers', '3.1.1'
+  gem 'shoulda-callback-matchers'
   gem "codeclimate-test-reporter", '0.4.8', require: nil
 end
 
