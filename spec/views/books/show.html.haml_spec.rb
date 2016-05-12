@@ -13,8 +13,10 @@ RSpec.describe "books/show", type: :view do
   before do 
     @book = assign(:book, FactoryGirl.create(:book))
     @ratings = [
-      FactoryGirl.create(:rating, book: @book, state: 'approved', rate: 5),
-      FactoryGirl.create(:rating, book: @book, state: 'pending', rate: 10)]
+      FactoryGirl.create(:rating, 
+        book: @book, rate: 5, review: 'review', state: 'approved'),
+      FactoryGirl.create(:rating, 
+        book: @book, rate: 10, review: 'weiver', state: 'pending')]
     
     @book.ratings << @ratings
   end
