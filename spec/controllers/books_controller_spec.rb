@@ -1,4 +1,5 @@
 require 'rails_helper'
+require 'controllers/shared/shared_controller_specs'
 
 RSpec.describe BooksController, type: :controller do
   let(:best_book) { FactoryGirl.create :bestseller_book }
@@ -13,21 +14,29 @@ RSpec.describe BooksController, type: :controller do
   end
 
   describe "GET #index" do  
+    subject { get :index }
+
+    it_behaves_like "load and authorize resource"
+
     it "assigns all books as @books" do
-      get :index
+      subject
       expect(assigns(:books)).to eq [book, best_book]
     end
 
     it "assigns all categories as @categories" do
       categories = FactoryGirl.create_list :category, 3
-      get :index
+      subject
       expect(assigns(:categories)).to eq categories
     end
   end
 
   describe "GET #show" do
+    subject { get :show, {id: book.to_param} }
+    
+    it_behaves_like "load and authorize resource"
+    
     it "assigns the requested book as @book" do
-      get :show, {:id => book.to_param}
+      subject
       expect(assigns(:book)).to eq(book)
     end
   end

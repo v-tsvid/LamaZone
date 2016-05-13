@@ -22,19 +22,4 @@ RSpec.describe StaticPagesController, type: :controller do
       expect(assigns(:books)).not_to match @other_book
     end
   end
-
-  # describe "GET #cart" do
-  #   it "receives order_items on current_order" do
-  #     expect(controller.current_order).to receive(:order_items)
-  #     get :cart
-  #   end
-
-  #   it "assigns items of current_order as @cart_items" do
-  #     cart_items = FactoryGirl.create_list :order_item, 2
-  #     allow(controller.current_order).
-  #       to receive(:order_items).and_return(cart_items)
-  #     get :cart
-  #     expect(assigns(:cart_items)).to match cart_items
-  #   end
-  # end
 end

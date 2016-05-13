@@ -1,4 +1,5 @@
 require 'rails_helper'
+require 'controllers/shared/shared_controller_specs'
 
 RSpec.describe RatingsController, type: :controller do
 
@@ -21,51 +22,41 @@ RSpec.describe RatingsController, type: :controller do
     sign_in customer
   end
 
-  shared_examples "customer authentication" do
-    it "receives authenticate_customer!" do
-      expect(controller).to receive(:authenticate_customer!)
-    end
-  end
-
   describe "GET #new" do
+
+    subject { get :new, { book_id: book.id } }
     
     context "messages receiving" do
-
-      after { get :new, { book_id: book.id } }
 
       it_behaves_like "customer authentication"
 
       it "receives find on Book and return book with requested id" do
         expect(Book).to receive(:find).with(book.id.to_s).and_return(book)
+        subject
       end
 
       it "receives new on Rating with finded book" do
         expect(Rating).to receive(:new).with(book: book, customer: customer)
+        subject
       end
     end
 
-    before { get :new, { book_id: book.id } }
-
     it "assigns requested book as @book" do
+      subject
       expect(assigns(:book)).to eq(book)
     end
 
     it "assigns a new rating as @rating" do  
+      subject
       expect(assigns(:rating)).to be_a_new(Rating)
     end
   end
 
   describe "POST #create" do
 
-    # it "permits white list parameters" do
-    #   is_expected.to permit(:id, :rate, :review, :book_id).
-    #     for(:create, params: rating_params)
-    # end
+    subject { post :create, { rating: rating_params, book_id: book.id } }
 
     context "messages receiving" do
-
-      after { post :create, { rating: rating_params, book_id: book.id } }
-    
       it_behaves_like "customer authentication"
     end
 
@@ -74,44 +65,46 @@ RSpec.describe RatingsController, type: :controller do
       it "receives find on Book with requested book_id" do
         expect(Book).to receive(:find).with(rating_params['book_id'].to_s).
           and_return(book)
-        post :create, { rating: rating_params, book_id: book.id }
+        subject
       end
 
       it "creates a new rating" do
-        expect {
-          post :create, { rating: rating_params, book_id: book.id }
-        }.to change(Rating, :count).by(1)
+        expect { subject }.to change(Rating, :count).by(1)
       end
 
-      before { post :create, { rating: rating_params, book_id: book.id } }
-
       it "assigns book for requested rating as @book" do
+        subject
         expect(assigns(:book)).to eq(book)
       end
 
       it "assigns a newly created rating as @rating" do
+        subject
         expect(assigns(:rating)).to be_a(Rating)
         expect(assigns(:rating)).to be_persisted
       end
 
       it "sets customer for rating with current_customer value" do
+        subject
         expect(assigns(:rating).customer_id).to eq controller.current_customer.id
       end
 
       it "redirects to the created rating" do
+        subject
         expect(response).to redirect_to(book_path(book))
       end
     end
 
     context "with invalid params" do
 
-      before { post :create, { rating: invalid_rating_params, book_id: book.id } }
+      subject { post :create, { rating: invalid_rating_params, book_id: book.id } }
 
       it "assigns a newly created but unsaved rating as @rating" do
+        subject
         expect(assigns(:rating)).to be_a_new(Rating)
       end
 
       it "re-renders the 'new' template" do
+        subject
         expect(response).to render_template("new")
       end
     end

@@ -7,7 +7,8 @@ class AddressesController < ApplicationController
   def create
     respond_to do |format|
       if @address.save
-        format.html { redirect_to edit_customer_registration_path(current_customer), notice: 'Address was successfully created.' }
+        format.html { redirect_to edit_customer_registration_path(current_customer), 
+          notice: 'Address was successfully created.' }
         format.json { render :show, status: :created, location: @address }
       else
         format.html { redirect_to :back, {flash: { errors: @address.errors }} }

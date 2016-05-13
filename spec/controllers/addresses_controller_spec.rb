@@ -1,105 +1,118 @@
 require 'rails_helper'
+require 'controllers/shared/shared_controller_specs'
 
 RSpec.describe AddressesController, type: :controller do
 
-  # let(:customer) { FactoryGirl.create :customer }
-  # let(:wrong_customer) { FactoryGirl.create :customer }
+  let(:valid_attributes) { FactoryGirl.attributes_for(:address).stringify_keys }
+  let(:invalid_attributes) { 
+    FactoryGirl.attributes_for(:address, phone: 'invalid').stringify_keys}
+  let(:customer) { 
+    FactoryGirl.create :customer, 
+    billing_address: nil, 
+    shipping_address: nil }
 
-  # before do
-  #   @request.env["devise.mapping"] = Devise.mappings[:customer]
-  #   sign_in customer
-  # end
+  before do
+    @request.env["devise.mapping"] = Devise.mappings[:customer]
+    sign_in customer
+    request.env["HTTP_REFERER"] = root_path
+  end
 
-  # let(:valid_attributes) {
-  #   skip("Add a hash of attributes valid for your model")
-  # }
+  describe "POST #create" do
+    context "with valid params" do  
+      subject { post :create, { address: valid_attributes } }
 
-  # let(:invalid_attributes) {
-  #   skip("Add a hash of attributes invalid for your model")
-  # }
+      it_behaves_like "customer authentication"
+      it_behaves_like "load and authorize resource"
+      
 
-  # # This should return the minimal set of values that should be in the session
-  # # in order to pass any filters (e.g. authentication) defined in
-  # # AddressesController. Be sure to keep this updated too.
-  # let(:valid_session) { {} }
+      it "creates a new Address" do
+        expect { subject }.to change(Address, :count).by(1)
+      end
 
-  # shared_examples "customer authentication" do
-  #   it "receives authenticate_customer!" do
-  #     expect(controller).to receive(:authenticate_customer!)
-  #   end
-  # end
+      it "assigns a newly created address as @address" do
+        subject
+        expect(assigns(:address)).to be_a(Address)
+        expect(assigns(:address)).to be_persisted
+      end
 
-  # describe "POST #create" do
-  #   context "with valid params" do
-  #     it "creates a new Address" do
-  #       expect {
-  #         post :create, {:address => valid_attributes}, valid_session
-  #       }.to change(Address, :count).by(1)
-  #     end
+      it "redirects to current customer settings editing page" do
+        subject
+        expect(response).to redirect_to(
+          edit_customer_registration_path(customer))
+        expect(flash[:notice]).to eq 'Address was successfully created.'
+      end
+    end
 
-  #     it "assigns a newly created address as @address" do
-  #       post :create, {:address => valid_attributes}, valid_session
-  #       expect(assigns(:address)).to be_a(Address)
-  #       expect(assigns(:address)).to be_persisted
-  #     end
+    context "with invalid params" do
+      subject { post :create, { address: invalid_attributes } }
 
-  #     it "redirects to the created address" do
-  #       post :create, {:address => valid_attributes}, valid_session
-  #       expect(response).to redirect_to(Address.last)
-  #     end
-  #   end
+      it_behaves_like "customer authentication"
+      it_behaves_like "load and authorize resource"
 
-  #   context "with invalid params" do
-  #     it "assigns a newly created but unsaved address as @address" do
-  #       post :create, {:address => invalid_attributes}, valid_session
-  #       expect(assigns(:address)).to be_a_new(Address)
-  #     end
+      it "assigns a newly created but unsaved address as @address" do
+        subject
+        expect(assigns(:address)).to be_a_new(Address)
+      end
 
-  #     it "re-renders the 'new' template" do
-  #       post :create, {:address => invalid_attributes}, valid_session
-  #       expect(response).to render_template("new")
-  #     end
-  #   end
-  # end
+      it "redirects to :back" do
+        subject
+        expect(response).to redirect_to request.env["HTTP_REFERER"]
+      end
+    end
+  end
 
-  # describe "PUT #update" do
-  #   context "with valid params" do
-  #     let(:new_attributes) {
-  #       skip("Add a hash of attributes valid for your model")
-  #     }
+  describe "PUT #update" do
+    let(:address) { address = FactoryGirl.create :address }
+    
+    before do
+      allow(Address).to receive(:find).and_return address
+      customer.billing_address = address
+    end
 
-  #     it "updates the requested address" do
-  #       address = Address.create! valid_attributes
-  #       put :update, {:id => address.to_param, :address => new_attributes}, valid_session
-  #       address.reload
-  #       skip("Add assertions for updated state")
-  #     end
+    context "with valid params" do  
+      subject { put :update, {id: address.to_param, address: valid_attributes} }
 
-  #     it "assigns the requested address as @address" do
-  #       address = Address.create! valid_attributes
-  #       put :update, {:id => address.to_param, :address => valid_attributes}, valid_session
-  #       expect(assigns(:address)).to eq(address)
-  #     end
+      it_behaves_like "customer authentication"
+      it_behaves_like "load and authorize resource"
+      
+      it "receives :update on @address" do
+        expect(Address).to receive(:find).and_return(address)
+        subject
+      end
 
-  #     it "redirects to the address" do
-  #       address = Address.create! valid_attributes
-  #       put :update, {:id => address.to_param, :address => valid_attributes}, valid_session
-  #       expect(response).to redirect_to(address)
-  #     end
-  #   end
+      it "updates the requested address" do
+        subject
+        expect(address.attributes).to include valid_attributes
+      end
 
-  #   context "with invalid params" do
-  #     it "assigns the address as @address" do
-  #       address = Address.create! valid_attributes
-  #       put :update, {:id => address.to_param, :address => invalid_attributes}, valid_session
-  #       expect(assigns(:address)).to eq(address)
-  #     end
+      it "assigns the requested address as @address" do
+        subject
+        expect(assigns(:address)).to eq(address)
+      end
 
-  #     it "re-renders the 'edit' template" do
-  #       address = Address.create! valid_attributes
-  #       put :update, {:id => address.to_param, :address => invalid_attributes}, valid_session
-  #       expect(response).to render_template("edit")
-  #     end
-  #   end
-  # end
+      it "redirects to current customer settings editing page" do
+        subject
+        expect(response).to redirect_to(
+          edit_customer_registration_path(customer))
+        expect(flash[:notice]).to eq 'Address was successfully updated.'
+      end
+    end
+
+    context "with invalid params" do
+      subject { put :update, {id: address.to_param, address: invalid_attributes} }
+
+      it_behaves_like "customer authentication"
+      it_behaves_like "load and authorize resource"
+
+      it "assigns the address as @address" do
+        subject
+        expect(assigns(:address)).to eq(address)
+      end
+
+      it "redirects to :back" do
+        subject
+        expect(response).to redirect_to request.env["HTTP_REFERER"]
+      end
+    end
+  end
 end
