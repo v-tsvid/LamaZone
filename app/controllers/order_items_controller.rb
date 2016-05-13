@@ -98,7 +98,7 @@ class OrderItemsController < ApplicationController
     end
 
     def current_order_items_from_params
-      params[:order_items_attrs].map do |item|
+      order_items_params[:order_items_attrs].map do |item|
         OrderItem.create(book_id:  item[:book_id], 
                          quantity: item[:quantity], 
                          order:    current_order)
@@ -106,8 +106,12 @@ class OrderItemsController < ApplicationController
     end
 
     def order_items_from_params
-      params[:order_items_attrs].map do |item|
+      order_items_params.map do |item|
         OrderItem.new(book_id: item[:book_id], quantity: item[:quantity])
       end
+    end
+
+    def order_items_params
+      params.permit(order_items_attrs: [:book_id, :quantity])
     end
 end
