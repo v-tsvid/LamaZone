@@ -13,7 +13,7 @@ class Order < ActiveRecord::Base
   belongs_to :billing_address, :class_name => 'Address'
   belongs_to :shipping_address, :class_name => 'Address'
   belongs_to :coupon
-  has_many :order_items
+  has_many :order_items, dependent: :delete_all
 
   aasm column: 'state', whiny_transitions: false do 
     state :in_progress, initial: true

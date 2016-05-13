@@ -11,8 +11,8 @@ class Customer < ActiveRecord::Base
   validates :email, format: { with: VALID_EMAIL_REGEX }, 
                     uniqueness: { case_sensitive: false }
 
-  has_many :orders
-  has_many :ratings
+  has_many :orders, dependent: :destroy
+  has_many :ratings, dependent: :destroy
 
   has_one :billing_address, class_name: 'Address', foreign_key: 'billing_address_for_id'
   has_one :shipping_address, class_name: 'Address', foreign_key: 'shipping_address_for_id'

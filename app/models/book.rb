@@ -8,7 +8,7 @@ class Book < ActiveRecord::Base
 
   belongs_to :author
   has_and_belongs_to_many :categories #, join_table: :books_categories
-  has_many :ratings
+  has_many :ratings, dependent: :delete_all
 
   mount_uploader :images, BookImageUploader
   # attr_accessible :asset, :asset_cache, :remove_asset
