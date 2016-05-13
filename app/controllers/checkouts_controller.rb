@@ -98,7 +98,7 @@ class CheckoutsController < ApplicationController
     end
 
     def init_address(address)
-      if current_customer.respond_to? address
+      if current_customer.public_send(address) 
         attrs = current_customer.public_send(address).attributes
       else
         attrs = nil

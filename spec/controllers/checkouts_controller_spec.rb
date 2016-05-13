@@ -470,16 +470,16 @@ RSpec.describe CheckoutsController, type: :controller do
       end
     end
 
-    it "receives :respond_to? with address on current_customer" do
-      expect(customer).to receive(:respond_to?).with(address_sym)
+    it "receives :public_send with address on current_customer" do
+      expect(customer).to receive(:public_send).with(address_sym)
       controller.send(:init_address, address_sym)
     end
     
-    context "if current_customer responds to address" do
+    context "if current_customer has address" do
       let(:attrs) { customer.public_send(address_sym).attributes }
       before do
-        allow(customer).to receive(:respond_to?).with(address_sym).
-          and_return true
+        allow(customer).to receive(:public_send).with(address_sym).
+          and_return address
       end
       
       it_behaves_like "method branch", "current_customer address"
@@ -488,7 +488,7 @@ RSpec.describe CheckoutsController, type: :controller do
     context "if current_customer doesn't respond to address" do
       let(:attrs) { nil }
       before do
-        allow(customer).to receive(:respond_to?).with(address_sym).
+        allow(customer).to receive(:public_send).with(address_sym).
           and_return false
       end
       
