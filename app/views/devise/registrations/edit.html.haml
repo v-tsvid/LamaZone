@@ -6,23 +6,23 @@
   .col-md-3.col-md-offset-2
     %h4 BILLING ADDRESS
     .billing_address_form
-      - if @billing_address
+      - if @billing_address.persisted?
         = form_for(@billing_address, html: { method: :put }) do |bil_addr_f|
-          = render 'form', f: bil_addr_f, kountry: @billing_address.try(:country_id)
+          = render 'form', f: bil_addr_f, kountry: @billing_address.try(:country_id), attrs: flash['attrs']
       - else
         = form_for(@billing_address, html: { method: :post }) do |bil_addr_f|
-          = render 'form', f: bil_addr_f, kountry: @billing_address.try(:country_id)
+          = render 'form', f: bil_addr_f, kountry: @billing_address.try(:country_id), attrs: flash['attrs']
     
 
   .col-md-3.col-md-offset-1
     .shipping_address_form
       %h4 SHIPPING ADDRESS
-      - if @shipping_address
+      - if @shipping_address.persisted?
         = form_for(@shipping_address, html: { method: :put }) do |ship_addr_f|
-          = render 'form', f: ship_addr_f, kountry: @shipping_address.try(:country_id)
+          = render 'form', f: ship_addr_f, kountry: @shipping_address.try(:country_id), attrs: flash['attrs']
       - else
         = form_for(@shipping_address, html: { method: :post }) do |ship_addr_f|
-          = render 'form', f: ship_addr_f, kountry: @shipping_address.try(:country_id)
+          = render 'form', f: ship_addr_f, kountry: @shipping_address.try(:country_id), attrs: flash['attrs']
 
 
 .row-fluid

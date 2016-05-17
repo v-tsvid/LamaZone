@@ -18,7 +18,7 @@ Rails.application.routes.draw do
   post   'order_items/update_cart'
   get    'order_items/index', path: 'cart'
 
-  resources :addresses, only: [:create, :update]
+  resources :addresses
   resources :authors, only: :show
   resources :books, only: [:index, :show] do
     resources :ratings, shallow: true, only: [:new, :create]
@@ -30,5 +30,5 @@ Rails.application.routes.draw do
   resources :orders, only: [:index, :show]
 
 
-  match "*path", to: "application#routing_error", via: :all
+  # match "*path", to: "application#routing_error", via: :all
 end

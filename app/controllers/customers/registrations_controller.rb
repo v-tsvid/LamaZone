@@ -52,20 +52,25 @@ before_filter :configure_account_update_params, only: [:update]
 
   # If you have extra params to permit, append them to the sanitizer.
   def params_to_permit
-    [:firstname,
-     :lastname,
-     :email, 
-     :password, 
-     :password_confirmation, 
-     :current_password, 
-     address: [:firstname, 
+    address = [:firstname, 
                :lastname, 
                :phone, 
                :address1, 
                :address2, 
                :city, 
                :zipcode, 
-               :country_id]]
+               :country_id,
+               :billing_address_for_id,
+               :shipping_address_for_id]
+
+    [:firstname,
+     :lastname,
+     :email, 
+     :password, 
+     :password_confirmation, 
+     :current_password, 
+     billing_address: address,
+     shipping_address: address]
   end
 
   def configure_sign_up_params
@@ -88,14 +93,4 @@ before_filter :configure_account_update_params, only: [:update]
       super
     end
   end
-
-  # The path used after sign up.
-  # def after_sign_up_path_for(resource)
-  #   super(resource)
-  # end
-
-  # The path used after sign up for inactive accounts.
-  # def after_inactive_sign_up_path_for(resource)
-  #   super(resource)
-  # end
 end

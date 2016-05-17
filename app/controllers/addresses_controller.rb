@@ -11,7 +11,9 @@ class AddressesController < ApplicationController
           notice: 'Address was successfully created.' }
         format.json { render :show, status: :created, location: @address }
       else
-        format.html { redirect_to :back, {flash: { errors: @address.errors }} }
+        format.html { 
+          redirect_to :back, {flash: { 
+          alert: @address.errors.full_messages.join('. ') }} }
         format.json { render json: @address.errors, status: :unprocessable_entity }
       end
     end
