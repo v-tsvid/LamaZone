@@ -30,5 +30,5 @@ Rails.application.routes.draw do
   resources :orders, only: [:index, :show]
 
 
-  # match "*path", to: "application#routing_error", via: :all
+  match "*path", to: "application#routing_error", via: :all
 end

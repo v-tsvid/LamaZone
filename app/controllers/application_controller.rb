@@ -20,9 +20,9 @@ class ApplicationController < ActionController::Base
                 :cool_date,
                 :flash_class
 
-  # rescue_from ActionController::RoutingError do
-  #   redirect_to root_path, alert: "There's no page you tried to visit"
-  # end
+  rescue_from ActionController::RoutingError do
+    redirect_to root_path, alert: "There's no page you tried to visit"
+  end
 
   rescue_from CanCan::AccessDenied do |exception|
     respond_to do |format|
@@ -31,9 +31,9 @@ class ApplicationController < ActionController::Base
     end
   end
 
-  # def routing_error
-  #   raise ActionController::RoutingError.new(params[:path])
-  # end
+  def routing_error
+    raise ActionController::RoutingError.new(params[:path])
+  end
 
   def set_locale
     I18n.locale = params[:locale] || session[:omniauth_login_locale] || I18n.default_locale
