@@ -74,6 +74,15 @@ class Checkout < Reform::Form
     end
   end
 
+  def init_addresses
+    self.model.billing_address ||= self.model.customer.billing_address
+    self.model.shipping_address ||= self.model.customer.shipping_address
+  end
+
+  def init_credit_card
+    self.model.credit_card ||= CreditCard.new
+  end
+
   private
 
     def next_step_confirm_or_complete?

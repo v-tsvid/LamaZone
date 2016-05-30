@@ -23,9 +23,9 @@ module CookiesHandling
     def write_to_cookies(items)
       cookies[:order_items] = ''
       items.each do |item|
-        cookies[:order_items] = { value: [cookies[:order_items],
-                                          item[:book_id],
-                                          item[:quantity]].join(' '),
+        cookies[:order_items] = { value:   [cookies[:order_items],
+                                            item[:book_id],
+                                            item[:quantity]].join(' '),
                                   expires: 30.days.from_now }
       end
     end
