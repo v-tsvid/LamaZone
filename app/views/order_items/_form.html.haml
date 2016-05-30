@@ -1,0 +1,28 @@
+%table.table
+  %thead
+    %tr.active
+      %th{colspan: '2'} BOOK
+      %th PRICE
+      %th QTY
+      %th TOTAL
+      %th
+    
+  %tbody  
+    = render order.order_items
+    %tr
+      %td{colspan: '2'}
+      %td{colspan: '2'}
+        .cart-left-col
+          = "SUBTOTAL: "
+      %td.cart-right-col
+        = cool_price(order.send(:update_subtotal))
+
+.row
+  .col-md-6
+    = link_to 'CONTINUE SHOPPING', books_path, class: 'btn btn-warning'
+    - if current_order
+      = link_to 'EMPTY CART', order, method: :delete, data: { confirm: "Are you sure?" }, class: 'btn btn-danger'
+    - else
+      = link_to 'EMPTY CART', url_for(controller: 'orders', action: 'destroy_cookies'),  method: :delete, data: { confirm: "Are you sure?" },class: 'btn btn-danger'
+  .col-md-2.col-md-offset-4.col-righted
+    = submit_tag 'UPDATE', class: 'btn btn-warning'

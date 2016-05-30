@@ -3,33 +3,13 @@
     %h4 SHOPPING CART
 .row-fluid
   .col-md-8.col-md-offset-2
-    = form_tag controller: 'order_items', action: 'update_cart', method: :post do 
+    - if current_customer
+      = form_tag @order, method: :put do
+        = render partial: 'form', locals: {order: @order}
+    - else
+      = form_tag controller: 'orders', action: 'update_cookies', method: :post do
+        = render partial: 'form', locals: {order: @order}
 
-      %table.table
-        %thead
-          %tr.active
-            %th{colspan: '2'} BOOK
-            %th PRICE
-            %th QTY
-            %th TOTAL
-            %th
-          
-        %tbody  
-          = render @order.order_items
-          %tr
-            %td{colspan: '2'}
-            %td{colspan: '2'}
-              .cart-left-col
-                = "SUBTOTAL: "
-            %td.cart-right-col
-              = cool_price(@order.send(:update_subtotal))
-
-      .row
-        .col-md-6
-          = link_to 'CONTINUE SHOPPING', books_path, class: 'btn btn-warning'
-          = link_to 'EMPTY CART', order_items_empty_cart_path, method: :delete, data: { confirm: "Are you sure?" }, class: 'btn btn-danger'
-        .col-md-2.col-md-offset-4.col-righted
-          = submit_tag 'UPDATE', class: 'btn btn-warning'
 
 .row-fluid
   .col-md-4.col-md-offset-6.col-righted

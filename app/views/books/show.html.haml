@@ -11,7 +11,7 @@
 
   .col-md-7
     %p
-      = form_tag(controller: 'order_items', action: 'add_to_cart', method: :post) do
+      = form_tag(controller: 'order_items', action: 'create', method: :post) do
         .form-inline
           .col-md-4
             %h4= cool_price @book.price

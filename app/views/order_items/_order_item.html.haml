@@ -8,4 +8,7 @@
     = hidden_field_tag "order_items_attrs[][book_id]", order_item.book.id
   %td= label_tag "order_items_attrs[][price]", cool_price(order_item.price)
   %td
-    = link_to 'X', url_for(controller: 'order_items', action: 'remove_from_cart', book_id: order_item.book.id),  method: :post, class: 'btn btn-danger'
+    - if current_order
+      = link_to 'X', order_item,  method: :delete, class: 'btn btn-danger'
+    - else
+      = link_to 'X', url_for(controller: 'order_items', action: 'delete_from_cookies', book_id: order_item.book.id),  method: :delete, class: 'btn btn-danger'

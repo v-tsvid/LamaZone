@@ -11,6 +11,7 @@ class Ability
       can :manage, CreditCard, customer_id: customer.id
       can [:read, :update], Customer, id: customer.id
       can [:create, :read], Order, customer_id: customer.id
+      can [:update, :destroy], Order, customer_id: customer.id, state: 'in_progress'
       can :manage, OrderItem, order: { customer_id: customer.id }  
       can [:create, :destroy], Rating, customer_id: customer.id
       can :read, Rating
@@ -21,5 +22,7 @@ class Ability
     can :read, Book
     can :read, Category
     can :read, Rating
+    can :manage, Order, customer_id: nil
+    can :manage, OrderItem, order_id: nil
   end
 end
