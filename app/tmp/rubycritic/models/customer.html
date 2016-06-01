@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>RubyCritic</title>
+    <link href="../assets/stylesheets/application.css" media="screen, projection, print" rel="stylesheet" type="text/css">
+    <link href="../assets/stylesheets/prettify.custom_theme.css" media="screen, projection, print" rel="stylesheet" type="text/css">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+  </head>
+  <body>
+    <header class="project-header group">
+      <div class="container">
+        <h1 class="logo"><a href="../overview.html" class="logo-link">RubyCritic</a></h1>
+        <nav class="project-nav">
+          <a href="../overview.html" class="project-nav-item">Overview</a>
+          <a href="../code_index.html" class="project-nav-item">Code</a>
+          <a href="../smells_index.html" class="project-nav-item">Smells</a>
+        </nav>
+      </div>
+    </header>
+    <div class="container">
+      <div class="file-header group rated">
+  <span class="rating rating-a circled-text circle">
+    A
+  </span>
+  <h2 class="file-name">Customer</h2>
+
+  <span class="file-committed-at">
+    
+      Updated <time class='js-timeago' datetime='2016-05-13 17:50:32 +0300'>2016-05-13 17:50:32 +0300</time>
+    
+  </span>
+
+  <div class="file-stats group">
+    <div class="file-stat">
+      24 complexity
+    </div>
+    <div class="file-stat">
+      6.0 complexity per method
+    </div>
+    <div class="file-stat">
+      17 churn
+    </div>
+    <div class="file-stat">
+      4 methods
+    </div>
+    <div class="file-stat">
+      0 duplication
+    </div>
+  </div>
+
+  
+    <button id="js-toggle-smells" class="smells-toggle-button button">Toggle Smells</button>
+  
+</div>
+
+<code class="prettyprint linenums lang-ruby file-code js-file-code">class Customer &lt; ActiveRecord::Base<ul class="nocode smells js-smells">  <li class="smell ">    <span class="description">      (<a href="https://github.com/troessner/reek/blob/master/docs/Irresponsible-Module.md" target="_blank">IrresponsibleModule</a>)      Customer has no descriptive comment          </span>  </li></ul>
+  include Human
+
+  devise :database_authenticatable, :registerable,
+         :recoverable, :rememberable, :trackable, :validatable,          
+         :omniauthable, :omniauth_providers =&gt; [:facebook]
+         
+  VALID_EMAIL_REGEX = /\A[\w+\-.]+@[a-z\d\-]+(\.[a-z]+)*\.[a-z]+\z/i
+
+  validates :email, presence: true
+  validates :email, format: { with: VALID_EMAIL_REGEX }, 
+                    uniqueness: { case_sensitive: false }
+
+  has_many :orders, dependent: :destroy
+  has_many :ratings, dependent: :destroy
+
+  has_one :billing_address, class_name: &#39;Address&#39;, foreign_key: &#39;billing_address_for_id&#39;
+  has_one :shipping_address, class_name: &#39;Address&#39;, foreign_key: &#39;shipping_address_for_id&#39;
+
+  before_save :downcase_email
+
+  rails_admin do
+    object_label_method do
+      :custom_label_method
+    end
+  end
+
+  def current_order_of_customer
+    Order.find_by(customer: self, state: &#39;in_progress&#39;) || nil
+  end
+
+  private
+
+  def custom_label_method
+    &quot;#{self.lastname} #{self.firstname}&quot;
+  end
+
+  def downcase_email
+    self.email.downcase!
+  end
+
+  def self.from_omniauth(auth)<ul class="nocode smells js-smells">  <li class="smell ">    <span class="description">      (<a href="https://github.com/troessner/reek/blob/master/docs/Too-Many-Statements.md" target="_blank">TooManyStatements</a>)      Customer#self.from_omniauth has approx 6 statements          </span>  </li></ul>
+    where(provider: auth.provider, uid: auth.uid).first_or_create do |customer|
+      customer.email = auth.info.email<ul class="nocode smells js-smells">  <li class="smell ">    <span class="description">      (<a href="https://github.com/troessner/reek/blob/master/docs/Duplicate-Method-Call.md" target="_blank">DuplicateMethodCall</a>)      Customer#self.from_omniauth calls auth.info 3 times                        <a href="customer.html#L44" class="js-smell-location">0</a>                  <a href="customer.html#L47" class="js-smell-location">1</a>                  <a href="customer.html#L48" class="js-smell-location">2</a>                  </span>  </li></ul>
+      customer.password = Devise.friendly_token[0,20]
+      customer.password_confirmation = customer.password
+      customer.firstname = auth.info.first_name<ul class="nocode smells js-smells">  <li class="smell ">    <span class="description">      (<a href="https://github.com/troessner/reek/blob/master/docs/Duplicate-Method-Call.md" target="_blank">DuplicateMethodCall</a>)      Customer#self.from_omniauth calls auth.info 3 times                        <a href="customer.html#L44" class="js-smell-location">0</a>                  <a href="customer.html#L47" class="js-smell-location">1</a>                  <a href="customer.html#L48" class="js-smell-location">2</a>                  </span>  </li></ul>
+      customer.lastname = auth.info.last_name   <ul class="nocode smells js-smells">  <li class="smell ">    <span class="description">      (<a href="https://github.com/troessner/reek/blob/master/docs/Duplicate-Method-Call.md" target="_blank">DuplicateMethodCall</a>)      Customer#self.from_omniauth calls auth.info 3 times                        <a href="customer.html#L44" class="js-smell-location">0</a>                  <a href="customer.html#L47" class="js-smell-location">1</a>                  <a href="customer.html#L48" class="js-smell-location">2</a>                  </span>  </li></ul>
+    end
+  end
+end
+</code>
+
+    </div>
+    <script src='../assets/javascripts/jquery-2.1.0.js'></script>
+    <script src='../assets/javascripts/jquery.tablesorter.js'></script>
+    <script src='../assets/javascripts/jquery.floatThead-v1.2.7.js'></script>
+    <script src='../assets/javascripts/jquery.timeago-v1.4.1.js'></script>
+    <script src='../assets/javascripts/highcharts.src-4.0.1.js'></script>
+    <script src='../assets/javascripts/jquery.scrollTo-1.4.11.js'></script>
+    <script src='../assets/javascripts/prettify-4-Mar-2013.js'></script>
+    <script src='../assets/javascripts/application.js'></script>
+  </body>
+</html>

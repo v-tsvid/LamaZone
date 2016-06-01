@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>RubyCritic</title>
+    <link href="../assets/stylesheets/application.css" media="screen, projection, print" rel="stylesheet" type="text/css">
+    <link href="../assets/stylesheets/prettify.custom_theme.css" media="screen, projection, print" rel="stylesheet" type="text/css">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+  </head>
+  <body>
+    <header class="project-header group">
+      <div class="container">
+        <h1 class="logo"><a href="../overview.html" class="logo-link">RubyCritic</a></h1>
+        <nav class="project-nav">
+          <a href="../overview.html" class="project-nav-item">Overview</a>
+          <a href="../code_index.html" class="project-nav-item">Code</a>
+          <a href="../smells_index.html" class="project-nav-item">Smells</a>
+        </nav>
+      </div>
+    </header>
+    <div class="container">
+      <div class="file-header group rated">
+  <span class="rating rating-a circled-text circle">
+    A
+  </span>
+  <h2 class="file-name">OrderItem</h2>
+
+  <span class="file-committed-at">
+    
+      Updated <time class='js-timeago' datetime='2016-04-25 17:57:55 +0300'>2016-04-25 17:57:55 +0300</time>
+    
+  </span>
+
+  <div class="file-stats group">
+    <div class="file-stat">
+      45 complexity
+    </div>
+    <div class="file-stat">
+      11.3 complexity per method
+    </div>
+    <div class="file-stat">
+      9 churn
+    </div>
+    <div class="file-stat">
+      4 methods
+    </div>
+    <div class="file-stat">
+      0 duplication
+    </div>
+  </div>
+
+  
+    <button id="js-toggle-smells" class="smells-toggle-button button">Toggle Smells</button>
+  
+</div>
+
+<code class="prettyprint linenums lang-ruby file-code js-file-code">class OrderItem &lt; ActiveRecord::Base<ul class="nocode smells js-smells">  <li class="smell ">    <span class="description">      (<a href="https://github.com/troessner/reek/blob/master/docs/Irresponsible-Module.md" target="_blank">IrresponsibleModule</a>)      OrderItem has no descriptive comment          </span>  </li></ul>
+  before_validation :update_price
+
+  validates :price, :quantity, presence: true
+  validates :price, numericality: { greater_than: 0 }
+  validates :quantity, numericality: { only_integer: true,
+                                       greater_than_or_equal_to: 0 }
+
+  belongs_to :book
+  belongs_to :order
+
+  rails_admin do
+    object_label_method do
+      :custom_label_method
+    end
+  end
+
+  class &lt;&lt; self
+    def compact_order_items(order_items)<ul class="nocode smells js-smells">  <li class="smell ">    <span class="description">      (<a href="http://docs.seattlerb.org/flog/" target="_blank">HighComplexity</a>)      OrderItem::compact_order_items has a flog score of 26          </span>  </li>  <li class="smell ">    <span class="description">      (<a href="https://github.com/troessner/reek/blob/master/docs/Too-Many-Statements.md" target="_blank">TooManyStatements</a>)      OrderItem#compact_order_items has approx 7 statements          </span>  </li></ul>
+      order_items = order_items.group_by{|h| h.book_id}.values.map do |a| <ul class="nocode smells js-smells">  <li class="smell ">    <span class="description">      (<a href="https://github.com/troessner/reek/blob/master/docs/Uncommunicative-Variable-Name.md" target="_blank">UncommunicativeVariableName</a>)      OrderItem#compact_order_items has the variable name 'a'          </span>  </li>  <li class="smell ">    <span class="description">      (<a href="https://github.com/troessner/reek/blob/master/docs/Uncommunicative-Variable-Name.md" target="_blank">UncommunicativeVariableName</a>)      OrderItem#compact_order_items has the variable name 'h'                        <a href="order_item.html#L20" class="js-smell-location">0</a>                  <a href="order_item.html#L22" class="js-smell-location">1</a>                  </span>  </li></ul>
+        OrderItem.new(book_id: a.first.book_id, 
+                      quantity: a.inject(0){|sum,h| sum + h.quantity})<ul class="nocode smells js-smells">  <li class="smell ">    <span class="description">      (<a href="https://github.com/troessner/reek/blob/master/docs/Nested-Iterators.md" target="_blank">NestedIterators</a>)      OrderItem#compact_order_items contains iterators nested 2 deep          </span>  </li>  <li class="smell ">    <span class="description">      (<a href="https://github.com/troessner/reek/blob/master/docs/Uncommunicative-Variable-Name.md" target="_blank">UncommunicativeVariableName</a>)      OrderItem#compact_order_items has the variable name 'h'                        <a href="order_item.html#L20" class="js-smell-location">0</a>                  <a href="order_item.html#L22" class="js-smell-location">1</a>                  </span>  </li></ul>
+      end
+      
+      order_items.each do |item| 
+        item.price = item.book.price
+      end
+
+      order_items
+    end
+
+    def compact_if_not_compacted(order_items)
+      if order_items != self.compact_order_items(order_items)
+        temp_items = order_items
+        order_items.each { |item| item.destroy }
+        order_items &lt;&lt; self.compact_order_items(temp_items)
+      end
+    end
+  end
+
+  private
+
+    def update_price
+      self.price = self.book.price * self.quantity
+    end
+
+    def custom_label_method
+      &quot;#{Book.find(self.book_id).title}&quot;
+    end
+end
+</code>
+
+    </div>
+    <script src='../assets/javascripts/jquery-2.1.0.js'></script>
+    <script src='../assets/javascripts/jquery.tablesorter.js'></script>
+    <script src='../assets/javascripts/jquery.floatThead-v1.2.7.js'></script>
+    <script src='../assets/javascripts/jquery.timeago-v1.4.1.js'></script>
+    <script src='../assets/javascripts/highcharts.src-4.0.1.js'></script>
+    <script src='../assets/javascripts/jquery.scrollTo-1.4.11.js'></script>
+    <script src='../assets/javascripts/prettify-4-Mar-2013.js'></script>
+    <script src='../assets/javascripts/application.js'></script>
+  </body>
+</html>

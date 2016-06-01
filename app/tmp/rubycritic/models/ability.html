@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>RubyCritic</title>
+    <link href="../assets/stylesheets/application.css" media="screen, projection, print" rel="stylesheet" type="text/css">
+    <link href="../assets/stylesheets/prettify.custom_theme.css" media="screen, projection, print" rel="stylesheet" type="text/css">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+  </head>
+  <body>
+    <header class="project-header group">
+      <div class="container">
+        <h1 class="logo"><a href="../overview.html" class="logo-link">RubyCritic</a></h1>
+        <nav class="project-nav">
+          <a href="../overview.html" class="project-nav-item">Overview</a>
+          <a href="../code_index.html" class="project-nav-item">Code</a>
+          <a href="../smells_index.html" class="project-nav-item">Smells</a>
+        </nav>
+      </div>
+    </header>
+    <div class="container">
+      <div class="file-header group rated">
+  <span class="rating rating-a circled-text circle">
+    A
+  </span>
+  <h2 class="file-name">Ability</h2>
+
+  <span class="file-committed-at">
+    
+      Updated <time class='js-timeago' datetime='2016-05-30 17:30:46 +0300'>2016-05-30 17:30:46 +0300</time>
+    
+  </span>
+
+  <div class="file-stats group">
+    <div class="file-stat">
+      33 complexity
+    </div>
+    <div class="file-stat">
+      33.0 complexity per method
+    </div>
+    <div class="file-stat">
+      6 churn
+    </div>
+    <div class="file-stat">
+      1 methods
+    </div>
+    <div class="file-stat">
+      0 duplication
+    </div>
+  </div>
+
+  
+    <button id="js-toggle-smells" class="smells-toggle-button button">Toggle Smells</button>
+  
+</div>
+
+<code class="prettyprint linenums lang-ruby file-code js-file-code">class Ability<ul class="nocode smells js-smells">  <li class="smell ">    <span class="description">      (<a href="https://github.com/troessner/reek/blob/master/docs/Irresponsible-Module.md" target="_blank">IrresponsibleModule</a>)      Ability has no descriptive comment          </span>  </li></ul>
+  include CanCan::Ability
+
+  def initialize(customer)<ul class="nocode smells js-smells">  <li class="smell ">    <span class="description">      (<a href="http://docs.seattlerb.org/flog/" target="_blank">HighComplexity</a>)      Ability#initialize has a flog score of 33          </span>  </li></ul>
+    customer ||= Customer.new
+    
+    if customer.persisted?
+      can :manage, Address, id: customer.shipping_address.try(:id)
+      can :manage, Address, id: customer.billing_address.try(:id)
+      can :read, Country
+      can :manage, CreditCard, customer_id: customer.id<ul class="nocode smells js-smells">  <li class="smell ">    <span class="description">      (<a href="https://github.com/troessner/reek/blob/master/docs/Duplicate-Method-Call.md" target="_blank">DuplicateMethodCall</a>)      Ability#initialize calls customer.id 6 times                        <a href="ability.html#L11" class="js-smell-location">0</a>                  <a href="ability.html#L12" class="js-smell-location">1</a>                  <a href="ability.html#L13" class="js-smell-location">2</a>                  <a href="ability.html#L14" class="js-smell-location">3</a>                  <a href="ability.html#L15" class="js-smell-location">4</a>                  <a href="ability.html#L16" class="js-smell-location">5</a>                  </span>  </li></ul>
+      can [:read, :update], Customer, id: customer.id<ul class="nocode smells js-smells">  <li class="smell ">    <span class="description">      (<a href="https://github.com/troessner/reek/blob/master/docs/Duplicate-Method-Call.md" target="_blank">DuplicateMethodCall</a>)      Ability#initialize calls customer.id 6 times                        <a href="ability.html#L11" class="js-smell-location">0</a>                  <a href="ability.html#L12" class="js-smell-location">1</a>                  <a href="ability.html#L13" class="js-smell-location">2</a>                  <a href="ability.html#L14" class="js-smell-location">3</a>                  <a href="ability.html#L15" class="js-smell-location">4</a>                  <a href="ability.html#L16" class="js-smell-location">5</a>                  </span>  </li></ul>
+      can [:create, :read], Order, customer_id: customer.id<ul class="nocode smells js-smells">  <li class="smell ">    <span class="description">      (<a href="https://github.com/troessner/reek/blob/master/docs/Duplicate-Method-Call.md" target="_blank">DuplicateMethodCall</a>)      Ability#initialize calls customer.id 6 times                        <a href="ability.html#L11" class="js-smell-location">0</a>                  <a href="ability.html#L12" class="js-smell-location">1</a>                  <a href="ability.html#L13" class="js-smell-location">2</a>                  <a href="ability.html#L14" class="js-smell-location">3</a>                  <a href="ability.html#L15" class="js-smell-location">4</a>                  <a href="ability.html#L16" class="js-smell-location">5</a>                  </span>  </li></ul>
+      can [:update, :destroy], Order, customer_id: customer.id, state: &#39;in_progress&#39;<ul class="nocode smells js-smells">  <li class="smell ">    <span class="description">      (<a href="https://github.com/troessner/reek/blob/master/docs/Duplicate-Method-Call.md" target="_blank">DuplicateMethodCall</a>)      Ability#initialize calls customer.id 6 times                        <a href="ability.html#L11" class="js-smell-location">0</a>                  <a href="ability.html#L12" class="js-smell-location">1</a>                  <a href="ability.html#L13" class="js-smell-location">2</a>                  <a href="ability.html#L14" class="js-smell-location">3</a>                  <a href="ability.html#L15" class="js-smell-location">4</a>                  <a href="ability.html#L16" class="js-smell-location">5</a>                  </span>  </li></ul>
+      can :manage, OrderItem, order: { customer_id: customer.id }  <ul class="nocode smells js-smells">  <li class="smell ">    <span class="description">      (<a href="https://github.com/troessner/reek/blob/master/docs/Duplicate-Method-Call.md" target="_blank">DuplicateMethodCall</a>)      Ability#initialize calls customer.id 6 times                        <a href="ability.html#L11" class="js-smell-location">0</a>                  <a href="ability.html#L12" class="js-smell-location">1</a>                  <a href="ability.html#L13" class="js-smell-location">2</a>                  <a href="ability.html#L14" class="js-smell-location">3</a>                  <a href="ability.html#L15" class="js-smell-location">4</a>                  <a href="ability.html#L16" class="js-smell-location">5</a>                  </span>  </li></ul>
+      can :manage, Rating, customer_id: customer.id<ul class="nocode smells js-smells">  <li class="smell ">    <span class="description">      (<a href="https://github.com/troessner/reek/blob/master/docs/Duplicate-Method-Call.md" target="_blank">DuplicateMethodCall</a>)      Ability#initialize calls customer.id 6 times                        <a href="ability.html#L11" class="js-smell-location">0</a>                  <a href="ability.html#L12" class="js-smell-location">1</a>                  <a href="ability.html#L13" class="js-smell-location">2</a>                  <a href="ability.html#L14" class="js-smell-location">3</a>                  <a href="ability.html#L15" class="js-smell-location">4</a>                  <a href="ability.html#L16" class="js-smell-location">5</a>                  </span>  </li></ul>
+      can :read, Rating
+    end
+
+    can :read, Author
+    can :read, Book
+    can :read, Category
+    
+    can :manage, Order, customer_id: nil
+    can :manage, OrderItem, order_id: nil
+  end
+end
+</code>
+
+    </div>
+    <script src='../assets/javascripts/jquery-2.1.0.js'></script>
+    <script src='../assets/javascripts/jquery.tablesorter.js'></script>
+    <script src='../assets/javascripts/jquery.floatThead-v1.2.7.js'></script>
+    <script src='../assets/javascripts/jquery.timeago-v1.4.1.js'></script>
+    <script src='../assets/javascripts/highcharts.src-4.0.1.js'></script>
+    <script src='../assets/javascripts/jquery.scrollTo-1.4.11.js'></script>
+    <script src='../assets/javascripts/prettify-4-Mar-2013.js'></script>
+    <script src='../assets/javascripts/application.js'></script>
+  </body>
+</html>

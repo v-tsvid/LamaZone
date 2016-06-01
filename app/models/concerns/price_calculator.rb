@@ -13,7 +13,7 @@ module PriceCalculator
       15.00
     when SHIPPING_METHOD_LIST[2]
       10.00
-    when nil
+    else
       0
     end
   end

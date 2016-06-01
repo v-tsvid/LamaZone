@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>RubyCritic</title>
+    <link href="../../assets/stylesheets/application.css" media="screen, projection, print" rel="stylesheet" type="text/css">
+    <link href="../../assets/stylesheets/prettify.custom_theme.css" media="screen, projection, print" rel="stylesheet" type="text/css">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+  </head>
+  <body>
+    <header class="project-header group">
+      <div class="container">
+        <h1 class="logo"><a href="../../overview.html" class="logo-link">RubyCritic</a></h1>
+        <nav class="project-nav">
+          <a href="../../overview.html" class="project-nav-item">Overview</a>
+          <a href="../../code_index.html" class="project-nav-item">Code</a>
+          <a href="../../smells_index.html" class="project-nav-item">Smells</a>
+        </nav>
+      </div>
+    </header>
+    <div class="container">
+      <div class="file-header group rated">
+  <span class="rating rating-a circled-text circle">
+    A
+  </span>
+  <h2 class="file-name">CookiesHandling</h2>
+
+  <span class="file-committed-at">
+    
+      Updated <time class='js-timeago' datetime='2016-05-30 13:12:30 +0300'>2016-05-30 13:12:30 +0300</time>
+    
+  </span>
+
+  <div class="file-stats group">
+    <div class="file-stat">
+      68 complexity
+    </div>
+    <div class="file-stat">
+      11.3 complexity per method
+    </div>
+    <div class="file-stat">
+      2 churn
+    </div>
+    <div class="file-stat">
+      6 methods
+    </div>
+    <div class="file-stat">
+      0 duplication
+    </div>
+  </div>
+
+  
+    <button id="js-toggle-smells" class="smells-toggle-button button">Toggle Smells</button>
+  
+</div>
+
+<code class="prettyprint linenums lang-ruby file-code js-file-code">module CookiesHandling<ul class="nocode smells js-smells">  <li class="smell ">    <span class="description">      (<a href="https://github.com/troessner/reek/blob/master/docs/Irresponsible-Module.md" target="_blank">IrresponsibleModule</a>)      CookiesHandling has no descriptive comment          </span>  </li></ul>
+  extend ActiveSupport::Concern
+
+  private
+    def combine_with_cookies(order_items)<ul class="nocode smells js-smells">  <li class="smell ">    <span class="description">      (<a href="https://github.com/troessner/reek/blob/master/docs/Too-Many-Statements.md" target="_blank">TooManyStatements</a>)      CookiesHandling#combine_with_cookies has approx 6 statements          </span>  </li></ul>
+      temp_items = order_items.map { |item| OrderItem.new(item.attributes) }
+      order_items.destroy_all
+      order_items = OrderItem.compact_order_items(temp_items + read_from_cookies)
+      cookies.delete(&#39;order_items&#39;)
+
+      order_items
+    end
+
+    def interact_with_cookies
+      order_items = OrderItem.compact_order_items(read_from_cookies)
+      yield order_items
+      write_to_cookies(order_items)
+    end
+
+    def push_to_cookies(order_items)
+      order_items &lt;&lt; OrderItem.new(book_id: params[:book_id], 
+                                   quantity: params[:quantity])
+    end
+
+    def pop_from_cookies(order_items)
+      order_items.each do |item|<ul class="nocode smells js-smells">  <li class="smell ">    <span class="description">      (<a href="https://github.com/troessner/reek/blob/master/docs/Feature-Envy.md" target="_blank">FeatureEnvy</a>)      CookiesHandling#pop_from_cookies refers to order_items more than self (maybe move it to another class?)                        <a href="cookies_handling.html#L26" class="js-smell-location">0</a>                  <a href="cookies_handling.html#L27" class="js-smell-location">1</a>                  </span>  </li></ul>
+        order_items.delete(item) if item.book_id.to_s == params[:book_id]<ul class="nocode smells js-smells">  <li class="smell ">    <span class="description">      (<a href="https://github.com/troessner/reek/blob/master/docs/Feature-Envy.md" target="_blank">FeatureEnvy</a>)      CookiesHandling#pop_from_cookies refers to order_items more than self (maybe move it to another class?)                        <a href="cookies_handling.html#L26" class="js-smell-location">0</a>                  <a href="cookies_handling.html#L27" class="js-smell-location">1</a>                  </span>  </li></ul>
+      end
+    end
+
+    def write_to_cookies(items)
+      cookies[:order_items] = &#39;&#39;
+      items.each do |item|
+        cookies[:order_items] = { 
+          value: [
+            cookies[:order_items],
+            item[:book_id],
+            item[:quantity]].join(&#39; &#39;),
+          expires: 30.days.from_now }
+      end
+    end
+
+    def read_from_cookies
+      order_items = Array.new
+      if cookies[:order_items]<ul class="nocode smells js-smells">  <li class="smell ">    <span class="description">      (<a href="https://github.com/troessner/reek/blob/master/docs/Duplicate-Method-Call.md" target="_blank">DuplicateMethodCall</a>)      CookiesHandling#read_from_cookies calls cookies[:order_items] 2 times                        <a href="cookies_handling.html#L45" class="js-smell-location">0</a>                  <a href="cookies_handling.html#L46" class="js-smell-location">1</a>                  </span>  </li></ul>
+        cookies[:order_items].split(&#39; &#39;).<ul class="nocode smells js-smells">  <li class="smell ">    <span class="description">      (<a href="https://github.com/troessner/reek/blob/master/docs/Duplicate-Method-Call.md" target="_blank">DuplicateMethodCall</a>)      CookiesHandling#read_from_cookies calls cookies[:order_items] 2 times                        <a href="cookies_handling.html#L45" class="js-smell-location">0</a>                  <a href="cookies_handling.html#L46" class="js-smell-location">1</a>                  </span>  </li></ul>
+          partition.with_index{ |v, index| index.even? }.transpose.each do |item|<ul class="nocode smells js-smells">  <li class="smell ">    <span class="description">      (<a href="https://github.com/troessner/reek/blob/master/docs/Uncommunicative-Variable-Name.md" target="_blank">UncommunicativeVariableName</a>)      CookiesHandling#read_from_cookies has the variable name 'v'          </span>  </li></ul>
+            order_items &lt;&lt; OrderItem.new(book_id: item[0], quantity: item[1])
+        end
+      end
+      order_items
+    end
+end
+</code>
+
+    </div>
+    <script src='../../assets/javascripts/jquery-2.1.0.js'></script>
+    <script src='../../assets/javascripts/jquery.tablesorter.js'></script>
+    <script src='../../assets/javascripts/jquery.floatThead-v1.2.7.js'></script>
+    <script src='../../assets/javascripts/jquery.timeago-v1.4.1.js'></script>
+    <script src='../../assets/javascripts/highcharts.src-4.0.1.js'></script>
+    <script src='../../assets/javascripts/jquery.scrollTo-1.4.11.js'></script>
+    <script src='../../assets/javascripts/prettify-4-Mar-2013.js'></script>
+    <script src='../../assets/javascripts/application.js'></script>
+  </body>
+</html>

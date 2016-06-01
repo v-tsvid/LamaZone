@@ -69,41 +69,23 @@ class ApplicationController < ActionController::Base
     "%07d" % id
   end
 
-  def compact_order_items(order_items)
-    order_items = order_items.group_by{|h| h.book_id}.values.map do |a| 
-      OrderItem.new(book_id: a.first.book_id, 
-                    quantity: a.inject(0){|sum,h| sum + h.quantity})
-    end
-    
-    order_items.each do |item| 
-      item.price = item.book.price
-    end
-
-    order_items
+  def new_order_from_cookies
+    order = Order.new
+    order.order_items = read_from_cookies
+    order
   end
 
   def cart_subtotal
-    if current_order
-      current_order.send(:update_subtotal)
-    else
-      @order = Order.new
-      @order.order_items = read_from_cookies
-      @order.order_items.each { |item| item.send(:update_price)}
-      @order.send(:update_subtotal)
-    end
+    order = current_order ? current_order : new_order_from_cookies
+    order.order_items.each { |item| item.send(:update_price)}
+    order.send(:update_subtotal)
   end
 
   def cart_total_quantity
-    if current_order
-      current_order.order_items.collect { |item| item.quantity }.sum
-    else
-      @order = Order.new
-      @order.order_items = read_from_cookies
-      @order.order_items.collect { |item| item.quantity }.sum
-    end
+    order = current_order ? current_order : new_order_from_cookies
+    order.order_items.collect { |item| item.quantity }.sum
   end
   
-
   def current_order
     current_customer ? current_customer.current_order_of_customer : nil
   end

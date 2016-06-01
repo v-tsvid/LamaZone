@@ -39,7 +39,7 @@ class CheckoutsController < ApplicationController
       
       render_wizard
     else
-      redirect_if_checkout_is_nil(step)
+      redirect_to root_path, notice: notice_when_checkout_is_nil(step)
     end
   end  
 
@@ -80,7 +80,7 @@ class CheckoutsController < ApplicationController
     end
 
     def redirect_if_wrong_step(next_step, step)
-      if next_step.nil?
+      if !next_step?
         redirect_to(order_items_index_path, 
           notice: "Please checkout first") and return
       elsif next_step_next?(next_step, step)
@@ -100,16 +100,14 @@ class CheckoutsController < ApplicationController
       end 
     end
 
-    def redirect_if_checkout_is_nil(step)
+    def notice_when_checkout_is_nil(step)
       if step == :complete
-        notice = "You have no completed orders"
+        "You have no completed orders"
       elsif step == :confirm
-        notice = "You have no orders to confirm"
+        "You have no orders to confirm"
       else
-        notice = "Please checkout first"
+        "Please checkout first"
       end
-
-      redirect_to root_path, notice: notice
     end
 
     def set_next_step(model, next_step)
@@ -124,7 +122,7 @@ class CheckoutsController < ApplicationController
       prev_index = Checkout::NEXT_STEPS.index(prev_step.to_sym)
       next_index = Checkout::NEXT_STEPS.index(next_step.to_sym)
       
-      if prev_index.nil?
+      if !prev_index?
         true
       elsif prev_index < next_index
         true

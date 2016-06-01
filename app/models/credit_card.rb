@@ -1,6 +1,6 @@
 class CreditCard < ActiveRecord::Base
   belongs_to :customer
-  has_many :orders
+  has_many :orders, dependent: :destroy
 
   rails_admin do
     object_label_method do

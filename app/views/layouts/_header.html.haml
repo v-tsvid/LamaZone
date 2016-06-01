@@ -4,7 +4,7 @@
       %a.navbar-brand{href: root_path}
         = image_tag "dalailama.png", size: "73x62", alt: "LZ" 
       %p.navbar-text 
-        = "#{t :hello}#{current_customer ? ", #{current_customer.firstname}" : nil}! #{t :in_lamazone}"
+        = "#{t :hello}#{current_customer && current_customer.firstname ? ", #{current_customer.firstname}" : nil}! #{t :in_lamazone}"
     .collapse.navbar-collapse#bs-example-navbar-collapse-1
       %ul.nav.navbar-nav
         %li{class: current_page?(root_path) ? "active" : nil}

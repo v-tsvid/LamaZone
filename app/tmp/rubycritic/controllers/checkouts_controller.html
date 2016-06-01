@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>RubyCritic</title>
+    <link href="../assets/stylesheets/application.css" media="screen, projection, print" rel="stylesheet" type="text/css">
+    <link href="../assets/stylesheets/prettify.custom_theme.css" media="screen, projection, print" rel="stylesheet" type="text/css">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+  </head>
+  <body>
+    <header class="project-header group">
+      <div class="container">
+        <h1 class="logo"><a href="../overview.html" class="logo-link">RubyCritic</a></h1>
+        <nav class="project-nav">
+          <a href="../overview.html" class="project-nav-item">Overview</a>
+          <a href="../code_index.html" class="project-nav-item">Code</a>
+          <a href="../smells_index.html" class="project-nav-item">Smells</a>
+        </nav>
+      </div>
+    </header>
+    <div class="container">
+      <div class="file-header group rated">
+  <span class="rating rating-b circled-text circle">
+    B
+  </span>
+  <h2 class="file-name">CheckoutsController</h2>
+
+  <span class="file-committed-at">
+    
+      Updated <time class='js-timeago' datetime='2016-05-30 13:12:30 +0300'>2016-05-30 13:12:30 +0300</time>
+    
+  </span>
+
+  <div class="file-stats group">
+    <div class="file-stat">
+      123 complexity
+    </div>
+    <div class="file-stat">
+      12.3 complexity per method
+    </div>
+    <div class="file-stat">
+      18 churn
+    </div>
+    <div class="file-stat">
+      10 methods
+    </div>
+    <div class="file-stat">
+      0 duplication
+    </div>
+  </div>
+
+  
+    <button id="js-toggle-smells" class="smells-toggle-button button">Toggle Smells</button>
+  
+</div>
+
+<code class="prettyprint linenums lang-ruby file-code js-file-code">class CheckoutsController &lt; ApplicationController<ul class="nocode smells js-smells">  <li class="smell ">    <span class="description">      (<a href="https://github.com/troessner/reek/blob/master/docs/Irresponsible-Module.md" target="_blank">IrresponsibleModule</a>)      CheckoutsController has no descriptive comment          </span>  </li></ul>
+  include Wicked::Wizard
+  include CookiesHandling
+  
+  WIZARD_STEPS = [:address, :shipment, :payment, :confirm, :complete]
+
+  before_action :authenticate_customer!
+  before_action :set_steps
+  before_action :setup_wizard
+
+  def create
+    @order = current_order || Order.new(customer: current_customer)
+    @order.prepare_for_checkout(checkout_params)
+    @checkout = Checkout.new(@order)
+    
+    if @checkout.valid? &amp;&amp; @checkout.save
+      redirect_to checkout_path(@order.next_step.to_sym)
+    else
+      redirect_to :back, alert: &quot;Can&#39;t checkout&quot;
+    end
+  end
+
+  def show<ul class="nocode smells js-smells">  <li class="smell ">    <span class="description">      (<a href="http://docs.seattlerb.org/flog/" target="_blank">HighComplexity</a>)      CheckoutsController#show has a flog score of 28          </span>  </li>  <li class="smell ">    <span class="description">      (<a href="https://github.com/troessner/reek/blob/master/docs/Too-Many-Statements.md" target="_blank">TooManyStatements</a>)      CheckoutsController#show has approx 7 statements          </span>  </li></ul>
+    if current_order
+      @checkout = Checkout.new(current_order)
+    elsif step == :complete &amp;&amp; last_processing_order
+      @checkout = Checkout.new(last_processing_order)
+    end
+      
+    if @checkout
+      redirect_if_wrong_step(@checkout.model.next_step, step) or return
+      
+      case step
+      when :address
+        @checkout.init_addresses
+      when :payment
+        @checkout.init_credit_card
+      end
+      
+      render_wizard
+    else
+      redirect_to root_path, notice: notice_when_checkout_is_nil(step)
+    end
+  end  
+
+  def update<ul class="nocode smells js-smells">  <li class="smell ">    <span class="description">      (<a href="http://docs.seattlerb.org/flog/" target="_blank">HighComplexity</a>)      CheckoutsController#update has a flog score of 43          </span>  </li>  <li class="smell ">    <span class="description">      (<a href="https://github.com/troessner/reek/blob/master/docs/Too-Many-Statements.md" target="_blank">TooManyStatements</a>)      CheckoutsController#update has approx 11 statements          </span>  </li></ul>
+    @checkout = Checkout.new(current_order)
+    @validation_hash = set_next_step(@checkout.model, next_step.to_s)
+    @validation_hash.merge!(checkout_params[&#39;model&#39;]) if WIZARD_STEPS[0..2].include?(step)<ul class="nocode smells js-smells">  <li class="smell ">    <span class="description">      (<a href="https://github.com/troessner/reek/blob/master/docs/Duplicate-Method-Call.md" target="_blank">DuplicateMethodCall</a>)      CheckoutsController#update calls checkout_params['model'] 4 times                        <a href="checkouts_controller.html#L49" class="js-smell-location">0</a>                  <a href="checkouts_controller.html#L58" class="js-smell-location">1</a>                  <a href="checkouts_controller.html#L63" class="js-smell-location">2</a>                  <a href="checkouts_controller.html#L64" class="js-smell-location">3</a>                  </span>  </li></ul>
+    
+    case step
+    when :address
+      @return_hash = { &#39;billing_address&#39; =&gt; @validation_hash[&#39;billing_address&#39;], <ul class="nocode smells js-smells">  <li class="smell ">    <span class="description">      (<a href="https://github.com/troessner/reek/blob/master/docs/Duplicate-Method-Call.md" target="_blank">DuplicateMethodCall</a>)      CheckoutsController#update calls @validation_hash['billing_address'] 2 times                        <a href="checkouts_controller.html#L53" class="js-smell-location">0</a>                  <a href="checkouts_controller.html#L59" class="js-smell-location">1</a>                  </span>  </li></ul>
+                       &#39;shipping_address&#39; =&gt; @validation_hash[&#39;shipping_address&#39;] }
+
+      if params[&#39;use_billing&#39;]
+        @validation_hash.merge!(
+          {&#39;shipping_address&#39; =&gt; checkout_params[&#39;model&#39;][&#39;billing_address&#39;]})<ul class="nocode smells js-smells">  <li class="smell ">    <span class="description">      (<a href="https://github.com/troessner/reek/blob/master/docs/Duplicate-Method-Call.md" target="_blank">DuplicateMethodCall</a>)      CheckoutsController#update calls checkout_params['model'] 4 times                        <a href="checkouts_controller.html#L49" class="js-smell-location">0</a>                  <a href="checkouts_controller.html#L58" class="js-smell-location">1</a>                  <a href="checkouts_controller.html#L63" class="js-smell-location">2</a>                  <a href="checkouts_controller.html#L64" class="js-smell-location">3</a>                  </span>  </li></ul>
+        @return_hash[&#39;shipping_address&#39;] = @validation_hash[&#39;billing_address&#39;]<ul class="nocode smells js-smells">  <li class="smell ">    <span class="description">      (<a href="https://github.com/troessner/reek/blob/master/docs/Duplicate-Method-Call.md" target="_blank">DuplicateMethodCall</a>)      CheckoutsController#update calls @validation_hash['billing_address'] 2 times                        <a href="checkouts_controller.html#L53" class="js-smell-location">0</a>                  <a href="checkouts_controller.html#L59" class="js-smell-location">1</a>                  </span>  </li></ul>
+      end
+    when :shipment
+      @return_hash = {
+        &#39;shipping_method&#39; =&gt; checkout_params[&#39;model&#39;][&#39;shipping_method&#39;],<ul class="nocode smells js-smells">  <li class="smell ">    <span class="description">      (<a href="https://github.com/troessner/reek/blob/master/docs/Duplicate-Method-Call.md" target="_blank">DuplicateMethodCall</a>)      CheckoutsController#update calls checkout_params['model'] 4 times                        <a href="checkouts_controller.html#L49" class="js-smell-location">0</a>                  <a href="checkouts_controller.html#L58" class="js-smell-location">1</a>                  <a href="checkouts_controller.html#L63" class="js-smell-location">2</a>                  <a href="checkouts_controller.html#L64" class="js-smell-location">3</a>                  </span>  </li></ul>
+        &#39;shipping_price&#39; =&gt; checkout_params[&#39;model&#39;][&#39;shipping_price&#39;]}<ul class="nocode smells js-smells">  <li class="smell ">    <span class="description">      (<a href="https://github.com/troessner/reek/blob/master/docs/Duplicate-Method-Call.md" target="_blank">DuplicateMethodCall</a>)      CheckoutsController#update calls checkout_params['model'] 4 times                        <a href="checkouts_controller.html#L49" class="js-smell-location">0</a>                  <a href="checkouts_controller.html#L58" class="js-smell-location">1</a>                  <a href="checkouts_controller.html#L63" class="js-smell-location">2</a>                  <a href="checkouts_controller.html#L64" class="js-smell-location">3</a>                  </span>  </li></ul>
+    when :payment
+      @return_hash = @validation_hash[&#39;credit_card&#39;]
+    when :confirm
+      @validation_hash.merge!({&#39;state&#39; =&gt; &quot;processing&quot;})
+      @return_hash = nil
+    end
+    
+    redirect_if_invalid(
+      @checkout, @validation_hash, @return_hash) or render_wizard(@checkout)
+  end
+
+
+  private
+    def set_steps
+      self.steps = WIZARD_STEPS
+    end
+
+    def redirect_if_wrong_step(next_step, step)
+      if !next_step?
+        redirect_to(order_items_index_path, 
+          notice: &quot;Please checkout first&quot;) and return
+      elsif next_step_next?(next_step, step)
+        redirect_to(checkout_path(next_step.to_sym), 
+          notice: &quot;Please proceed checkout from this step&quot;) and return
+      end
+      return true
+    end
+
+    def redirect_if_invalid(checkout, validation_hash, return_hash)
+      if checkout.validate(validation_hash)<ul class="nocode smells js-smells">  <li class="smell ">    <span class="description">      (<a href="https://github.com/troessner/reek/blob/master/docs/Feature-Envy.md" target="_blank">FeatureEnvy</a>)      CheckoutsController#redirect_if_invalid refers to checkout more than self (maybe move it to another class?)                        <a href="checkouts_controller.html#L94" class="js-smell-location">0</a>                  <a href="checkouts_controller.html#L98" class="js-smell-location">1</a>                  </span>  </li></ul>
+        return false
+      else
+        redirect_to :back, {flash: { 
+          errors: checkout.errors, attrs: return_hash } } <ul class="nocode smells js-smells">  <li class="smell ">    <span class="description">      (<a href="https://github.com/troessner/reek/blob/master/docs/Feature-Envy.md" target="_blank">FeatureEnvy</a>)      CheckoutsController#redirect_if_invalid refers to checkout more than self (maybe move it to another class?)                        <a href="checkouts_controller.html#L94" class="js-smell-location">0</a>                  <a href="checkouts_controller.html#L98" class="js-smell-location">1</a>                  </span>  </li></ul>
+        return true
+      end 
+    end
+
+    def notice_when_checkout_is_nil(step)<ul class="nocode smells js-smells">  <li class="smell ">    <span class="description">      (<a href="https://github.com/troessner/reek/blob/master/docs/Utility-Function.md" target="_blank">UtilityFunction</a>)      CheckoutsController#notice_when_checkout_is_nil doesn't depend on instance state (maybe move it to another class?)          </span>  </li></ul>
+      if step == :complete<ul class="nocode smells js-smells">  <li class="smell ">    <span class="description">      (<a href="https://github.com/troessner/reek/blob/master/docs/Control-Parameter.md" target="_blank">ControlParameter</a>)      CheckoutsController#notice_when_checkout_is_nil is controlled by argument step                        <a href="checkouts_controller.html#L104" class="js-smell-location">0</a>                  <a href="checkouts_controller.html#L106" class="js-smell-location">1</a>                  </span>  </li></ul>
+        &quot;You have no completed orders&quot;
+      elsif step == :confirm<ul class="nocode smells js-smells">  <li class="smell ">    <span class="description">      (<a href="https://github.com/troessner/reek/blob/master/docs/Control-Parameter.md" target="_blank">ControlParameter</a>)      CheckoutsController#notice_when_checkout_is_nil is controlled by argument step                        <a href="checkouts_controller.html#L104" class="js-smell-location">0</a>                  <a href="checkouts_controller.html#L106" class="js-smell-location">1</a>                  </span>  </li></ul>
+        &quot;You have no orders to confirm&quot;
+      else
+        &quot;Please checkout first&quot;
+      end
+    end
+
+    def set_next_step(model, next_step)
+      val_hash = model.attributes<ul class="nocode smells js-smells">  <li class="smell ">    <span class="description">      (<a href="https://github.com/troessner/reek/blob/master/docs/Feature-Envy.md" target="_blank">FeatureEnvy</a>)      CheckoutsController#set_next_step refers to model more than self (maybe move it to another class?)                        <a href="checkouts_controller.html#L114" class="js-smell-location">0</a>                  <a href="checkouts_controller.html#L115" class="js-smell-location">1</a>                  </span>  </li></ul>
+      if next_step_next?(model.next_step, next_step)<ul class="nocode smells js-smells">  <li class="smell ">    <span class="description">      (<a href="https://github.com/troessner/reek/blob/master/docs/Feature-Envy.md" target="_blank">FeatureEnvy</a>)      CheckoutsController#set_next_step refers to model more than self (maybe move it to another class?)                        <a href="checkouts_controller.html#L114" class="js-smell-location">0</a>                  <a href="checkouts_controller.html#L115" class="js-smell-location">1</a>                  </span>  </li></ul>
+        val_hash.merge!({next_step: next_step}) 
+      end
+      val_hash
+    end
+
+    def next_step_next?(prev_step, next_step)
+      prev_index = Checkout::NEXT_STEPS.index(prev_step.to_sym)
+      next_index = Checkout::NEXT_STEPS.index(next_step.to_sym)
+      
+      if !prev_index?
+        true
+      elsif prev_index &lt; next_index
+        true
+      else
+        false
+      end
+    end
+
+    def checkout_params
+      address = [:firstname,
+                 :lastname,
+                 :address1,
+                 :address2,
+                 :phone,
+                 :city,
+                 :zipcode,
+                 :country_id,
+                 :billing_address_for_id,
+                 :shipping_address_for_id]
+
+      credit_card = [:number, 
+                     :cvv, 
+                     :firstname, 
+                     :lastname,
+                     :expiration_month, 
+                     :expiration_year,
+                     :customer_id]
+
+      model = [:total_price,
+               :completed_date,
+               :customer_id,
+               :state,
+               :next_step,
+               :shipping_price,
+               :shipping_method,
+               billing_address: address,
+               shipping_address: address,
+               credit_card: credit_card]
+
+      params.require(:order).permit(
+        :coupon_code,
+        model: model, 
+        order_items_attrs: [:book_id, :quantity])
+    end
+end
+</code>
+
+    </div>
+    <script src='../assets/javascripts/jquery-2.1.0.js'></script>
+    <script src='../assets/javascripts/jquery.tablesorter.js'></script>
+    <script src='../assets/javascripts/jquery.floatThead-v1.2.7.js'></script>
+    <script src='../assets/javascripts/jquery.timeago-v1.4.1.js'></script>
+    <script src='../assets/javascripts/highcharts.src-4.0.1.js'></script>
+    <script src='../assets/javascripts/jquery.scrollTo-1.4.11.js'></script>
+    <script src='../assets/javascripts/prettify-4-Mar-2013.js'></script>
+    <script src='../assets/javascripts/application.js'></script>
+  </body>
+</html>

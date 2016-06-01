@@ -2,9 +2,17 @@ module CookiesHandling
   extend ActiveSupport::Concern
 
   private
+    def combine_with_cookies(order_items)
+      temp_items = order_items.map { |item| OrderItem.new(item.attributes) }
+      order_items.destroy_all
+      order_items = OrderItem.compact_order_items(temp_items + read_from_cookies)
+      cookies.delete('order_items')
+
+      order_items
+    end
 
     def interact_with_cookies
-      order_items = compact_order_items(read_from_cookies)
+      order_items = OrderItem.compact_order_items(read_from_cookies)
       yield order_items
       write_to_cookies(order_items)
     end
@@ -23,10 +31,12 @@ module CookiesHandling
     def write_to_cookies(items)
       cookies[:order_items] = ''
       items.each do |item|
-        cookies[:order_items] = { value:   [cookies[:order_items],
-                                            item[:book_id],
-                                            item[:quantity]].join(' '),
-                                  expires: 30.days.from_now }
+        cookies[:order_items] = { 
+          value: [
+            cookies[:order_items],
+            item[:book_id],
+            item[:quantity]].join(' '),
+          expires: 30.days.from_now }
       end
     end
 

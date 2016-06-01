@@ -15,6 +15,29 @@ class OrderItem < ActiveRecord::Base
     end
   end
 
+  class << self
+    def compact_order_items(order_items)
+      order_items = order_items.group_by{|h| h.book_id}.values.map do |a| 
+        OrderItem.new(book_id: a.first.book_id, 
+                      quantity: a.inject(0){|sum,h| sum + h.quantity})
+      end
+      
+      order_items.each do |item| 
+        item.price = item.book.price
+      end
+
+      order_items
+    end
+
+    def compact_if_not_compacted(order_items)
+      if order_items != self.compact_order_items(order_items)
+        temp_items = order_items
+        order_items.each { |item| item.destroy }
+        order_items << self.compact_order_items(temp_items)
+      end
+    end
+  end
+
   private
 
     def update_price

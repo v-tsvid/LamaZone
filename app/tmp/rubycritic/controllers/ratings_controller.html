@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>RubyCritic</title>
+    <link href="../assets/stylesheets/application.css" media="screen, projection, print" rel="stylesheet" type="text/css">
+    <link href="../assets/stylesheets/prettify.custom_theme.css" media="screen, projection, print" rel="stylesheet" type="text/css">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+  </head>
+  <body>
+    <header class="project-header group">
+      <div class="container">
+        <h1 class="logo"><a href="../overview.html" class="logo-link">RubyCritic</a></h1>
+        <nav class="project-nav">
+          <a href="../overview.html" class="project-nav-item">Overview</a>
+          <a href="../code_index.html" class="project-nav-item">Code</a>
+          <a href="../smells_index.html" class="project-nav-item">Smells</a>
+        </nav>
+      </div>
+    </header>
+    <div class="container">
+      <div class="file-header group rated">
+  <span class="rating rating-a circled-text circle">
+    A
+  </span>
+  <h2 class="file-name">RatingsController</h2>
+
+  <span class="file-committed-at">
+    
+      Updated <time class='js-timeago' datetime='2016-04-25 11:33:59 +0300'>2016-04-25 11:33:59 +0300</time>
+    
+  </span>
+
+  <div class="file-stats group">
+    <div class="file-stat">
+      34 complexity
+    </div>
+    <div class="file-stat">
+      11.3 complexity per method
+    </div>
+    <div class="file-stat">
+      9 churn
+    </div>
+    <div class="file-stat">
+      3 methods
+    </div>
+    <div class="file-stat">
+      0 duplication
+    </div>
+  </div>
+
+  
+    <button id="js-toggle-smells" class="smells-toggle-button button">Toggle Smells</button>
+  
+</div>
+
+<code class="prettyprint linenums lang-ruby file-code js-file-code">class RatingsController &lt; ApplicationController<ul class="nocode smells js-smells">  <li class="smell ">    <span class="description">      (<a href="https://github.com/troessner/reek/blob/master/docs/Irresponsible-Module.md" target="_blank">IrresponsibleModule</a>)      RatingsController has no descriptive comment          </span>  </li></ul>
+
+  NOTICE_CREATE_SUCCESS = &#39;Rating was successfully created. &#39;\
+                          &#39;It will be available soon&#39;
+  NOTICE_UPDATE_SUCCESS = &#39;Rating was successfully updated. &#39;\
+                          &#39;It will be available soon&#39;
+  NOTICE_DESTROY_SUCCESS = &#39;Rating was successfully destroyed.&#39;
+
+  before_action :authenticate_customer!, except: [:index, :show]
+  
+  skip_load_resource only: [:new]
+  load_and_authorize_resource
+
+  # GET /ratings/new
+  def new
+    @book = Book.find(params[:book_id])
+    @rating = Rating.new(book: @book, customer: current_customer)
+  end
+
+  # POST /ratings
+  # POST /ratings.json
+  def create<ul class="nocode smells js-smells">  <li class="smell ">    <span class="description">      (<a href="https://github.com/troessner/reek/blob/master/docs/Too-Many-Statements.md" target="_blank">TooManyStatements</a>)      RatingsController#create has approx 12 statements          </span>  </li></ul>
+    @book = Book.find(params[:book_id])
+    @rating = Rating.new(rating_params)
+    @rating.customer = current_customer
+
+    respond_to do |format|
+      if @rating.save
+        format.html { redirect_to book_path(@book), notice: NOTICE_CREATE_SUCCESS }<ul class="nocode smells js-smells">  <li class="smell ">    <span class="description">      (<a href="https://github.com/troessner/reek/blob/master/docs/Duplicate-Method-Call.md" target="_blank">DuplicateMethodCall</a>)      RatingsController#create calls format.html 2 times                        <a href="ratings_controller.html#L29" class="js-smell-location">0</a>                  <a href="ratings_controller.html#L32" class="js-smell-location">1</a>                  </span>  </li></ul>
+        format.json { render :show, status: :created, location: @rating }<ul class="nocode smells js-smells">  <li class="smell ">    <span class="description">      (<a href="https://github.com/troessner/reek/blob/master/docs/Duplicate-Method-Call.md" target="_blank">DuplicateMethodCall</a>)      RatingsController#create calls format.json 2 times                        <a href="ratings_controller.html#L30" class="js-smell-location">0</a>                  <a href="ratings_controller.html#L33" class="js-smell-location">1</a>                  </span>  </li></ul>
+      else
+        format.html { render :new }<ul class="nocode smells js-smells">  <li class="smell ">    <span class="description">      (<a href="https://github.com/troessner/reek/blob/master/docs/Duplicate-Method-Call.md" target="_blank">DuplicateMethodCall</a>)      RatingsController#create calls format.html 2 times                        <a href="ratings_controller.html#L29" class="js-smell-location">0</a>                  <a href="ratings_controller.html#L32" class="js-smell-location">1</a>                  </span>  </li></ul>
+        format.json { render json: @rating.errors, status: :unprocessable_entity }<ul class="nocode smells js-smells">  <li class="smell ">    <span class="description">      (<a href="https://github.com/troessner/reek/blob/master/docs/Duplicate-Method-Call.md" target="_blank">DuplicateMethodCall</a>)      RatingsController#create calls format.json 2 times                        <a href="ratings_controller.html#L30" class="js-smell-location">0</a>                  <a href="ratings_controller.html#L33" class="js-smell-location">1</a>                  </span>  </li></ul>
+      end
+    end
+  end
+
+  private
+
+    # Never trust parameters from the scary internet, only allow the white list through.
+    def rating_params
+      params.require(:rating).permit(:id, :rate, :review, :book_id)
+    end
+end
+</code>
+
+    </div>
+    <script src='../assets/javascripts/jquery-2.1.0.js'></script>
+    <script src='../assets/javascripts/jquery.tablesorter.js'></script>
+    <script src='../assets/javascripts/jquery.floatThead-v1.2.7.js'></script>
+    <script src='../assets/javascripts/jquery.timeago-v1.4.1.js'></script>
+    <script src='../assets/javascripts/highcharts.src-4.0.1.js'></script>
+    <script src='../assets/javascripts/jquery.scrollTo-1.4.11.js'></script>
+    <script src='../assets/javascripts/prettify-4-Mar-2013.js'></script>
+    <script src='../assets/javascripts/application.js'></script>
+  </body>
+</html>
