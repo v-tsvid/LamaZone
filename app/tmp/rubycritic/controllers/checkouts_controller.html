@@ -28,7 +28,7 @@
 
   <span class="file-committed-at">
     
-      Updated <time class='js-timeago' datetime='2016-05-30 13:12:30 +0300'>2016-05-30 13:12:30 +0300</time>
+      Updated <time class='js-timeago' datetime='2016-06-02 11:15:30 +0300'>2016-06-02 11:15:30 +0300</time>
     
   </span>
 
@@ -40,7 +40,7 @@
       12.3 complexity per method
     </div>
     <div class="file-stat">
-      18 churn
+      20 churn
     </div>
     <div class="file-stat">
       10 methods
@@ -73,11 +73,13 @@
     if @checkout.valid? &amp;&amp; @checkout.save
       redirect_to checkout_path(@order.next_step.to_sym)
     else
-      redirect_to :back, alert: &quot;Can&#39;t checkout&quot;
+      redirect_to root_path, alert: &quot;Can&#39;t checkout&quot;
     end
   end
 
   def show<ul class="nocode smells js-smells">  <li class="smell ">    <span class="description">      (<a href="http://docs.seattlerb.org/flog/" target="_blank">HighComplexity</a>)      CheckoutsController#show has a flog score of 28          </span>  </li>  <li class="smell ">    <span class="description">      (<a href="https://github.com/troessner/reek/blob/master/docs/Too-Many-Statements.md" target="_blank">TooManyStatements</a>)      CheckoutsController#show has approx 7 statements          </span>  </li></ul>
+    # find out how to extract following into the new method 
+    # without control coupling
     if current_order
       @checkout = Checkout.new(current_order)
     elsif step == :complete &amp;&amp; last_processing_order
@@ -103,22 +105,22 @@
   def update<ul class="nocode smells js-smells">  <li class="smell ">    <span class="description">      (<a href="http://docs.seattlerb.org/flog/" target="_blank">HighComplexity</a>)      CheckoutsController#update has a flog score of 43          </span>  </li>  <li class="smell ">    <span class="description">      (<a href="https://github.com/troessner/reek/blob/master/docs/Too-Many-Statements.md" target="_blank">TooManyStatements</a>)      CheckoutsController#update has approx 11 statements          </span>  </li></ul>
     @checkout = Checkout.new(current_order)
     @validation_hash = set_next_step(@checkout.model, next_step.to_s)
-    @validation_hash.merge!(checkout_params[&#39;model&#39;]) if WIZARD_STEPS[0..2].include?(step)<ul class="nocode smells js-smells">  <li class="smell ">    <span class="description">      (<a href="https://github.com/troessner/reek/blob/master/docs/Duplicate-Method-Call.md" target="_blank">DuplicateMethodCall</a>)      CheckoutsController#update calls checkout_params['model'] 4 times                        <a href="checkouts_controller.html#L49" class="js-smell-location">0</a>                  <a href="checkouts_controller.html#L58" class="js-smell-location">1</a>                  <a href="checkouts_controller.html#L63" class="js-smell-location">2</a>                  <a href="checkouts_controller.html#L64" class="js-smell-location">3</a>                  </span>  </li></ul>
+    @validation_hash.merge!(checkout_params[&#39;model&#39;]) if WIZARD_STEPS[0..2].include?(step)<ul class="nocode smells js-smells">  <li class="smell ">    <span class="description">      (<a href="https://github.com/troessner/reek/blob/master/docs/Duplicate-Method-Call.md" target="_blank">DuplicateMethodCall</a>)      CheckoutsController#update calls checkout_params['model'] 4 times                        <a href="checkouts_controller.html#L51" class="js-smell-location">0</a>                  <a href="checkouts_controller.html#L60" class="js-smell-location">1</a>                  <a href="checkouts_controller.html#L65" class="js-smell-location">2</a>                  <a href="checkouts_controller.html#L66" class="js-smell-location">3</a>                  </span>  </li></ul>
     
     case step
     when :address
-      @return_hash = { &#39;billing_address&#39; =&gt; @validation_hash[&#39;billing_address&#39;], <ul class="nocode smells js-smells">  <li class="smell ">    <span class="description">      (<a href="https://github.com/troessner/reek/blob/master/docs/Duplicate-Method-Call.md" target="_blank">DuplicateMethodCall</a>)      CheckoutsController#update calls @validation_hash['billing_address'] 2 times                        <a href="checkouts_controller.html#L53" class="js-smell-location">0</a>                  <a href="checkouts_controller.html#L59" class="js-smell-location">1</a>                  </span>  </li></ul>
+      @return_hash = { &#39;billing_address&#39; =&gt; @validation_hash[&#39;billing_address&#39;], <ul class="nocode smells js-smells">  <li class="smell ">    <span class="description">      (<a href="https://github.com/troessner/reek/blob/master/docs/Duplicate-Method-Call.md" target="_blank">DuplicateMethodCall</a>)      CheckoutsController#update calls @validation_hash['billing_address'] 2 times                        <a href="checkouts_controller.html#L55" class="js-smell-location">0</a>                  <a href="checkouts_controller.html#L61" class="js-smell-location">1</a>                  </span>  </li></ul>
                        &#39;shipping_address&#39; =&gt; @validation_hash[&#39;shipping_address&#39;] }
 
       if params[&#39;use_billing&#39;]
         @validation_hash.merge!(
-          {&#39;shipping_address&#39; =&gt; checkout_params[&#39;model&#39;][&#39;billing_address&#39;]})<ul class="nocode smells js-smells">  <li class="smell ">    <span class="description">      (<a href="https://github.com/troessner/reek/blob/master/docs/Duplicate-Method-Call.md" target="_blank">DuplicateMethodCall</a>)      CheckoutsController#update calls checkout_params['model'] 4 times                        <a href="checkouts_controller.html#L49" class="js-smell-location">0</a>                  <a href="checkouts_controller.html#L58" class="js-smell-location">1</a>                  <a href="checkouts_controller.html#L63" class="js-smell-location">2</a>                  <a href="checkouts_controller.html#L64" class="js-smell-location">3</a>                  </span>  </li></ul>
-        @return_hash[&#39;shipping_address&#39;] = @validation_hash[&#39;billing_address&#39;]<ul class="nocode smells js-smells">  <li class="smell ">    <span class="description">      (<a href="https://github.com/troessner/reek/blob/master/docs/Duplicate-Method-Call.md" target="_blank">DuplicateMethodCall</a>)      CheckoutsController#update calls @validation_hash['billing_address'] 2 times                        <a href="checkouts_controller.html#L53" class="js-smell-location">0</a>                  <a href="checkouts_controller.html#L59" class="js-smell-location">1</a>                  </span>  </li></ul>
+          {&#39;shipping_address&#39; =&gt; checkout_params[&#39;model&#39;][&#39;billing_address&#39;]})<ul class="nocode smells js-smells">  <li class="smell ">    <span class="description">      (<a href="https://github.com/troessner/reek/blob/master/docs/Duplicate-Method-Call.md" target="_blank">DuplicateMethodCall</a>)      CheckoutsController#update calls checkout_params['model'] 4 times                        <a href="checkouts_controller.html#L51" class="js-smell-location">0</a>                  <a href="checkouts_controller.html#L60" class="js-smell-location">1</a>                  <a href="checkouts_controller.html#L65" class="js-smell-location">2</a>                  <a href="checkouts_controller.html#L66" class="js-smell-location">3</a>                  </span>  </li></ul>
+        @return_hash[&#39;shipping_address&#39;] = @validation_hash[&#39;billing_address&#39;]<ul class="nocode smells js-smells">  <li class="smell ">    <span class="description">      (<a href="https://github.com/troessner/reek/blob/master/docs/Duplicate-Method-Call.md" target="_blank">DuplicateMethodCall</a>)      CheckoutsController#update calls @validation_hash['billing_address'] 2 times                        <a href="checkouts_controller.html#L55" class="js-smell-location">0</a>                  <a href="checkouts_controller.html#L61" class="js-smell-location">1</a>                  </span>  </li></ul>
       end
     when :shipment
       @return_hash = {
-        &#39;shipping_method&#39; =&gt; checkout_params[&#39;model&#39;][&#39;shipping_method&#39;],<ul class="nocode smells js-smells">  <li class="smell ">    <span class="description">      (<a href="https://github.com/troessner/reek/blob/master/docs/Duplicate-Method-Call.md" target="_blank">DuplicateMethodCall</a>)      CheckoutsController#update calls checkout_params['model'] 4 times                        <a href="checkouts_controller.html#L49" class="js-smell-location">0</a>                  <a href="checkouts_controller.html#L58" class="js-smell-location">1</a>                  <a href="checkouts_controller.html#L63" class="js-smell-location">2</a>                  <a href="checkouts_controller.html#L64" class="js-smell-location">3</a>                  </span>  </li></ul>
-        &#39;shipping_price&#39; =&gt; checkout_params[&#39;model&#39;][&#39;shipping_price&#39;]}<ul class="nocode smells js-smells">  <li class="smell ">    <span class="description">      (<a href="https://github.com/troessner/reek/blob/master/docs/Duplicate-Method-Call.md" target="_blank">DuplicateMethodCall</a>)      CheckoutsController#update calls checkout_params['model'] 4 times                        <a href="checkouts_controller.html#L49" class="js-smell-location">0</a>                  <a href="checkouts_controller.html#L58" class="js-smell-location">1</a>                  <a href="checkouts_controller.html#L63" class="js-smell-location">2</a>                  <a href="checkouts_controller.html#L64" class="js-smell-location">3</a>                  </span>  </li></ul>
+        &#39;shipping_method&#39; =&gt; checkout_params[&#39;model&#39;][&#39;shipping_method&#39;],<ul class="nocode smells js-smells">  <li class="smell ">    <span class="description">      (<a href="https://github.com/troessner/reek/blob/master/docs/Duplicate-Method-Call.md" target="_blank">DuplicateMethodCall</a>)      CheckoutsController#update calls checkout_params['model'] 4 times                        <a href="checkouts_controller.html#L51" class="js-smell-location">0</a>                  <a href="checkouts_controller.html#L60" class="js-smell-location">1</a>                  <a href="checkouts_controller.html#L65" class="js-smell-location">2</a>                  <a href="checkouts_controller.html#L66" class="js-smell-location">3</a>                  </span>  </li></ul>
+        &#39;shipping_price&#39; =&gt; checkout_params[&#39;model&#39;][&#39;shipping_price&#39;]}<ul class="nocode smells js-smells">  <li class="smell ">    <span class="description">      (<a href="https://github.com/troessner/reek/blob/master/docs/Duplicate-Method-Call.md" target="_blank">DuplicateMethodCall</a>)      CheckoutsController#update calls checkout_params['model'] 4 times                        <a href="checkouts_controller.html#L51" class="js-smell-location">0</a>                  <a href="checkouts_controller.html#L60" class="js-smell-location">1</a>                  <a href="checkouts_controller.html#L65" class="js-smell-location">2</a>                  <a href="checkouts_controller.html#L66" class="js-smell-location">3</a>                  </span>  </li></ul>
     when :payment
       @return_hash = @validation_hash[&#39;credit_card&#39;]
     when :confirm
@@ -137,7 +139,7 @@
     end
 
     def redirect_if_wrong_step(next_step, step)
-      if !next_step?
+      if !next_step
         redirect_to(order_items_index_path, 
           notice: &quot;Please checkout first&quot;) and return
       elsif next_step_next?(next_step, step)
@@ -148,19 +150,20 @@
     end
 
     def redirect_if_invalid(checkout, validation_hash, return_hash)
-      if checkout.validate(validation_hash)<ul class="nocode smells js-smells">  <li class="smell ">    <span class="description">      (<a href="https://github.com/troessner/reek/blob/master/docs/Feature-Envy.md" target="_blank">FeatureEnvy</a>)      CheckoutsController#redirect_if_invalid refers to checkout more than self (maybe move it to another class?)                        <a href="checkouts_controller.html#L94" class="js-smell-location">0</a>                  <a href="checkouts_controller.html#L98" class="js-smell-location">1</a>                  </span>  </li></ul>
+      if checkout.validate(validation_hash)<ul class="nocode smells js-smells">  <li class="smell ">    <span class="description">      (<a href="https://github.com/troessner/reek/blob/master/docs/Feature-Envy.md" target="_blank">FeatureEnvy</a>)      CheckoutsController#redirect_if_invalid refers to checkout more than self (maybe move it to another class?)                        <a href="checkouts_controller.html#L96" class="js-smell-location">0</a>                  <a href="checkouts_controller.html#L100" class="js-smell-location">1</a>                  </span>  </li></ul>
         return false
       else
         redirect_to :back, {flash: { 
-          errors: checkout.errors, attrs: return_hash } } <ul class="nocode smells js-smells">  <li class="smell ">    <span class="description">      (<a href="https://github.com/troessner/reek/blob/master/docs/Feature-Envy.md" target="_blank">FeatureEnvy</a>)      CheckoutsController#redirect_if_invalid refers to checkout more than self (maybe move it to another class?)                        <a href="checkouts_controller.html#L94" class="js-smell-location">0</a>                  <a href="checkouts_controller.html#L98" class="js-smell-location">1</a>                  </span>  </li></ul>
+          errors: checkout.errors, attrs: return_hash } } <ul class="nocode smells js-smells">  <li class="smell ">    <span class="description">      (<a href="https://github.com/troessner/reek/blob/master/docs/Feature-Envy.md" target="_blank">FeatureEnvy</a>)      CheckoutsController#redirect_if_invalid refers to checkout more than self (maybe move it to another class?)                        <a href="checkouts_controller.html#L96" class="js-smell-location">0</a>                  <a href="checkouts_controller.html#L100" class="js-smell-location">1</a>                  </span>  </li></ul>
         return true
       end 
     end
-
+    
+    # find out how to avoid the control coupling
     def notice_when_checkout_is_nil(step)<ul class="nocode smells js-smells">  <li class="smell ">    <span class="description">      (<a href="https://github.com/troessner/reek/blob/master/docs/Utility-Function.md" target="_blank">UtilityFunction</a>)      CheckoutsController#notice_when_checkout_is_nil doesn't depend on instance state (maybe move it to another class?)          </span>  </li></ul>
-      if step == :complete<ul class="nocode smells js-smells">  <li class="smell ">    <span class="description">      (<a href="https://github.com/troessner/reek/blob/master/docs/Control-Parameter.md" target="_blank">ControlParameter</a>)      CheckoutsController#notice_when_checkout_is_nil is controlled by argument step                        <a href="checkouts_controller.html#L104" class="js-smell-location">0</a>                  <a href="checkouts_controller.html#L106" class="js-smell-location">1</a>                  </span>  </li></ul>
+      if step == :complete<ul class="nocode smells js-smells">  <li class="smell ">    <span class="description">      (<a href="https://github.com/troessner/reek/blob/master/docs/Control-Parameter.md" target="_blank">ControlParameter</a>)      CheckoutsController#notice_when_checkout_is_nil is controlled by argument step                        <a href="checkouts_controller.html#L107" class="js-smell-location">0</a>                  <a href="checkouts_controller.html#L109" class="js-smell-location">1</a>                  </span>  </li></ul>
         &quot;You have no completed orders&quot;
-      elsif step == :confirm<ul class="nocode smells js-smells">  <li class="smell ">    <span class="description">      (<a href="https://github.com/troessner/reek/blob/master/docs/Control-Parameter.md" target="_blank">ControlParameter</a>)      CheckoutsController#notice_when_checkout_is_nil is controlled by argument step                        <a href="checkouts_controller.html#L104" class="js-smell-location">0</a>                  <a href="checkouts_controller.html#L106" class="js-smell-location">1</a>                  </span>  </li></ul>
+      elsif step == :confirm<ul class="nocode smells js-smells">  <li class="smell ">    <span class="description">      (<a href="https://github.com/troessner/reek/blob/master/docs/Control-Parameter.md" target="_blank">ControlParameter</a>)      CheckoutsController#notice_when_checkout_is_nil is controlled by argument step                        <a href="checkouts_controller.html#L107" class="js-smell-location">0</a>                  <a href="checkouts_controller.html#L109" class="js-smell-location">1</a>                  </span>  </li></ul>
         &quot;You have no orders to confirm&quot;
       else
         &quot;Please checkout first&quot;
@@ -168,18 +171,18 @@
     end
 
     def set_next_step(model, next_step)
-      val_hash = model.attributes<ul class="nocode smells js-smells">  <li class="smell ">    <span class="description">      (<a href="https://github.com/troessner/reek/blob/master/docs/Feature-Envy.md" target="_blank">FeatureEnvy</a>)      CheckoutsController#set_next_step refers to model more than self (maybe move it to another class?)                        <a href="checkouts_controller.html#L114" class="js-smell-location">0</a>                  <a href="checkouts_controller.html#L115" class="js-smell-location">1</a>                  </span>  </li></ul>
-      if next_step_next?(model.next_step, next_step)<ul class="nocode smells js-smells">  <li class="smell ">    <span class="description">      (<a href="https://github.com/troessner/reek/blob/master/docs/Feature-Envy.md" target="_blank">FeatureEnvy</a>)      CheckoutsController#set_next_step refers to model more than self (maybe move it to another class?)                        <a href="checkouts_controller.html#L114" class="js-smell-location">0</a>                  <a href="checkouts_controller.html#L115" class="js-smell-location">1</a>                  </span>  </li></ul>
+      val_hash = model.attributes<ul class="nocode smells js-smells">  <li class="smell ">    <span class="description">      (<a href="https://github.com/troessner/reek/blob/master/docs/Feature-Envy.md" target="_blank">FeatureEnvy</a>)      CheckoutsController#set_next_step refers to model more than self (maybe move it to another class?)                        <a href="checkouts_controller.html#L117" class="js-smell-location">0</a>                  <a href="checkouts_controller.html#L118" class="js-smell-location">1</a>                  </span>  </li></ul>
+      if next_step_next?(model.next_step, next_step)<ul class="nocode smells js-smells">  <li class="smell ">    <span class="description">      (<a href="https://github.com/troessner/reek/blob/master/docs/Feature-Envy.md" target="_blank">FeatureEnvy</a>)      CheckoutsController#set_next_step refers to model more than self (maybe move it to another class?)                        <a href="checkouts_controller.html#L117" class="js-smell-location">0</a>                  <a href="checkouts_controller.html#L118" class="js-smell-location">1</a>                  </span>  </li></ul>
         val_hash.merge!({next_step: next_step}) 
       end
       val_hash
     end
 
-    def next_step_next?(prev_step, next_step)
+    def next_step_next?(prev_step, next_step)<ul class="nocode smells js-smells">  <li class="smell ">    <span class="description">      (<a href="https://github.com/troessner/reek/blob/master/docs/Utility-Function.md" target="_blank">UtilityFunction</a>)      CheckoutsController#next_step_next? doesn't depend on instance state (maybe move it to another class?)          </span>  </li></ul>
       prev_index = Checkout::NEXT_STEPS.index(prev_step.to_sym)
       next_index = Checkout::NEXT_STEPS.index(next_step.to_sym)
       
-      if !prev_index?
+      if !prev_index
         true
       elsif prev_index &lt; next_index
         true

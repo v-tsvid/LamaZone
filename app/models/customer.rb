@@ -27,7 +27,7 @@ class Customer < ActiveRecord::Base
   end
 
   def current_order_of_customer
-    Order.find_by(customer: self, state: 'in_progress') || nil
+    Order.find_by(customer: self, state: 'in_progress')
   end
 
   private

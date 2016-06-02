@@ -31,7 +31,7 @@ RSpec.describe RatingsController, type: :controller do
       it_behaves_like "customer authentication"
 
       it "receives find on Book and return book with requested id" do
-        expect(Book).to receive(:find).with(book.id.to_s).and_return(book)
+        expect(Book).to receive(:find_by_id).with(book.id.to_s).and_return(book)
         subject
       end
 
@@ -63,7 +63,7 @@ RSpec.describe RatingsController, type: :controller do
     context "with valid params" do
 
       it "receives find on Book with requested book_id" do
-        expect(Book).to receive(:find).with(rating_params['book_id'].to_s).
+        expect(Book).to receive(:find_by_id).with(rating_params['book_id'].to_s).
           and_return(book)
         subject
       end

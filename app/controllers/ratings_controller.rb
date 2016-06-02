@@ -13,14 +13,14 @@ class RatingsController < ApplicationController
 
   # GET /ratings/new
   def new
-    @book = Book.find(params[:book_id])
+    @book = Book.find_by_id(params[:book_id])
     @rating = Rating.new(book: @book, customer: current_customer)
   end
 
   # POST /ratings
   # POST /ratings.json
   def create
-    @book = Book.find(params[:book_id])
+    @book = Book.find_by_id(params[:book_id])
     @rating = Rating.new(rating_params)
     @rating.customer = current_customer
 

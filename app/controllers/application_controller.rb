@@ -32,6 +32,7 @@ class ApplicationController < ActionController::Base
   end
 
   def set_locale
+    # find out how to wrap the line with ||
     I18n.locale = params[:locale] || session[:omniauth_login_locale] || I18n.default_locale
     session[:omniauth_login_locale] = I18n.locale
   end
@@ -49,18 +50,14 @@ class ApplicationController < ActionController::Base
     end
   end
 
-  def new_order_from_cookies
-    order = Order.new
-    order.order_items = read_from_cookies
-    order
-  end
-
+  #consider the proper place for this method
   def cart_subtotal
     order = current_order ? current_order : new_order_from_cookies
     order.order_items.each { |item| item.send(:update_price)}
     order.send(:update_subtotal)
   end
 
+  #consider the proper place for this method
   def cart_total_quantity
     order = current_order ? current_order : new_order_from_cookies
     order.order_items.collect { |item| item.quantity }.sum
@@ -71,12 +68,8 @@ class ApplicationController < ActionController::Base
   end
 
   def last_processing_order
-    if current_order
-      nil
-    else
-      current_customer ? Order.where(
-        customer: current_customer, state: 'processing').last : nil
-    end
+    current_order ?  nil : (current_customer ? Order.where(
+        customer: current_customer, state: 'processing').last : nil)
   end
 
   protected
@@ -87,8 +80,16 @@ class ApplicationController < ActionController::Base
 
   private
 
+    #consider the proper place for this method
+    def new_order_from_cookies
+      order = Order.new
+      order.order_items = read_from_cookies
+      order
+    end
+
     def store_location
-      # store last url - this is needed for post-login redirect to whatever the customer last visited.
+      # store last url - this is needed for post-login redirect 
+      # to whatever the customer last visited.
       return unless request.get? 
       if (request.path != "/customers/sign_in" &&
           request.path != "/customers/sign_up" &&

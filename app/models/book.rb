@@ -16,6 +16,7 @@ class Book < ActiveRecord::Base
   private
 
     def self.books_of_category(title)
-      Category.find_by_title(title).books || nil
+      category = Category.find_by_title(title)
+      category ? category.books : nil
     end
 end

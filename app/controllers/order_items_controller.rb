@@ -29,8 +29,8 @@ class OrderItemsController < ApplicationController
   end
 
   def destroy
-    @order_item = OrderItem.find_by(id: params[:id])
-    @book = @order_item.book  
+    @order_item = OrderItem.find_by_id(params[:id])
+    @book = @order_item.book if @order_item
     @order = current_order
     
     @order_item.destroy

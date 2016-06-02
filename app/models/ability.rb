@@ -4,15 +4,15 @@ class Ability
   def initialize(customer)
     customer ||= Customer.new
     
-    if customer.persisted?
-      can :manage, Address, id: customer.shipping_address.try(:id)
-      can :manage, Address, id: customer.billing_address.try(:id)
+    if customer
+      can :manage, Address, billing_address_for_id: customer.id
+      can :manage, Address, shipping_address_for_id: customer.id
       can :read, Country
       can :manage, CreditCard, customer_id: customer.id
       can [:read, :update], Customer, id: customer.id
       can [:create, :read], Order, customer_id: customer.id
       can [:update, :destroy], Order, customer_id: customer.id, state: 'in_progress'
-      can :manage, OrderItem, order: { customer_id: customer.id }  
+      can :manage, OrderItem, order: { customer_id: customer.id, state: 'in_progress' }  
       can :manage, Rating, customer_id: customer.id
     end
 

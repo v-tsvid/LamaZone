@@ -23,7 +23,7 @@ class Order < ActiveRecord::Base
     state :canceled
 
     event :cancel do
-      transitions from: [:in_progress, :processing], to: :canceled
+      transitions from: [:processing], to: :canceled
     end
   end
 

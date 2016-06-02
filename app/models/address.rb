@@ -13,8 +13,8 @@ class Address < ActiveRecord::Base
   validates :zipcode, zipcode: { country_code: :country_code }
 
   belongs_to :country
-  belongs_to :customer, class_name: 'Customer', foreign_key: 'billing_address_for_id'
-  belongs_to :customer, class_name: 'Customer', foreign_key: 'shipping_address_for_id'
+  belongs_to :customer_billing, class_name: 'Customer', primary_key: 'billing_address_for_id'
+  belongs_to :customer_shipping, class_name: 'Customer', primary_key: 'shipping_address_for_id'
   
   before_save :normalize_phone
 

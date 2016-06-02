@@ -28,7 +28,7 @@
 
   <span class="file-committed-at">
     
-      Updated <time class='js-timeago' datetime='2016-04-25 17:57:55 +0300'>2016-04-25 17:57:55 +0300</time>
+      Updated <time class='js-timeago' datetime='2016-06-01 14:29:24 +0300'>2016-06-01 14:29:24 +0300</time>
     
   </span>
 
@@ -40,7 +40,7 @@
       1.0 complexity per method
     </div>
     <div class="file-stat">
-      7 churn
+      8 churn
     </div>
     <div class="file-stat">
       1 methods
@@ -57,7 +57,7 @@
 
 <code class="prettyprint linenums lang-ruby file-code js-file-code">class CreditCard &lt; ActiveRecord::Base<ul class="nocode smells js-smells">  <li class="smell ">    <span class="description">      (<a href="https://github.com/troessner/reek/blob/master/docs/Irresponsible-Module.md" target="_blank">IrresponsibleModule</a>)      CreditCard has no descriptive comment          </span>  </li></ul>
   belongs_to :customer
-  has_many :orders
+  has_many :orders, dependent: :destroy
 
   rails_admin do
     object_label_method do

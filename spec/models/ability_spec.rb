@@ -48,14 +48,21 @@ RSpec.describe Ability, type: :model do
         FactoryGirl.build(:order, customer_id: wrong_customer.id))
     end
 
-    it "can manage items in his own orders only" do
-      order = FactoryGirl.create :order, customer_id: customer.id
-      wrong_order = FactoryGirl.create :order, customer_id: wrong_customer.id
+    it "can manage items in his own in_progress orders only" do
+      order = FactoryGirl.create(:order, 
+        customer_id: customer.id, state: 'in_progress')
+      wrong_orders = [
+        FactoryGirl.create(:order, 
+          customer_id: wrong_customer.id, state: 'in_progress'),
+        FactoryGirl.create(:order, 
+          customer_id: customer.id, state: 'processing')]
       
       expect(subject).to have_abilities(:manage, 
         FactoryGirl.build(:order_item, order_id: order.id))
-      expect(subject).to not_have_abilities(:manage,
-        FactoryGirl.build(:order_item, order_id: wrong_order.id))
+      wrong_orders.each do |wrong_order|
+        expect(subject).to not_have_abilities(:manage,
+          FactoryGirl.build(:order_item, order_id: wrong_order.id))
+      end
     end
 
     it "can create and destroy his own ratings only" do

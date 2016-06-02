@@ -70,8 +70,8 @@
   validates :zipcode, zipcode: { country_code: :country_code }
 
   belongs_to :country
-  belongs_to :customer, class_name: &#39;Customer&#39;, foreign_key: &#39;billing_address_for_id&#39;
-  belongs_to :customer, class_name: &#39;Customer&#39;, foreign_key: &#39;shipping_address_for_id&#39;
+  belongs_to :customer_billing, class_name: &#39;Customer&#39;, primary_key: &#39;billing_address_for_id&#39;
+  belongs_to :customer_shipping, class_name: &#39;Customer&#39;, primary_key: &#39;shipping_address_for_id&#39;
   
   before_save :normalize_phone
 

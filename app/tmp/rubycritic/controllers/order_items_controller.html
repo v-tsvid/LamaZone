@@ -28,19 +28,19 @@
 
   <span class="file-committed-at">
     
-      Updated <time class='js-timeago' datetime='2016-05-30 17:30:46 +0300'>2016-05-30 17:30:46 +0300</time>
+      Updated <time class='js-timeago' datetime='2016-06-02 11:15:30 +0300'>2016-06-02 11:15:30 +0300</time>
     
   </span>
 
   <div class="file-stats group">
     <div class="file-stat">
-      91 complexity
+      92 complexity
     </div>
     <div class="file-stat">
-      15.2 complexity per method
+      15.3 complexity per method
     </div>
     <div class="file-stat">
-      14 churn
+      16 churn
     </div>
     <div class="file-stat">
       6 methods
@@ -63,7 +63,7 @@
   # GET /order_items
   def index
     @order = order_with_order_items
-    @order_items = @order.order_items
+    @order_items = @order.order_items if @order
 
     if !@order || @order_items.empty?
       redirect_to root_path, notice: &#39;Your cart is empty&#39; 
@@ -86,8 +86,8 @@
   end
 
   def destroy<ul class="nocode smells js-smells">  <li class="smell ">    <span class="description">      (<a href="https://github.com/troessner/reek/blob/master/docs/Too-Many-Statements.md" target="_blank">TooManyStatements</a>)      OrderItemsController#destroy has approx 6 statements          </span>  </li></ul>
-    @order_item = OrderItem.find(params[:id])
-    @book = @order_item.book  
+    @order_item = OrderItem.find_by_id(params[:id])
+    @book = @order_item.book if @order_item
     @order = current_order
     
     @order_item.destroy

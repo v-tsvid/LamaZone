@@ -21,6 +21,8 @@ class CheckoutsController < ApplicationController
   end
 
   def show
+    # find out how to extract following into the new method 
+    # without control coupling
     if current_order
       @checkout = Checkout.new(current_order)
     elsif step == :complete && last_processing_order
@@ -99,7 +101,8 @@ class CheckoutsController < ApplicationController
         return true
       end 
     end
-
+    
+    # find out how to avoid the control coupling
     def notice_when_checkout_is_nil(step)
       if step == :complete
         "You have no completed orders"

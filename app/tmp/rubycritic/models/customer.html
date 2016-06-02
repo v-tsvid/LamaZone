@@ -28,19 +28,19 @@
 
   <span class="file-committed-at">
     
-      Updated <time class='js-timeago' datetime='2016-05-13 17:50:32 +0300'>2016-05-13 17:50:32 +0300</time>
+      Updated <time class='js-timeago' datetime='2016-06-01 14:29:24 +0300'>2016-06-01 14:29:24 +0300</time>
     
   </span>
 
   <div class="file-stats group">
     <div class="file-stat">
-      24 complexity
+      23 complexity
     </div>
     <div class="file-stat">
-      6.0 complexity per method
+      5.8 complexity per method
     </div>
     <div class="file-stat">
-      17 churn
+      18 churn
     </div>
     <div class="file-stat">
       4 methods
@@ -70,6 +70,7 @@
 
   has_many :orders, dependent: :destroy
   has_many :ratings, dependent: :destroy
+  has_one :credit_card, dependent: :destroy
 
   has_one :billing_address, class_name: &#39;Address&#39;, foreign_key: &#39;billing_address_for_id&#39;
   has_one :shipping_address, class_name: &#39;Address&#39;, foreign_key: &#39;shipping_address_for_id&#39;
@@ -83,7 +84,7 @@
   end
 
   def current_order_of_customer
-    Order.find_by(customer: self, state: &#39;in_progress&#39;) || nil
+    Order.find_by(customer: self, state: &#39;in_progress&#39;)
   end
 
   private
@@ -98,11 +99,11 @@
 
   def self.from_omniauth(auth)<ul class="nocode smells js-smells">  <li class="smell ">    <span class="description">      (<a href="https://github.com/troessner/reek/blob/master/docs/Too-Many-Statements.md" target="_blank">TooManyStatements</a>)      Customer#self.from_omniauth has approx 6 statements          </span>  </li></ul>
     where(provider: auth.provider, uid: auth.uid).first_or_create do |customer|
-      customer.email = auth.info.email<ul class="nocode smells js-smells">  <li class="smell ">    <span class="description">      (<a href="https://github.com/troessner/reek/blob/master/docs/Duplicate-Method-Call.md" target="_blank">DuplicateMethodCall</a>)      Customer#self.from_omniauth calls auth.info 3 times                        <a href="customer.html#L44" class="js-smell-location">0</a>                  <a href="customer.html#L47" class="js-smell-location">1</a>                  <a href="customer.html#L48" class="js-smell-location">2</a>                  </span>  </li></ul>
+      customer.email = auth.info.email<ul class="nocode smells js-smells">  <li class="smell ">    <span class="description">      (<a href="https://github.com/troessner/reek/blob/master/docs/Duplicate-Method-Call.md" target="_blank">DuplicateMethodCall</a>)      Customer#self.from_omniauth calls auth.info 3 times                        <a href="customer.html#L45" class="js-smell-location">0</a>                  <a href="customer.html#L48" class="js-smell-location">1</a>                  <a href="customer.html#L49" class="js-smell-location">2</a>                  </span>  </li></ul>
       customer.password = Devise.friendly_token[0,20]
       customer.password_confirmation = customer.password
-      customer.firstname = auth.info.first_name<ul class="nocode smells js-smells">  <li class="smell ">    <span class="description">      (<a href="https://github.com/troessner/reek/blob/master/docs/Duplicate-Method-Call.md" target="_blank">DuplicateMethodCall</a>)      Customer#self.from_omniauth calls auth.info 3 times                        <a href="customer.html#L44" class="js-smell-location">0</a>                  <a href="customer.html#L47" class="js-smell-location">1</a>                  <a href="customer.html#L48" class="js-smell-location">2</a>                  </span>  </li></ul>
-      customer.lastname = auth.info.last_name   <ul class="nocode smells js-smells">  <li class="smell ">    <span class="description">      (<a href="https://github.com/troessner/reek/blob/master/docs/Duplicate-Method-Call.md" target="_blank">DuplicateMethodCall</a>)      Customer#self.from_omniauth calls auth.info 3 times                        <a href="customer.html#L44" class="js-smell-location">0</a>                  <a href="customer.html#L47" class="js-smell-location">1</a>                  <a href="customer.html#L48" class="js-smell-location">2</a>                  </span>  </li></ul>
+      customer.firstname = auth.info.first_name<ul class="nocode smells js-smells">  <li class="smell ">    <span class="description">      (<a href="https://github.com/troessner/reek/blob/master/docs/Duplicate-Method-Call.md" target="_blank">DuplicateMethodCall</a>)      Customer#self.from_omniauth calls auth.info 3 times                        <a href="customer.html#L45" class="js-smell-location">0</a>                  <a href="customer.html#L48" class="js-smell-location">1</a>                  <a href="customer.html#L49" class="js-smell-location">2</a>                  </span>  </li></ul>
+      customer.lastname = auth.info.last_name   <ul class="nocode smells js-smells">  <li class="smell ">    <span class="description">      (<a href="https://github.com/troessner/reek/blob/master/docs/Duplicate-Method-Call.md" target="_blank">DuplicateMethodCall</a>)      Customer#self.from_omniauth calls auth.info 3 times                        <a href="customer.html#L45" class="js-smell-location">0</a>                  <a href="customer.html#L48" class="js-smell-location">1</a>                  <a href="customer.html#L49" class="js-smell-location">2</a>                  </span>  </li></ul>
     end
   end
 end
