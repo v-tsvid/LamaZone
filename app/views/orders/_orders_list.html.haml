@@ -12,7 +12,7 @@
     %tbody
       - orders.each do |order|
         %tr
-          %td= cool_id(order.id)
+          %td= order.extend(OrderDecorator).id
           %td= "#{order.completed_date || "not completed"}"
-          %td= cool_price(order.total_price)
+          %td= PriceDecorator.new(order.total_price).decorate
           %td= link_to 'View', order

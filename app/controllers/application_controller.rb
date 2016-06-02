@@ -14,10 +14,6 @@ class ApplicationController < ActionController::Base
   helper_method :current_order, 
                 :cart_subtotal, 
                 :cart_total_quantity, 
-                :cool_id, 
-                :cool_card_number,
-                :cool_price,
-                :cool_date,
                 :flash_class
 
   rescue_from ActionController::RoutingError do
@@ -51,22 +47,6 @@ class ApplicationController < ActionController::Base
       when 'error' then "alert alert-danger"
       when 'alert' then "alert alert-danger"
     end
-  end
-
-  def cool_date(date)
-    "#{date.strftime("%B %d, %Y")}"
-  end
-
-  def cool_price(price)
-    "$#{'%.2f' % price}"
-  end
-
-  def cool_card_number(number)
-    "**** **** **** #{number.split("").last(4).join("")}"
-  end
-
-  def cool_id(id)
-    "%07d" % id
   end
 
   def new_order_from_cookies

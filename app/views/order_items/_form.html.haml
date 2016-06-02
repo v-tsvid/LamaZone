@@ -15,7 +15,7 @@
         .cart-left-col
           = "SUBTOTAL: "
       %td.cart-right-col
-        = cool_price(order.send(:update_subtotal))
+        = PriceDecorator.new(order.send(:update_subtotal)).decorate
 
 .row
   .col-md-6

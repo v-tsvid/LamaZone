@@ -2,7 +2,7 @@
   %tr.active
     %td.small
       %span.stars= "#{(rating.rate / 2.0)}"
-      = " by #{rating.customer.send(:full_name)}, #{cool_date(rating.updated_at)}"
+      = " by #{rating.customer.send(:full_name)}, #{DateDecorator.new(rating.updated_at).decorate}"
   %tr
     %td
       = rating.review.to_s

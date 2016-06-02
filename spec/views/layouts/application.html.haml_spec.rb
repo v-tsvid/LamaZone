@@ -30,7 +30,7 @@ describe 'layouts/application.html.haml' do
   before do
     allow(view).to receive(:cart_total_quantity)
     allow(view).to receive(:cart_subtotal)
-    allow(view).to receive(:cool_price)
+    allow_any_instance_of(PriceDecorator).to receive(:decorate)
     allow(view).to receive(:url_for).and_return(root_path)
   end
 

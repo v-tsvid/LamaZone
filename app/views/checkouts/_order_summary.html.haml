@@ -1,4 +1,4 @@
-- {"SUBTOTAL: " => "#{cool_price(item.subtotal)}", "DISCOUNT: " => "#{item.coupon ? item.coupon.discount : 0}%", "SHIPPING: " => "#{cool_price(item.shipping_price)}", "TOTAL: " => "#{cool_price(item.total_price)}"}.each do |key, val|
+- {"SUBTOTAL: " => "#{PriceDecorator.new(item.subtotal).decorate}", "DISCOUNT: " => "#{item.coupon ? item.coupon.discount : 0}%", "SHIPPING: " => "#{PriceDecorator.new(item.shipping_price).decorate}", "TOTAL: " => "#{PriceDecorator.new(item.total_price).decorate}"}.each do |key, val|
   %tr
   %td{colspan: '2'}
   %td{colspan: '2'}

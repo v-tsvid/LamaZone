@@ -14,7 +14,7 @@
       = form_tag(controller: 'order_items', action: 'create', method: :post) do
         .form-inline
           .col-md-4
-            %h4= cool_price @book.price
+            %h4= PriceDecorator.new(@book.price).decorate
           .col-md-4.col-md-offset-4
             .book-form-right
               = number_field_tag 'quantity', '1', in: 1..@book.books_in_stock, id: "book_quantity", class: 'form-control' 

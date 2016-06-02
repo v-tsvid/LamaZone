@@ -2,11 +2,11 @@
   %td= image_tag order_item.book.images, size: '30x40'
   %td.cart-title-col
     = link_to "#{order_item.book.title}", order_item.book
-  %td= cool_price order_item.book.price
+  %td= PriceDecorator.new(order_item.book.price).decorate
   %td 
     = number_field_tag "order_items_attrs[][quantity]", order_item.quantity, min: 1, class: 'form-control'
     = hidden_field_tag "order_items_attrs[][book_id]", order_item.book.id
-  %td= label_tag "order_items_attrs[][price]", cool_price(order_item.price)
+  %td= label_tag "order_items_attrs[][price]", PriceDecorator.new(order_item.price).decorate
   %td
     - if current_order
       = link_to 'X', order_item,  method: :delete, class: 'btn btn-danger'

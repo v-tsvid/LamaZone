@@ -6,7 +6,7 @@
           %tbody
             %tr
               %td
-                %h4= "Order #{cool_id(@order.id)}"
+                %h4= "Order #{@order.extend(OrderDecorator).id}"
               %td
                 %p= "(#{@order.state.humanize})"
 

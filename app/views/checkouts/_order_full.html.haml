@@ -2,7 +2,7 @@
   .col-md-12
     %h4
       ORDER 
-      = cool_id(checkout.model.id)
+      = checkout.model.extend(OrderDecorator).id
 .row-fluid
   .col-md-3
     %h4 
@@ -29,7 +29,7 @@
     - item = checkout.model
     %p= item.shipping_method
     %p
-      = cool_price(item.shipping_price)
+      = PriceDecorator.new(item.shipping_price).decorate
     %br/
 
   .col-md-3
@@ -37,8 +37,8 @@
       Payment
       - if view == 'confirm'
         (#{link_to 'edit', checkout_path(:payment)})
-    - item = checkout.model.credit_card
-    %p= cool_card_number(item.number)
+    - item = checkout.model.credit_card.extend CreditCardDecorator
+    %p= item.number
     %p= "#{item.expiration_month}/#{item.expiration_year}"
     %br/
 
