@@ -15,7 +15,7 @@
 
         .col-md-3.col-md-offset-1
           %h4 SHIPPING ADDRESS 
-          - if @checkout.model.billing_address.attributes_short == @checkout.model.shipping_address.attributes_short && !flash[:errors]
+          - if @checkout.model.billing_address && @checkout.model.shipping_address && @checkout.model.billing_address.attributes_short == @checkout.model.shipping_address.attributes_short && !flash[:errors]
             = check_box_tag 'use_billing', 'use billing', true 
           - else
             = check_box_tag 'use_billing', 'use billing', false

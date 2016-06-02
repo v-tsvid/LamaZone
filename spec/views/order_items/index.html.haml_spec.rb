@@ -13,6 +13,7 @@ RSpec.describe "order_items/index", type: :view do
 
     allow_any_instance_of(Order).to receive(:order_items).and_return @order_items
     allow(view).to receive(:cool_price)
+    allow(view).to receive(:current_order)
 
     render
   end
@@ -39,7 +40,7 @@ RSpec.describe "order_items/index", type: :view do
 
   it "displays delete buttons for each order_item" do
     @order_items.each do |item|
-      expect(rendered).to have_link 'X', order_items_remove_from_cart_path(item.id)
+      expect(rendered).to have_link 'X', item
     end
   end
 

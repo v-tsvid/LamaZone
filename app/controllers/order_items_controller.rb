@@ -6,7 +6,7 @@ class OrderItemsController < ApplicationController
   # GET /order_items
   def index
     @order = order_with_order_items
-    @order_items = @order.order_items
+    @order_items = @order.order_items if @order
 
     if !@order || @order_items.empty?
       redirect_to root_path, notice: 'Your cart is empty' 
@@ -29,7 +29,7 @@ class OrderItemsController < ApplicationController
   end
 
   def destroy
-    @order_item = OrderItem.find(params[:id])
+    @order_item = OrderItem.find_by(id: params[:id])
     @book = @order_item.book  
     @order = current_order
     

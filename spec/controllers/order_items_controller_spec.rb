@@ -37,7 +37,7 @@ RSpec.describe OrderItemsController, type: :controller do
 
   shared_examples ":compact_if_not_compacted" do
     it "receives :compact_if_not_compacted with order.order_items" do
-      expect(controller).to receive(:compact_if_not_compacted).with(order.order_items)
+      expect(OrderItem).to receive(:compact_if_not_compacted).with(order.order_items)
       subject
     end
   end
@@ -56,82 +56,11 @@ RSpec.describe OrderItemsController, type: :controller do
     end
   end
 
-  describe "POST #update_cart" do
-    let(:order_items) { FactoryGirl.create_list :order_item, 2 }
-
-    subject { post :update_cart, { order_items_params: order_items_params } }
-
-    context "when current order exists" do
-      
-      before do
-        allow(controller).to receive(:current_order).and_return order
-        allow(controller).to receive(
-          :current_order_items_from_params).and_return order_items
-      end
-
-      it_behaves_like "current order items destroying"
-
-      it "assigns :current_order_items_from_params as @order_items" do
-        subject
-        expect(assigns(:order_items)).to eq order_items
-      end
-    end
-
-    context "when current order doesn't exist" do
-      before do
-        allow(controller).to receive(:current_order).and_return nil
-        allow(controller).to receive(
-          :order_items_from_params).and_return order_items
-      end
-
-      it "assigns :order_items_from_params as @order_items" do
-        subject
-        expect(assigns(:order_items)).to eq order_items
-      end
-
-      it "receives :write_to_cookies with @order_items" do
-        expect(controller).to receive(:write_to_cookies).with(order_items)
-        subject
-      end
-    end
-
-    it_behaves_like "redirecting to order_items_path"
-  end
-
-  describe "DELETE #empty_cart" do
-
-    subject { delete :empty_cart }
-
-    context "when current order exists" do
-
-      before { allow(controller).to receive(:current_order).and_return order }
-
-      it_behaves_like "current order items destroying"
-
-      it "destroys current order" do
-        expect(order).to receive(:destroy)
-        subject
-      end
-    end
-
-    context "when current order doesn't exist" do
-      before { allow(controller).to receive(:current_order).and_return nil }
-
-      it "removes key 'order_items' from cookies" do
-        expect_any_instance_of(ActionDispatch::Cookies::CookieJar).to receive(
-          :delete).with('order_items')
-        subject
-      end
-    end
-
-    it_behaves_like "redirecting to order_items_path"
-  end
-
-  describe "POST #add_to_cart" do
+  describe "POST #create" do
     let(:params) { {book_id: book.id, quantity: 1} }
     let(:order_item) { FactoryGirl.create :order_item }
 
-    subject { post :add_to_cart, params }
+    subject { post :create, params }
 
     before do
       allow(OrderItem).to receive(:create).and_return order_item
@@ -167,22 +96,12 @@ RSpec.describe OrderItemsController, type: :controller do
         it_behaves_like "order item creating", 'new'
       end
 
-      it "receives save! on order" do
-        expect_any_instance_of(Order).to receive(:save!)
-        subject
-      end
-
       context "if order wasn't saved" do
         before do 
           allow_any_instance_of(Order).to receive(:save!).and_return false
         end
 
         it_behaves_like "redirecting to :back"
-
-        it "sets flash[:alert] to \"Can't add book\"" do
-          subject
-          expect(flash[:alert]).to eq "Can't add book"
-        end
       end
     end
 
@@ -201,48 +120,32 @@ RSpec.describe OrderItemsController, type: :controller do
     it_behaves_like "notice added or removed", "added to"
   end
 
-  describe "POST #remove_from_cart" do
-    let(:params) { {book_id: book.id} }
+  describe "POST #destroy" do
     let!(:order_item) { FactoryGirl.create :order_item, order: order, book: book }
-
-    subject { post :remove_from_cart, params }
 
     before do
       request.env["HTTP_REFERER"] = root_path
+      allow(controller).to receive(:current_order).and_return order
     end
 
-    context "when current order exists" do
-      before do
-        allow(controller).to receive(:current_order).and_return order
-      end
+    subject { delete :destroy, {id: order_item.id} }
 
-      it "finds order item of current order with requested book_id" do
-        allow(OrderItem).to receive(:find_by).and_return order_item
-        expect(OrderItem).to receive(:find_by).with(
-          order_id: order.id, book_id: book.id.to_s)
-        subject
-      end
-      it "destroys order item finded" do
-        expect_any_instance_of(OrderItem).to receive(:destroy)
-        subject
-      end
-
-      it "destroys current order if it has no order items" do
-        allow_any_instance_of(OrderItem).to receive(:[]).and_return nil
-        expect_any_instance_of(Order).to receive(:destroy)
-        subject
-      end
+    it "finds order item by requested order_id" do
+      allow(OrderItem).to receive(:find_by).and_return order_item
+      expect(OrderItem).to receive(:find_by).with(id: order_item.id.to_s)
+      subject
     end
 
-    context "when current order doesn't exist" do
-      before do
-        allow(controller).to receive(:current_order).and_return nil
-      end
+    it "destroys order item finded" do
+      expect_any_instance_of(OrderItem).to receive(:destroy)
+      subject
+    end
 
-      it "receives :pop_from_cookies" do
-        expect(controller).to receive(:pop_from_cookies)
-        subject
-      end
+    it "destroys current order if it has no order items" do
+      allow_any_instance_of(OrderItem).to receive(:book).and_return book
+      allow_any_instance_of(OrderItem).to receive(:[]).and_return nil
+      expect_any_instance_of(Order).to receive(:destroy)
+      subject
     end
 
     it_behaves_like "redirecting to :back"
@@ -291,16 +194,4 @@ RSpec.describe OrderItemsController, type: :controller do
 
   describe "#order_with_order_items" do
   end
-
-  describe "#combine_with_cookies" do
-  end
-
-  describe "#compact_if_not_compacted" do
-  end
-
-  describe "#current_order_items_from_params" do
-  end
-
-  describe "#order_items_from_params" do
-  end  
 end
