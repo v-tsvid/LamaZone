@@ -27,6 +27,14 @@ textarea {
   width: 100%;
 }
 
+.center {
+  text-align: center;
+}
+
+.nowrap {
+  white-space:nowrap;
+}
+
 .form-control {
   min-width: 70px;
 }
@@ -44,7 +52,7 @@ textarea {
 }
 
 .cart-title-col {
-  width: 78%;
+  width: 70%;
 }
 
 th, td {
@@ -84,6 +92,10 @@ th {
   margin-right: 10px;
 }
 
+.cart-right-col-thin {
+  text-align: right;
+}
+
 .cart-right-col {
   font-weight: bolder;
   text-align: right;
@@ -91,7 +103,7 @@ th {
 
 .summary-left-col {
   font-weight: bolder;
-  width: 80px;
+  width: 90px;
   text-align: right;
   margin-right: 10px;
 }
@@ -120,14 +132,14 @@ a {
 
 
 span.stars, span.stars span {
-    display: inline-block;
-    background: image-url("dharmacakras.png") 0 -16px repeat-x;
-    width: 80px;
-    height: 16px;
+  display: inline-block;
+  background: image-url("dharmacakras.png") 0 -16px repeat-x;
+  width: 80px;
+  height: 16px;
 }
 
 span.stars span {
-    background-position: 0 0;
+  background-position: 0 0;
 }
 
 .image {

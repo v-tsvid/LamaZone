@@ -1,6 +1,6 @@
 class DateDecorator < BaseDecorator
  
   def decorate
-    "#{@obj.strftime("%B %d, %Y")}"
+    @obj ? "#{I18n.l(@obj)}" : nil
   end
 end

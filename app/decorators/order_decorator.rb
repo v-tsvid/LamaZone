@@ -4,6 +4,6 @@ module OrderDecorator
   end
  
   def id
-    "%07d" % plain_id
+    "R%09d" % plain_id
   end
 end

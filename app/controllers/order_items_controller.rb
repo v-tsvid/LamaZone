@@ -9,7 +9,7 @@ class OrderItemsController < ApplicationController
     @order_items = @order.order_items if @order
 
     if !@order || @order_items.empty?
-      redirect_to root_path, notice: 'Your cart is empty' 
+      redirect_to root_path, notice: t("checkout.cart_is_empty") 
     end
   end
 
@@ -25,7 +25,7 @@ class OrderItemsController < ApplicationController
       interact_with_cookies { |order_items| push_to_cookies(order_items) }
     end
     redirect_to :back, notice: "\"#{Book.find(params[:book_id]).title}\" " \
-                                   "was added to the cart"
+                                   "#{t("checkout.added")}"
   end
 
   def destroy
@@ -37,13 +37,13 @@ class OrderItemsController < ApplicationController
     @order.destroy unless @order.order_items[0]
     
     redirect_to :back, notice: "\"#{@book.title}\" " \
-                                 "was removed from the cart"
+                                 "#{t("checkout.removed")}"
   end
 
   def delete_from_cookies
     interact_with_cookies { |order_items| pop_from_cookies(order_items) }
     redirect_to :back, notice: "\"#{Book.find(params[:book_id]).title}\" " \
-                                   "was removed from the cart"
+                                   "#{t("checkout.removed")}"
   end
 
   private

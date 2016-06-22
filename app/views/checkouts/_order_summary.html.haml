@@ -1,4 +1,4 @@
-- {"SUBTOTAL: " => "#{PriceDecorator.new(item.subtotal).decorate}", "DISCOUNT: " => "#{item.coupon ? item.coupon.discount : 0}%", "SHIPPING: " => "#{PriceDecorator.new(item.shipping_price).decorate}", "TOTAL: " => "#{PriceDecorator.new(item.total_price).decorate}"}.each do |key, val|
+- {"#{t("checkout.order.subtotal")}: " => "#{PriceDecorator.new(item.subtotal).decorate}", "#{t("checkout.order.discount")}: " => "#{item.coupon ? item.coupon.discount : 0}%", "#{t("checkout.order.shipping")}: " => "#{PriceDecorator.new(item.shipping_price).decorate}", "#{t("checkout.order.total")}: " => "#{PriceDecorator.new(item.total_price).decorate}"}.each do |key, val|
   %tr
   %td{colspan: '2'}
   %td{colspan: '2'}

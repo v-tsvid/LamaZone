@@ -6,7 +6,7 @@
       
       .row-fluid
         .col-md-3
-          %h4 BILLING ADDRESS
+          %h4= t("addresses.billing_address")
           = label_tag nil, nil, transparent: true
           #billing_form
             = model.fields_for(:billing_address, @checkout.model.billing_address) do |bil_addr_f|
@@ -14,7 +14,7 @@
             %br/
 
         .col-md-3.col-md-offset-1
-          %h4 SHIPPING ADDRESS 
+          %h4= t("addresses.shipping_address")
           - if @checkout.model.billing_address && @checkout.model.shipping_address && @checkout.model.billing_address.attributes_short == @checkout.model.shipping_address.attributes_short && !flash[:errors]
             = check_box_tag 'use_billing', 'use billing', true 
           - else
@@ -26,7 +26,7 @@
               = render 'address_form', f: ship_addr_f, addr: 'shipping_address', attrs: @attrs['shipping_address'], kountry: @checkout.model.shipping_address.try(:country_id)
         
         .col-md-3.col-md-offset-1
-          %h4 ORDER SUMMARY
+          %h4.center= t("checkout.order.summary")
           %table
             %body
               = render partial: "order_summary", locals: {item: @checkout.model}  
@@ -34,4 +34,4 @@
       .row-fluid
         .col-md-3
           .actions
-            = checkout.submit "SAVE AND CONTINUE", class: 'btn btn-warning'
+            = checkout.submit t("checkout.save_and_continue"), class: 'btn btn-warning'

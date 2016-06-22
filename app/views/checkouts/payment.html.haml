@@ -2,7 +2,7 @@
   .row-fluid
     .col-md-3
 
-      %h4 CREDIT CARD
+      %h4= t("c_card")
 
       = form_for(@checkout, url: wizard_path, html: { method: :put }) do |checkout|
         = checkout.fields_for(:model, @checkout.model) do |model|
@@ -11,10 +11,10 @@
         
         %br/
         .actions
-          = checkout.submit "SAVE AND CONTINUE", class: "btn btn-warning"
+          = checkout.submit t("checkout.save_and_continue"), class: "btn btn-warning"
 
     .col-md-3.col-md-offset-5
-      %h4 ORDER SUMMARY
+      %h4.center= t("checkout.order.summary")
       %table
         %body
           = render partial: "order_summary", locals: {item: @checkout.model}

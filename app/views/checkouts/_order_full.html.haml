@@ -1,31 +1,31 @@
 .row-fluid
   .col-md-12
     %h4
-      ORDER 
+      = t("ordr")
       = checkout.model.extend(OrderDecorator).id
 .row-fluid
   .col-md-3
     %h4 
-      Billing address
+      = t("checkout.order.full.bil_address")
       - if view == 'confirm'
-        (#{link_to 'edit', checkout_path(:address)})
+        (#{link_to t("checkout.edit"), checkout_path(:address)})
     - item = checkout.model.billing_address
     = render partial: 'confirm_address_fields', locals: {item: item}
 
 
   .col-md-3
     %h4 
-      Shipping address
+      = t("checkout.order.full.ship_address")
       - if view == 'confirm'
-        (#{link_to 'edit', checkout_path(:address)})
+        (#{link_to t("checkout.edit"), checkout_path(:address)})
     - item = checkout.model.shipping_address
     = render partial: 'confirm_address_fields', locals: {item: item}
 
   .col-md-3
     %h4 
-      Shipment
+      = t("checkout.order.full.shipment")
       - if view == 'confirm'
-        (#{link_to 'edit', checkout_path(:shipment)})
+        (#{link_to t("checkout.edit"), checkout_path(:shipment)})
     - item = checkout.model
     %p= item.shipping_method
     %p
@@ -34,9 +34,9 @@
 
   .col-md-3
     %h4
-      Payment
+      = t("checkout.order.full.payment")
       - if view == 'confirm'
-        (#{link_to 'edit', checkout_path(:payment)})
+        (#{link_to t("checkout.edit"), checkout_path(:payment)})
     - item = checkout.model.credit_card.extend CreditCardDecorator
     %p= item.number
     %p= "#{item.expiration_month}/#{item.expiration_year}"
@@ -48,10 +48,12 @@
     %table.table
       %thead
         %tr.active
-          %th{colspan: '2'} BOOK
-          %th PRICE
-          %th QTY
-          %th TOTAL
+          %th{colspan: '2'}
+            = t("checkout.items.book")
+          %th= t("checkout.items.price")
+          %th.nowrap
+            = t("checkout.items.qty")
+          %th= t("checkout.items.total")
 
       %tbody
         - item.order_items.each do |item|
@@ -62,6 +64,6 @@
     - if view == 'confirm'
       = form_for(checkout, url: wizard_path, html: { method: :put }) do |checkout|
         .actions
-          = checkout.submit "PLACE ORDER", class: "btn btn-warning"
+          = checkout.submit t("checkout.place_order"), class: "btn btn-warning"
     - else
-      = button_to "GO BACK TO STORE", books_path, method: :get, class: "btn btn-warning"
+      = button_to t("checkout.back_to_store"), books_path, method: :get, class: "btn btn-warning"

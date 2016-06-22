@@ -32,4 +32,122 @@ en:
   sign_up: "SIGN UP"
   sign_in: "SIGN IN"
   sign_out: "SIGN OUT"
+  add_to_cart: "Add to cart"
+  add_review: "Add review for this book"
+  reviews: "Reviews"
+  by: "by"
+  by_author: " by "
+  by_author_1: "by" 
+  shop_by: "SHOP BY CATEGORIES"
+  confirm: "Are you sure?"
+  shipping_method: "SHIPPING METHOD"
+  c_card: "CREDIT CARD"
+  ordr: "ORDER"
+  
+  categories:
+    category: 'Category'
+    'all': 'All'
+    'bestsellers': 'Bestsellers'
+    'other': 'Other'
+
+  settings_page:
+    settings: "Settings"
+    save: "SAVE"
+    email: "EMAIL"
+    password: "PASSWORD"
+    remove_acc: "REMOVE ACCOUNT"
+    remove_acc_button: "PLEASE REMOVE MY ACCOUNT"
+    rem_acc_understand: "I understand that all data will be lost"
+
+  orders_page:
+    no_orders: "NO ORDERS"
+    number: "NUMBER"
+    completed: "COMPLETED"
+    total: "TOTAL"
+    not_completed: "not completed"
+    view: "View"
+    in_progress: "IN PROGRESS"
+    processing: "PROCESSING"
+    shipping: "SHIPPING"
+    completed: "COMPLETED"
+    canceled: "CANCELED"
+
+  addresses:
+    billing_address: "BILLING ADDRESS"
+    shipping_address: "SHIPPING ADDRESS"
+    firstname: "Firstname"
+    lastname: "Lastname"
+    phone: "Phone"
+    address1: "Address (str. 1)"
+    address2: "Address (str. 2)"
+    city: "City"
+    zipcode: "Zipcode"
+    use_billing: "Use billing address"
+
+  credit_card:
+    firstname: "Firstname"
+    lastname: "Lastname"
+    number: "Number"
+    expiration_month: "Expiration month"
+    expiration_year: "Expiration year"
+    cvv: "CVV"
+
+  checkout:
+    shopping_cart: "SHOPPING CART"
+    cart_is_empty: "Your cart is empty"
+    added: "was added to the cart"
+    removed: "was removed from the cart"
+    continue_shopping: "CONTINUE SHOPPING"
+    remove: "X"
+    empty_cart: "EMPTY CART"
+    update_cart: "UPDATE"
+    checkout: "CHECKOUT"
+    coupon_code: "Coupon code"
+    save_and_continue: "SAVE AND CONTINUE"
+    edit: "edit"
+    place_order: "PLACE ORDER"
+    back_to_store: "GO BACK TO STORE"
+    to_cart: "GO TO CART"
+
+    items:
+      book: "BOOK"
+      price: "PRICE"
+      qty: "QTY"
+      total: "TOTAL"
+
+    order:
+      summary: "ORDER SUMMARY"
+      subtotal: "SUBTOTAL"
+      discount: "DISCOUNT"
+      shipping: "SHIPPING"
+      total: "TOTAL"
+
+      full:
+        bil_address: "Billing address"
+        ship_address: "Shipping address"
+        shipmnt: "Shipment"
+        payment: "Payment"
+
+    tabs:
+      address: "ADDRESS"
+      shipment: "SHIPMENT"
+      payment: "PAYMENT"
+      confirm: "CONFIRM"
+      complete: "COMPLETE"
+
+  views:
+    pagination:
+      first: "&laquo; First"
+      last: "Last &raquo;"
+      previous: "&lsaquo; Prev"
+      next: "Next &rsaquo;"
+
+  defaults: &defaults
+    formats:
+      default: "%B %d %Y"
+      short: "%m %d %Y"
+  date:
+    <<: *defaults
+  time:
+    <<: *defaults
 

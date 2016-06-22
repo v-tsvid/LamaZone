@@ -2,7 +2,7 @@
   
   .row-fluid
     .col-md-3
-      %h4 SHIPPING METHOD
+      %h4= t("shipping_method")
       = form_for(@checkout, url: wizard_path, html: { method: :put }) do |checkout|
         = checkout.fields_for(:model, @checkout.model) do |model|
           - @current_method = @checkout.model.shipping_method
@@ -11,10 +11,10 @@
             = render partial: 'shipping_method_field', locals: {model: model, method: method, current_method: @current_method, checkout: @checkout}
           
         .actions
-          = checkout.submit "SAVE AND CONTINUE", class: 'btn btn-warning'
+          = checkout.submit t("checkout.save_and_continue"), class: 'btn btn-warning'
 
     .col-md-3.col-md-offset-5
-      %h4 ORDER SUMMARY
+      %h4.center= t("checkout.order.summary")
       %table
         %body
           = render partial: "order_summary", locals: {item: @checkout.model}

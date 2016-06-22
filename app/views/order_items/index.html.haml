@@ -1,6 +1,6 @@
 .row-fluid
   .col-md-8.col-md-offset-2
-    %h4 SHOPPING CART
+    %h4= t("checkout.shopping_cart")
 .row-fluid
   .col-md-8.col-md-offset-2
     - if current_customer
@@ -17,5 +17,5 @@
       .form-inline
         - @order.order_items.each do |item|
           = render partial: "hidden_order_item", locals: {order_item: item}
-        = text_field_tag "order[coupon_code]", nil, placeholder: 'Coupon code', class: 'form-control'
-        = submit_tag 'CHECKOUT', class: 'btn btn-success'
+        = text_field_tag "order[coupon_code]", nil, placeholder: t("checkout.coupon_code"), class: 'form-control'
+        = submit_tag t("checkout.checkout"), class: 'btn btn-success'

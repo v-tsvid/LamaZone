@@ -11,3 +11,123 @@ uk:
   sign_up: "РЕЄСТРАЦІЯ"
   sign_in: "УВІЙТИ"
   sign_out: "ВИЙТИ"
+  add_to_cart: "Додати у кошик"
+  add_review: "Оцінити книгу"
+  reviews: "Оцінки"
+  by: "від"
+  by_author: ", "
+  by_author_1: ""
+  shop_by: "ЗА КАТЕГОРІЯМИ"
+  confirm: "Ви впевнені?"
+  shipping_method: "СПОСІБ ДОСТАВКИ"
+  c_card: "КРЕДИТНА КАРТА"
+  ordr: "ЗАМОВЛЕННЯ"
+
+  categories:
+    category: 'Категорія'
+    'all': 'Усі'
+    'bestsellers': 'Бестселери'
+    'other': 'Інші'
+
+  settings_page:
+    settings: "Налаштування"
+    save: "ЗБЕРЕГТИ"
+    email: "EMAIL"
+    password: "ПАРОЛЬ"
+    remove_acc: "ВИДАЛЕННЯ ПРОФІЛЮ"
+    remove_acc_button: "ВИДАЛІТЬ МІЙ ПРОФІЛЬ"
+    rem_acc_understand: "Я розумію, що усі мох дані будуть втрачені"
+
+  orders_page:
+    no_orders: "ЗАМОВЛЕНЬ НЕМАЄ"
+    number: "НОМЕР"
+    completed: "ВИКОНАНО"
+    total: "ВСЬОГО"
+    not_completed: "не виконано"
+    view: "Переглянути"
+    in_progress: "У ПРОЦЕСІ"
+    processing: "В ОБРОБЦІ"
+    shipping: "ДОСТАВКА"
+    completed: "ВИКОНАНО"
+    canceled: "ВІДМІНЕНО"
+
+  addresses:
+    billing_address: "АДРЕСА ПЛАТНИКА"
+    shipping_address: "АДРЕСА ОТРИМУВАЧА"
+    firstname: "Ім'я"
+    lastname: "Прізвище"
+    phone: "Телефон"
+    address1: "Адреса (р. 1)"
+    address2: "Адреса (р. 2)"
+    city: "Нас. пункт"
+    zipcode: "Пошт. індекс"
+    use_billing: "Скопіювати адресу платника"
+
+  credit_card:
+    firstname: "Ім'я"
+    lastname: "Прізвище"
+    number: "Номер"
+    expiration_month: "Термін дії, місяць"
+    expiration_year: "Термін дії, рік"
+    cvv: "CVV"
+
+  checkout:
+    shopping_cart: "КОШИК"
+    cart_is_empty: "Ваш кошик порожній"
+    added: "додано у кошик"
+    removed: "видалено з кошика"
+    continue_shopping: "ПРОДОВЖИТИ КУПУВАТИ"
+    remove: "Х"
+    empty_cart: "ВИДАЛИТИ ВСЕ"
+    update_cart: "ОНОВИТИ"
+    checkout: "ЗАМОВИТИ"
+    coupon_code: "Код купона"
+    save_and_continue: "ЗБЕРЕГТИ І ПРОДОВЖИТИ"
+    edit: "ред."
+    place_order: "ЗАМОВИТИ"
+    back_to_store: "НАЗАД ДО МАГАЗИНУ"
+    to_cart: "ДО КОШИКА"
+
+    items:
+      book: "КНИГА"
+      price: "ВАРТІСТЬ"
+      qty: "К-СТЬ"
+      total: "ВСЬОГО"
+
+    order:
+      summary: "ЗАМОВЛЕННЯ"
+      subtotal: "ВСЬОГО"
+      discount: "ЗНИЖКА"
+      shipping: "ДОСТАВКА"
+      total: "ДО СПЛАТИ"
+
+      full:
+        bil_address: "Адр. платника"
+        ship_address: "Адр. отримувача"
+        shipmnt: "Доставка"
+        payment: "Оплата"
+
+    tabs:
+      address: "АДРЕСИ"
+      shipment: "ДОСТАВКА"
+      payment: "ОПЛАТА"
+      confirm: "ПІДТВЕРДЖЕННЯ"
+      complete: "ЗАВЕРШЕННЯ"
+
+  views:
+    pagination:
+      first: "&laquo; Початок"
+      last: "Кінець &raquo;"
+      previous: "&lsaquo; Назад"
+      next: "Вперед &rsaquo;"
+  
+  defaults: &defaults
+    month_names:
+      [~, січня, лютого, березня, квітня, травня, червня, липня, серпня, вересня, жовтня, листопада, грудня]
+    formats:
+      default: "%d %B %Y"
+      short: "%d %m %Y"
+  date:
+    <<: *defaults
+  time:
+    <<: *defaults

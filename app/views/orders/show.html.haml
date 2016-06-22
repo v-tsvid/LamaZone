@@ -1,22 +1,24 @@
 .row-fluid
   .col-md-8.col-md-offset-2
     .row
-      .col-md-4
+      .col-md-6
         %table
           %tbody
             %tr
               %td
-                %h4= "Order #{@order.extend(OrderDecorator).id}"
+                %h4= "#{t :ordr} #{@order.extend(OrderDecorator).id}"
               %td
-                %p= "(#{@order.state.humanize})"
+                %p= "(#{t("orders_page.#{@order.state}")})"
 
     %table.table
       %thead
         %tr.active
-          %th{colspan: '2'} BOOK
-          %th PRICE
-          %th QTY
-          %th TOTAL
+          %th{colspan: '2'}
+            = t("checkout.items.book")
+          %th= t("checkout.items.price")
+          %th.nowrap
+              = t("checkout.items.qty")
+          %th= t("checkout.items.total")
 
       %tbody
         - @order.order_items.each do |item|

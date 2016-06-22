@@ -41,7 +41,7 @@ RSpec.describe "books/show", type: :view do
     end
 
     it "displays 'add to cart' button" do
-      expect(rendered).to have_button 'Add to Cart'
+      expect(rendered).to have_button I18n.t(:add_to_cart)
     end
   end
 

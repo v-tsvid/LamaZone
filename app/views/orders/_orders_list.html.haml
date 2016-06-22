@@ -1,18 +1,18 @@
 - if orders.empty?
-  %p NO ORDERS
+  %p= t("orders_page.no_orders")
 - else
   %table.table.orders-list
     %thead
       %tr.active
-        %th NUMBER
-        %th COMPLETED
-        %th TOTAL
+        %th= t("orders_page.number")
+        %th= t("orders_page.completed")
+        %th= t("orders_page.total")
         %th
 
     %tbody
       - orders.each do |order|
         %tr
           %td= order.extend(OrderDecorator).id
-          %td= "#{order.completed_date || "not completed"}"
+          %td= "#{DateDecorator.new(order.completed_date).decorate || t("orders_page.not_completed")}"
           %td= PriceDecorator.new(order.total_price).decorate
-          %td= link_to 'View', order
+          %td= link_to t("orders_page.view"), order

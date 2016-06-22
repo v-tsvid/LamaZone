@@ -3,15 +3,15 @@
     .col-md-9
       .navigation
         - if category_show
-          = link_to "HOME", root_path
+          = link_to t(:home), root_path
           %span >>
-          = link_to "SHOP", books_path
+          = link_to t(:shop), books_path
           %span >> 
-          = link_to "#{category.title.humanize}", category_path(category)
+          = link_to "#{t "categories.#{category.title}"}", category_path(category)
       
-          %h4= "Category - #{category.title.humanize}"
+          %h4= "#{t "categories.category"} - #{t "categories.#{category.title}"}"
         - else
-          %h4 Category - All
+          %h4= "#{t "categories.category"} - #{t "categories.all"}"
         = render @books
 
     = render partial: 'categories/categories'

@@ -1,31 +1,31 @@
 .form
   .form-group
     .field
-      = f.text_field :firstname, placeholder: 'Firstname', class: "form-control"
+      = f.text_field :firstname, placeholder: t("addresses.firstname"), class: "form-control"
     %br/
 
     .field
-      = f.text_field :lastname, placeholder: 'Lastname', class: "form-control"
+      = f.text_field :lastname, placeholder: t("addresses.lastname"), class: "form-control"
     %br/
 
     .field
-      = f.text_field :phone, placeholder: 'Phone', class: "form-control"
+      = f.text_field :phone, placeholder: t("addresses.phone"), class: "form-control"
     %br/
 
   .field
-    = f.text_field :address1, placeholder: 'Address1', class: "form-control"
+    = f.text_field :address1, placeholder: t("addresses.address1"), class: "form-control"
   %br/
 
   .field
-    = f.text_field :address2, placeholder: 'Address2', class: "form-control"
+    = f.text_field :address2, placeholder: t("addresses.address2"), class: "form-control"
   %br/
 
   .field
-    = f.text_field :city, placeholder: 'City', class: "form-control"
+    = f.text_field :city, placeholder: t("addresses.city"), class: "form-control"
   %br/
 
   .field
-    = f.text_field :zipcode, placeholder: 'Zipcode', class: "form-control"
+    = f.text_field :zipcode, placeholder: t("addresses.zipcode"), class: "form-control"
   %br/
 
   .field
@@ -40,4 +40,4 @@
     %br/
 
     .actions
-      = f.submit "SAVE", class: "btn btn-warning"
+      = f.submit t("settings_page.save"), class: "btn btn-warning"

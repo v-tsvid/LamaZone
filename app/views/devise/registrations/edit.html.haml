@@ -1,10 +1,10 @@
 .row-fluid
   .col-md-10.col-md-offset-2
-    %h3 Settings
+    %h3= t("settings_page.settings")
 
 .row-fluid
   .col-md-3.col-md-offset-2
-    %h4 BILLING ADDRESS
+    %h4= t("addresses.billing_address")
     .billing_address_form
       - if @billing_address.persisted?
         = form_for(@billing_address, html: { method: :put }) do |bil_addr_f|
@@ -16,7 +16,7 @@
 
   .col-md-3.col-md-offset-1
     .shipping_address_form
-      %h4 SHIPPING ADDRESS
+      %h4= t("addresses.shipping_address")
       - if @shipping_address.persisted?
         = form_for(@shipping_address, html: { method: :put }) do |ship_addr_f|
           = render 'form', f: ship_addr_f, kountry: @shipping_address.try(:country_id), attrs: flash['attrs']
@@ -30,7 +30,7 @@
     .email_form
       = form_for(resource, as: resource_name, url: registration_path(resource_name), html: { method: :put }) do |f|
 
-        %h4 EMAIL
+        %h4= t("settings_page.email")
         - if resource.errors.messages && resource.errors.messages[:email]
           .has-error
             .field
@@ -45,13 +45,13 @@
             %br/
 
         .actions
-          = f.submit "SAVE", class: "btn btn-warning"
+          = f.submit t("settings_page.save"), class: "btn btn-warning"
   
   .col-md-3.col-md-offset-1
     .password_form
       = form_for(resource, as: resource_name, url: registration_path(resource_name), html: { method: :put }) do |f|
 
-        %h4 PASSWORD
+        %h4= t("settings_page.password")
 
         - if devise_mapping.confirmable? && resource.pending_reconfirmation?
           %div Currently waiting confirmation for: #{resource.unconfirmed_email}
@@ -83,18 +83,18 @@
             %br/
 
         .actions
-          = f.submit "SAVE", class: 'btn btn-warning'
+          = f.submit t("settings_page.save"), class: 'btn btn-warning'
 
 .row-fluid
 
 .row-fluid
   .col-md-10.col-md-offset-2
-    %h4 REMOVE ACCOUNT
+    %h4= t("settings_page.remove_acc")
 
     = form_for(resource, as: resource_name, url: registration_path(resource_name), html: { method: :delete }) do |f|
 
       .actions
-        = f.submit "PLEASE REMOVE MY ACCOUNT", class: 'btn btn-danger'
+        = f.submit t("settings_page.remove_acc_button"), class: 'btn btn-danger'
         = check_box_tag 'confirm'
-        = label_tag nil, 'I understand that all data will be lost', class: 'label label-warning'
+        = label_tag nil, t("settings_page.rem_acc_understand"), class: 'label label-warning'
 

@@ -2,13 +2,15 @@
   %td= image_tag order_item.book.images, size: '30x40'
   %td.cart-title-col
     = link_to "#{order_item.book.title}", order_item.book
-  %td= PriceDecorator.new(order_item.book.price).decorate
+  %td.cart-right-col-thin
+    = PriceDecorator.new(order_item.book.price).decorate
   %td 
     = number_field_tag "order_items_attrs[][quantity]", order_item.quantity, min: 1, class: 'form-control'
     = hidden_field_tag "order_items_attrs[][book_id]", order_item.book.id
-  %td= label_tag "order_items_attrs[][price]", PriceDecorator.new(order_item.price).decorate
+  %td.cart-right-col
+    = label_tag "order_items_attrs[][price]", PriceDecorator.new(order_item.price).decorate
   %td
     - if current_order
-      = link_to 'X', order_item,  method: :delete, class: 'btn btn-danger'
+      = link_to t("checkout.remove"), order_item,  method: :delete, class: 'btn btn-danger'
     - else
-      = link_to 'X', url_for(controller: 'order_items', action: 'delete_from_cookies', book_id: order_item.book.id),  method: :delete, class: 'btn btn-danger'
+      = link_to t("checkout.remove"), url_for(controller: 'order_items', action: 'delete_from_cookies', book_id: order_item.book.id),  method: :delete, class: 'btn btn-danger'

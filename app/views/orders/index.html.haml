@@ -1,16 +1,18 @@
 .row-fluid
   .col-md-8.col-md-offset-2
     - @state = Order::STATE_LIST[0]
-    %h4= @state.humanize.upcase
+    %h4= t("orders_page.#{@state}")
     - @order = @orders.find_by(state: @state)
     - if @order
       %table.table
         %thead
           %tr.active
-            %th{colspan: '2'} BOOK
-            %th PRICE
-            %th QTY
-            %th TOTAL
+            %th{colspan: '2'}
+              = t("checkout.items.book")
+            %th= t("checkout.items.price")
+            %th.nowrap
+              = t("checkout.items.qty")
+            %th= t("checkout.items.total")
             %th
 
         %tbody
@@ -20,17 +22,17 @@
             %td{colspan: '2'}
             %td{colspan: '2'}
               .cart-left-col
-                = "SUBTOTAL: "
+                = "#{t "checkout.order.subtotal"}: "
             %td.cart-right-col
               = PriceDecorator.new(@order.send(:update_subtotal)).decorate
-      = link_to 'GO TO CART', order_items_path, class: 'btn btn-warning'
+      = link_to t("checkout.to_cart"), order_items_path, class: 'btn btn-warning'
       %br/
     - else
-      %p NO ORDERS
+      %p= t("orders_page.no_orders")
 
     - Order::STATE_LIST.drop(1).each do |state|
       .row-fluid
         %br/
-        %h4= state.humanize.upcase
+        %h4= t("orders_page.#{state}")
         - @actual_orders = @orders.where(state: state)
         = render partial: 'orders_list', locals: {orders: @actual_orders}
