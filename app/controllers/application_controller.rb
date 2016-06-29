@@ -68,8 +68,8 @@ class ApplicationController < ActionController::Base
   end
 
   def last_processing_order
-    current_order ?  nil : (current_customer ? Order.where(
-        customer: current_customer, state: 'processing').last : nil)
+    current_order || (current_customer ? Order.where(
+      customer: current_customer, state: 'processing').last : nil)
   end
 
   protected
