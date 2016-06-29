@@ -1,6 +1,6 @@
 class PriceDecorator < BaseDecorator
  
   def decorate
-    "$#{'%.2f' % @obj}"
+    @obj ? "$#{'%.2f' % @obj}" : nil
   end
 end

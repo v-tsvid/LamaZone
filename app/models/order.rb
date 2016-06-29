@@ -37,7 +37,7 @@ class Order < ActiveRecord::Base
     end
   end
 
-  def prepare_for_checkout(checkout_params)
+  def for_checkout(checkout_params)
     return false unless self.init_with_order_items(
       checkout_params[:order_items_attrs])
     
@@ -45,6 +45,7 @@ class Order < ActiveRecord::Base
     next_step = self.next_step ? self.next_step : 'address'
 
     self.update(coupon: coupon, next_step: next_step)
+    self
   end
 
   def init_with_order_items(items_params)
