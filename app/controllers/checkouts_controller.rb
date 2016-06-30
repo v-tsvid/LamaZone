@@ -32,7 +32,7 @@ class CheckoutsController < ApplicationController
 
   def update
     @checkout = Checkout.new(current_order)
-    
+
     hashes = CheckoutValidationHashForm.new(
       @checkout.model, 
       checkout_params, 
@@ -40,7 +40,6 @@ class CheckoutsController < ApplicationController
       step, 
       next_step,
       next_step_next?(@checkout.model.next_step, next_step))
-    # byebug
 
     if @checkout.validate(hashes.validation_hash)
       render_wizard(@checkout)
