@@ -1,7 +1,7 @@
 = render layout: 'step' do
 
-  = form_for(@checkout, url: wizard_path, html: { method: :put }) do |checkout|
-    = checkout.fields_for(:model, @checkout.model) do |model|
+  = form_for(@checkout_form, url: wizard_path, html: { method: :put }) do |checkout_form|
+    = checkout_form.fields_for(:model, @checkout_form.model) do |model|
       - @attrs = flash['attrs'] || {'billing_address' => nil, 'shipping_address' => nil }
       
       .row-fluid
@@ -9,29 +9,29 @@
           %h4= t("addresses.billing_address")
           = label_tag nil, nil, transparent: true
           #billing_form
-            = model.fields_for(:billing_address, @checkout.model.billing_address) do |bil_addr_f|
-              = render 'address_form', f: bil_addr_f, addr: 'billing_address', attrs: @attrs['billing_address'], kountry: @checkout.model.billing_address.try(:country_id)
+            = model.fields_for(:billing_address, @checkout_form.model.billing_address) do |bil_addr_f|
+              = render 'address_form', f: bil_addr_f, addr: 'billing_address', attrs: @attrs['billing_address'], kountry: @checkout_form.model.billing_address.try(:country_id)
             %br/
 
         .col-md-3.col-md-offset-1
           %h4= t("addresses.shipping_address")
-          - if @checkout.model.billing_address && @checkout.model.shipping_address && @checkout.model.billing_address.attributes_short == @checkout.model.shipping_address.attributes_short && !flash[:errors]
+          - if @checkout_form.model.billing_address && @checkout_form.model.shipping_address && @checkout_form.model.billing_address.attributes_short == @checkout_form.model.shipping_address.attributes_short && !flash[:errors]
             = check_box_tag 'use_billing', 'use billing', true 
           - else
             = check_box_tag 'use_billing', 'use billing', false
           = label_tag 'Use billing address', nil, class: 'label label-warning'
 
           #shipping_form
-            = model.fields_for(:shipping_address, @checkout.model.shipping_address) do |ship_addr_f|
-              = render 'address_form', f: ship_addr_f, addr: 'shipping_address', attrs: @attrs['shipping_address'], kountry: @checkout.model.shipping_address.try(:country_id)
+            = model.fields_for(:shipping_address, @checkout_form.model.shipping_address) do |ship_addr_f|
+              = render 'address_form', f: ship_addr_f, addr: 'shipping_address', attrs: @attrs['shipping_address'], kountry: @checkout_form.model.shipping_address.try(:country_id)
         
         .col-md-3.col-md-offset-1
           %h4.center= t("checkout.order.summary")
           %table
             %body
-              = render partial: "order_summary", locals: {item: @checkout.model}  
+              = render partial: "order_summary", locals: {item: @checkout_form.model}  
       
       .row-fluid
         .col-md-3
           .actions
-            = checkout.submit t("checkout.save_and_continue"), class: 'btn btn-warning'
+            = checkout_form.submit t("checkout.save_and_continue"), class: 'btn btn-warning'

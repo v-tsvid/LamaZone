@@ -3,7 +3,6 @@ class OrderItemsController < ApplicationController
 
   authorize_resource
 
-  # GET /order_items
   def index
     @order = order_with_order_items
     @order_items = @order.order_items if @order

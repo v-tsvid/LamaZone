@@ -4,13 +4,9 @@ class OrdersController < ApplicationController
   load_and_authorize_resource only: [:index, :show]
   authorize_resource except: [:index, :show]
 
-  # # GET /orders
-  # # GET /orders.json
   def index
   end
 
-  # # GET /orders/1
-  # # GET /orders/1.json
   def show
   end
 

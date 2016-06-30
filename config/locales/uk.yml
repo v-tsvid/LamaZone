@@ -104,7 +104,7 @@ uk:
       full:
         bil_address: "Адр. платника"
         ship_address: "Адр. отримувача"
-        shipmnt: "Доставка"
+        shipment: "Доставка"
         payment: "Оплата"
 
     tabs:
