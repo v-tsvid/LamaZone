@@ -2,7 +2,7 @@
 
 [![Build Status](https://travis-ci.org/v-tsvid/LamaZone.svg?branch=master)](https://travis-ci.org/v-tsvid/LamaZone)
 [![Test Coverage](https://codeclimate.com/repos/56309f7fe30ba0310900a6ab/badges/11546985ca4dfe9246c5/coverage.svg)](https://codeclimate.com/repos/56309f7fe30ba0310900a6ab/coverage)
-[![Code Climate](https://codeclimate.com/repos/56309f7fe30ba0310900a6ab/badges/11546985ca4dfe9246c5/gpa.svg)](https://codeclimate.com/repos/56309f7fe30ba0310900a6ab/feed)
+[![Code Climate](https://codeclimate.com/github/v-tsvid/LamaZone/badges/gpa.svg)](https://codeclimate.com/github/v-tsvid/LamaZone)
 
 This README would normally document whatever steps are necessary to get the
 application up and running.
