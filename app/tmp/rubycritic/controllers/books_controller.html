@@ -28,7 +28,7 @@
 
   <span class="file-committed-at">
     
-      Updated <time class='js-timeago' datetime='2016-04-25 11:33:59 +0300'>2016-04-25 11:33:59 +0300</time>
+      Updated <time class='js-timeago' datetime='2016-06-30 16:44:57 +0300'>2016-06-30 16:44:57 +0300</time>
     
   </span>
 
@@ -58,15 +58,11 @@
 <code class="prettyprint linenums lang-ruby file-code js-file-code">class BooksController &lt; ApplicationController<ul class="nocode smells js-smells">  <li class="smell ">    <span class="description">      (<a href="https://github.com/troessner/reek/blob/master/docs/Irresponsible-Module.md" target="_blank">IrresponsibleModule</a>)      BooksController has no descriptive comment          </span>  </li></ul>
   load_and_authorize_resource
 
-  # GET /books
-  # GET /books.json
   def index
     @categories = Category.all
     @books = @books.page(params[:page]).per(6)
   end
 
-  # GET /books/1
-  # GET /books/1.json
   def show
   end
 end

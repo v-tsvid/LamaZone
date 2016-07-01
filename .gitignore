@@ -11,6 +11,7 @@
 /log/*
 !/log/.keep
 /tmp
+/app/tmp
 /coverage
 /config/secrets.yml
 /config/local_env.yml

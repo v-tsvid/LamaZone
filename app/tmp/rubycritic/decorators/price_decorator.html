@@ -28,7 +28,7 @@
 
   <span class="file-committed-at">
     
-      Updated <time class='js-timeago' datetime='2016-06-02 15:17:56 +0300'>2016-06-02 15:17:56 +0300</time>
+      Updated <time class='js-timeago' datetime='2016-06-29 17:26:00 +0300'>2016-06-29 17:26:00 +0300</time>
     
   </span>
 
@@ -40,7 +40,7 @@
       1.0 complexity per method
     </div>
     <div class="file-stat">
-      1 churn
+      3 churn
     </div>
     <div class="file-stat">
       1 methods
@@ -58,7 +58,7 @@
 <code class="prettyprint linenums lang-ruby file-code js-file-code">class PriceDecorator &lt; BaseDecorator<ul class="nocode smells js-smells">  <li class="smell ">    <span class="description">      (<a href="https://github.com/troessner/reek/blob/master/docs/Irresponsible-Module.md" target="_blank">IrresponsibleModule</a>)      PriceDecorator has no descriptive comment          </span>  </li></ul>
  
   def decorate
-    &quot;$#{&#39;%.2f&#39; % @obj}&quot;
+    @obj ? &quot;$#{&#39;%.2f&#39; % @obj}&quot; : nil
   end
 end
 </code>

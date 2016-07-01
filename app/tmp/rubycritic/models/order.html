@@ -28,7 +28,7 @@
 
   <span class="file-committed-at">
     
-      Updated <time class='js-timeago' datetime='2016-05-30 13:12:30 +0300'>2016-05-30 13:12:30 +0300</time>
+      Updated <time class='js-timeago' datetime='2016-06-29 17:26:00 +0300'>2016-06-29 17:26:00 +0300</time>
     
   </span>
 
@@ -40,7 +40,7 @@
       6.8 complexity per method
     </div>
     <div class="file-stat">
-      19 churn
+      22 churn
     </div>
     <div class="file-stat">
       4 methods
@@ -94,14 +94,15 @@
     end
   end
 
-  def prepare_for_checkout(checkout_params)
+  def for_checkout(checkout_params)<ul class="nocode smells js-smells">  <li class="smell ">    <span class="description">      (<a href="https://github.com/troessner/reek/blob/master/docs/Too-Many-Statements.md" target="_blank">TooManyStatements</a>)      Order#for_checkout has approx 6 statements          </span>  </li></ul>
     return false unless self.init_with_order_items(
       checkout_params[:order_items_attrs])
     
     coupon = Coupon.find_by(code: checkout_params[:coupon_code])
-    next_step = self.next_step ? self.next_step : &#39;address&#39;<ul class="nocode smells js-smells">  <li class="smell ">    <span class="description">      (<a href="https://github.com/troessner/reek/blob/master/docs/Duplicate-Method-Call.md" target="_blank">DuplicateMethodCall</a>)      Order#prepare_for_checkout calls self.next_step 2 times          </span>  </li></ul>
+    next_step = self.next_step ? self.next_step : &#39;address&#39;<ul class="nocode smells js-smells">  <li class="smell ">    <span class="description">      (<a href="https://github.com/troessner/reek/blob/master/docs/Duplicate-Method-Call.md" target="_blank">DuplicateMethodCall</a>)      Order#for_checkout calls self.next_step 2 times          </span>  </li></ul>
 
     self.update(coupon: coupon, next_step: next_step)
+    self
   end
 
   def init_with_order_items(items_params)

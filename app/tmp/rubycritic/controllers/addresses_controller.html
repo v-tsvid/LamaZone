@@ -21,23 +21,23 @@
     </header>
     <div class="container">
       <div class="file-header group rated">
-  <span class="rating rating-c circled-text circle">
-    C
+  <span class="rating rating-a circled-text circle">
+    A
   </span>
   <h2 class="file-name">AddressesController</h2>
 
   <span class="file-committed-at">
     
-      Updated <time class='js-timeago' datetime='2016-05-17 17:12:41 +0300'>2016-05-17 17:12:41 +0300</time>
+      Updated <time class='js-timeago' datetime='2016-06-30 16:44:57 +0300'>2016-06-30 16:44:57 +0300</time>
     
   </span>
 
   <div class="file-stats group">
     <div class="file-stat">
-      54 complexity
+      26 complexity
     </div>
     <div class="file-stat">
-      18.0 complexity per method
+      8.7 complexity per method
     </div>
     <div class="file-stat">
       12 churn
@@ -46,7 +46,7 @@
       3 methods
     </div>
     <div class="file-stat">
-      90 duplication
+      0 duplication
     </div>
   </div>
 
@@ -59,45 +59,28 @@
   before_action :authenticate_customer!
   load_and_authorize_resource
 
-  # # # POST /addresses
-  # # # POST /addresses.json
-  def create<ul class="nocode smells js-smells">  <li class="smell ">    <span class="description">      (<a href="https://github.com/troessner/reek/blob/master/docs/Too-Many-Statements.md" target="_blank">TooManyStatements</a>)      AddressesController#create has approx 9 statements          </span>  </li></ul>
-    respond_to do |format|
-      if @address.save
-        format.html { redirect_to edit_customer_registration_path(current_customer), <ul class="nocode smells js-smells">  <li class="smell ">    <span class="description">      (<a href="http://docs.seattlerb.org/flay/" target="_blank">DuplicateCode</a>)      Similar code found in 2 nodes                        <a href="addresses_controller.html#L10" class="js-smell-location">0</a>                  <a href="addresses_controller.html#L27" class="js-smell-location">1</a>                  </span>  </li>  <li class="smell ">    <span class="description">      (<a href="https://github.com/troessner/reek/blob/master/docs/Duplicate-Method-Call.md" target="_blank">DuplicateMethodCall</a>)      AddressesController#create calls format.html 2 times                        <a href="addresses_controller.html#L10" class="js-smell-location">0</a>                  <a href="addresses_controller.html#L14" class="js-smell-location">1</a>                  </span>  </li></ul>
-          notice: &#39;Address was successfully created.&#39; }
-        format.json { render :show, status: :created, location: @address }<ul class="nocode smells js-smells">  <li class="smell ">    <span class="description">      (<a href="https://github.com/troessner/reek/blob/master/docs/Duplicate-Method-Call.md" target="_blank">DuplicateMethodCall</a>)      AddressesController#create calls format.json 2 times                        <a href="addresses_controller.html#L12" class="js-smell-location">0</a>                  <a href="addresses_controller.html#L17" class="js-smell-location">1</a>                  </span>  </li></ul>
-      else
-        format.html { <ul class="nocode smells js-smells">  <li class="smell ">    <span class="description">      (<a href="http://docs.seattlerb.org/flay/" target="_blank">DuplicateCode</a>)      Identical code found in 2 nodes                        <a href="addresses_controller.html#L14" class="js-smell-location">0</a>                  <a href="addresses_controller.html#L32" class="js-smell-location">1</a>                  </span>  </li>  <li class="smell ">    <span class="description">      (<a href="https://github.com/troessner/reek/blob/master/docs/Duplicate-Method-Call.md" target="_blank">DuplicateMethodCall</a>)      AddressesController#create calls format.html 2 times                        <a href="addresses_controller.html#L10" class="js-smell-location">0</a>                  <a href="addresses_controller.html#L14" class="js-smell-location">1</a>                  </span>  </li></ul>
-          redirect_to :back, {flash: { 
-          alert: @address.errors.full_messages.join(&#39;. &#39;) }} }<ul class="nocode smells js-smells">  <li class="smell ">    <span class="description">      (<a href="https://github.com/troessner/reek/blob/master/docs/Duplicate-Method-Call.md" target="_blank">DuplicateMethodCall</a>)      AddressesController#create calls @address.errors 2 times                        <a href="addresses_controller.html#L16" class="js-smell-location">0</a>                  <a href="addresses_controller.html#L17" class="js-smell-location">1</a>                  </span>  </li></ul>
-        format.json { render json: @address.errors, status: :unprocessable_entity }<ul class="nocode smells js-smells">  <li class="smell ">    <span class="description">      (<a href="https://github.com/troessner/reek/blob/master/docs/Duplicate-Method-Call.md" target="_blank">DuplicateMethodCall</a>)      AddressesController#create calls @address.errors 2 times                        <a href="addresses_controller.html#L16" class="js-smell-location">0</a>                  <a href="addresses_controller.html#L17" class="js-smell-location">1</a>                  </span>  </li>  <li class="smell ">    <span class="description">      (<a href="https://github.com/troessner/reek/blob/master/docs/Duplicate-Method-Call.md" target="_blank">DuplicateMethodCall</a>)      AddressesController#create calls format.json 2 times                        <a href="addresses_controller.html#L12" class="js-smell-location">0</a>                  <a href="addresses_controller.html#L17" class="js-smell-location">1</a>                  </span>  </li></ul>
-      end
+  def create
+    if @address.save
+      redirect_to edit_customer_registration_path(current_customer), 
+        notice: &#39;Address was successfully created.&#39;
+    else
+      redirect_to :back, {flash: { 
+        alert: @address.errors.full_messages.join(&#39;. &#39;) }}
     end
   end
 
-  # # # PATCH/PUT /addresses/1
-  # # # PATCH/PUT /addresses/1.json
-  def update<ul class="nocode smells js-smells">  <li class="smell ">    <span class="description">      (<a href="http://docs.seattlerb.org/flog/" target="_blank">HighComplexity</a>)      AddressesController#update has a flog score of 26          </span>  </li>  <li class="smell ">    <span class="description">      (<a href="https://github.com/troessner/reek/blob/master/docs/Too-Many-Statements.md" target="_blank">TooManyStatements</a>)      AddressesController#update has approx 9 statements          </span>  </li></ul>
-    respond_to do |format|
-      if @address.update(address_params)
-        format.html { <ul class="nocode smells js-smells">  <li class="smell ">    <span class="description">      (<a href="http://docs.seattlerb.org/flay/" target="_blank">DuplicateCode</a>)      Similar code found in 2 nodes                        <a href="addresses_controller.html#L10" class="js-smell-location">0</a>                  <a href="addresses_controller.html#L27" class="js-smell-location">1</a>                  </span>  </li>  <li class="smell ">    <span class="description">      (<a href="https://github.com/troessner/reek/blob/master/docs/Duplicate-Method-Call.md" target="_blank">DuplicateMethodCall</a>)      AddressesController#update calls format.html 2 times                        <a href="addresses_controller.html#L27" class="js-smell-location">0</a>                  <a href="addresses_controller.html#L32" class="js-smell-location">1</a>                  </span>  </li></ul>
-          redirect_to edit_customer_registration_path(current_customer), 
-          notice: &#39;Address was successfully updated.&#39; }
-        format.json { render :show, status: :ok, location: @address }<ul class="nocode smells js-smells">  <li class="smell ">    <span class="description">      (<a href="https://github.com/troessner/reek/blob/master/docs/Duplicate-Method-Call.md" target="_blank">DuplicateMethodCall</a>)      AddressesController#update calls format.json 2 times                        <a href="addresses_controller.html#L30" class="js-smell-location">0</a>                  <a href="addresses_controller.html#L35" class="js-smell-location">1</a>                  </span>  </li></ul>
-      else
-        format.html { <ul class="nocode smells js-smells">  <li class="smell ">    <span class="description">      (<a href="http://docs.seattlerb.org/flay/" target="_blank">DuplicateCode</a>)      Identical code found in 2 nodes                        <a href="addresses_controller.html#L14" class="js-smell-location">0</a>                  <a href="addresses_controller.html#L32" class="js-smell-location">1</a>                  </span>  </li>  <li class="smell ">    <span class="description">      (<a href="https://github.com/troessner/reek/blob/master/docs/Duplicate-Method-Call.md" target="_blank">DuplicateMethodCall</a>)      AddressesController#update calls format.html 2 times                        <a href="addresses_controller.html#L27" class="js-smell-location">0</a>                  <a href="addresses_controller.html#L32" class="js-smell-location">1</a>                  </span>  </li></ul>
-          redirect_to :back, {flash: { 
-          alert: @address.errors.full_messages.join(&#39;. &#39;) }} }<ul class="nocode smells js-smells">  <li class="smell ">    <span class="description">      (<a href="https://github.com/troessner/reek/blob/master/docs/Duplicate-Method-Call.md" target="_blank">DuplicateMethodCall</a>)      AddressesController#update calls @address.errors 2 times                        <a href="addresses_controller.html#L34" class="js-smell-location">0</a>                  <a href="addresses_controller.html#L36" class="js-smell-location">1</a>                  </span>  </li></ul>
-        format.json { <ul class="nocode smells js-smells">  <li class="smell ">    <span class="description">      (<a href="https://github.com/troessner/reek/blob/master/docs/Duplicate-Method-Call.md" target="_blank">DuplicateMethodCall</a>)      AddressesController#update calls format.json 2 times                        <a href="addresses_controller.html#L30" class="js-smell-location">0</a>                  <a href="addresses_controller.html#L35" class="js-smell-location">1</a>                  </span>  </li></ul>
-          render json: @address.errors, status: :unprocessable_entity }<ul class="nocode smells js-smells">  <li class="smell ">    <span class="description">      (<a href="https://github.com/troessner/reek/blob/master/docs/Duplicate-Method-Call.md" target="_blank">DuplicateMethodCall</a>)      AddressesController#update calls @address.errors 2 times                        <a href="addresses_controller.html#L34" class="js-smell-location">0</a>                  <a href="addresses_controller.html#L36" class="js-smell-location">1</a>                  </span>  </li></ul>
-      end
+  def update
+    if @address.update(address_params)
+      redirect_to edit_customer_registration_path(current_customer), 
+        notice: &#39;Address was successfully updated.&#39; 
+    else
+      redirect_to :back, {flash: { 
+        alert: @address.errors.full_messages.join(&#39;. &#39;) }} 
     end
   end
 
   private
 
-    # # Never trust parameters from the scary internet, only allow the white list through.
     def address_params
       params.require(:address).permit(:phone, 
                                       :address1, 
