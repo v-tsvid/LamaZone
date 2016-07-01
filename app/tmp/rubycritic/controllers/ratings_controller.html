@@ -28,19 +28,19 @@
 
   <span class="file-committed-at">
     
-      Updated <time class='js-timeago' datetime='2016-04-25 11:33:59 +0300'>2016-04-25 11:33:59 +0300</time>
+      Updated <time class='js-timeago' datetime='2016-06-30 16:44:57 +0300'>2016-06-30 16:44:57 +0300</time>
     
   </span>
 
   <div class="file-stats group">
     <div class="file-stat">
-      34 complexity
+      21 complexity
     </div>
     <div class="file-stat">
-      11.3 complexity per method
+      7.0 complexity per method
     </div>
     <div class="file-stat">
-      9 churn
+      10 churn
     </div>
     <div class="file-stat">
       3 methods
@@ -68,33 +68,25 @@
   skip_load_resource only: [:new]
   load_and_authorize_resource
 
-  # GET /ratings/new
   def new
     @book = Book.find_by_id(params[:book_id])
     @rating = Rating.new(book: @book, customer: current_customer)
   end
 
-  # POST /ratings
-  # POST /ratings.json
-  def create<ul class="nocode smells js-smells">  <li class="smell ">    <span class="description">      (<a href="https://github.com/troessner/reek/blob/master/docs/Too-Many-Statements.md" target="_blank">TooManyStatements</a>)      RatingsController#create has approx 12 statements          </span>  </li></ul>
+  def create
     @book = Book.find_by_id(params[:book_id])
     @rating = Rating.new(rating_params)
     @rating.customer = current_customer
 
-    respond_to do |format|
-      if @rating.save
-        format.html { redirect_to book_path(@book), notice: NOTICE_CREATE_SUCCESS }<ul class="nocode smells js-smells">  <li class="smell ">    <span class="description">      (<a href="https://github.com/troessner/reek/blob/master/docs/Duplicate-Method-Call.md" target="_blank">DuplicateMethodCall</a>)      RatingsController#create calls format.html 2 times                        <a href="ratings_controller.html#L29" class="js-smell-location">0</a>                  <a href="ratings_controller.html#L32" class="js-smell-location">1</a>                  </span>  </li></ul>
-        format.json { render :show, status: :created, location: @rating }<ul class="nocode smells js-smells">  <li class="smell ">    <span class="description">      (<a href="https://github.com/troessner/reek/blob/master/docs/Duplicate-Method-Call.md" target="_blank">DuplicateMethodCall</a>)      RatingsController#create calls format.json 2 times                        <a href="ratings_controller.html#L30" class="js-smell-location">0</a>                  <a href="ratings_controller.html#L33" class="js-smell-location">1</a>                  </span>  </li></ul>
-      else
-        format.html { render :new }<ul class="nocode smells js-smells">  <li class="smell ">    <span class="description">      (<a href="https://github.com/troessner/reek/blob/master/docs/Duplicate-Method-Call.md" target="_blank">DuplicateMethodCall</a>)      RatingsController#create calls format.html 2 times                        <a href="ratings_controller.html#L29" class="js-smell-location">0</a>                  <a href="ratings_controller.html#L32" class="js-smell-location">1</a>                  </span>  </li></ul>
-        format.json { render json: @rating.errors, status: :unprocessable_entity }<ul class="nocode smells js-smells">  <li class="smell ">    <span class="description">      (<a href="https://github.com/troessner/reek/blob/master/docs/Duplicate-Method-Call.md" target="_blank">DuplicateMethodCall</a>)      RatingsController#create calls format.json 2 times                        <a href="ratings_controller.html#L30" class="js-smell-location">0</a>                  <a href="ratings_controller.html#L33" class="js-smell-location">1</a>                  </span>  </li></ul>
-      end
+    if @rating.save
+      redirect_to book_path(@book), notice: NOTICE_CREATE_SUCCESS 
+    else
+      render :new 
     end
   end
 
   private
 
-    # Never trust parameters from the scary internet, only allow the white list through.
     def rating_params
       params.require(:rating).permit(:id, :rate, :review, :book_id)
     end

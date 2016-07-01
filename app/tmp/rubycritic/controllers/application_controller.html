@@ -28,7 +28,7 @@
 
   <span class="file-committed-at">
     
-      Updated <time class='js-timeago' datetime='2016-06-02 15:17:56 +0300'>2016-06-02 15:17:56 +0300</time>
+      Updated <time class='js-timeago' datetime='2016-06-29 17:26:00 +0300'>2016-06-29 17:26:00 +0300</time>
     
   </span>
 
@@ -40,7 +40,7 @@
       8.5 complexity per method
     </div>
     <div class="file-stat">
-      23 churn
+      26 churn
     </div>
     <div class="file-stat">
       13 methods
@@ -109,14 +109,14 @@
 
   #consider the proper place for this method
   def cart_subtotal
-    order = current_order ? current_order : new_order_from_cookies<ul class="nocode smells js-smells">  <li class="smell ">    <span class="description">      (<a href="https://github.com/troessner/reek/blob/master/docs/Repeated-Conditional.md" target="_blank">RepeatedConditional</a>)      ApplicationController tests current_order at least 3 times                        <a href="application_controller.html#L55" class="js-smell-location">0</a>                  <a href="application_controller.html#L62" class="js-smell-location">1</a>                  <a href="application_controller.html#L71" class="js-smell-location">2</a>                  </span>  </li></ul>
+    order = current_order ? current_order : new_order_from_cookies
     order.order_items.each { |item| item.send(:update_price)}
     order.send(:update_subtotal)
   end
 
   #consider the proper place for this method
   def cart_total_quantity
-    order = current_order ? current_order : new_order_from_cookies<ul class="nocode smells js-smells">  <li class="smell ">    <span class="description">      (<a href="https://github.com/troessner/reek/blob/master/docs/Repeated-Conditional.md" target="_blank">RepeatedConditional</a>)      ApplicationController tests current_order at least 3 times                        <a href="application_controller.html#L55" class="js-smell-location">0</a>                  <a href="application_controller.html#L62" class="js-smell-location">1</a>                  <a href="application_controller.html#L71" class="js-smell-location">2</a>                  </span>  </li></ul>
+    order = current_order ? current_order : new_order_from_cookies
     order.order_items.collect { |item| item.quantity }.sum
   end
   
@@ -124,9 +124,9 @@
     current_customer ? current_customer.current_order_of_customer : nil
   end
 
-  def last_processing_order
-    current_order ?  nil : (current_customer ? Order.where(<ul class="nocode smells js-smells">  <li class="smell ">    <span class="description">      (<a href="https://github.com/troessner/reek/blob/master/docs/Repeated-Conditional.md" target="_blank">RepeatedConditional</a>)      ApplicationController tests current_order at least 3 times                        <a href="application_controller.html#L55" class="js-smell-location">0</a>                  <a href="application_controller.html#L62" class="js-smell-location">1</a>                  <a href="application_controller.html#L71" class="js-smell-location">2</a>                  </span>  </li></ul>
-        customer: current_customer, state: &#39;processing&#39;).last : nil)
+  def last_order
+    current_order || (current_customer ? Order.where(
+      customer: current_customer, state: &#39;processing&#39;).last : nil)
   end
 
   protected

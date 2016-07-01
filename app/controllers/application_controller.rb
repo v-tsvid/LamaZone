@@ -67,7 +67,7 @@ class ApplicationController < ActionController::Base
     current_customer ? current_customer.current_order_of_customer : nil
   end
 
-  def last_processing_order
+  def last_order
     current_order || (current_customer ? Order.where(
       customer: current_customer, state: 'processing').last : nil)
   end
