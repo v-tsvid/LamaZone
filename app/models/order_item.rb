@@ -36,6 +36,20 @@ class OrderItem < ActiveRecord::Base
         order_items << self.compact_order_items(temp_items)
       end
     end
+
+    def current_order_items_from_params(order_params, current_order)
+      order_params[:order_items_attrs].map do |item|
+        OrderItem.create(book_id:  item[:book_id], 
+                         quantity: item[:quantity], 
+                         order:    current_order)
+      end
+    end
+
+    def order_items_from_params(order_params)
+      order_params[:order_items_attrs].map do |item|
+        OrderItem.new(book_id: item[:book_id], quantity: item[:quantity])
+      end
+    end
   end
 
   private
