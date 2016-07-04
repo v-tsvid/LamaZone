@@ -12,8 +12,14 @@ uk:
   sign_in: "УВІЙТИ"
   sign_out: "ВИЙТИ"
   add_to_cart: "Додати у кошик"
-  add_review: "Оцінити книгу"
-  reviews: "Оцінки"
+  add_review: "Залишити відгук"
+  reviews: "Відгуки"
+  rating: 'Оцінка'
+  text_review: 'Текст відгука'
+  add: "Додати"
+  cancel: 'Відмінити'
+  new_review_for: 'Новий відгук на'
+  or: "або"
   by: "від"
   by_author: ", "
   by_author_1: ""
@@ -73,9 +79,6 @@ uk:
 
   checkout:
     shopping_cart: "КОШИК"
-    cart_is_empty: "Ваш кошик порожній"
-    added: "додано у кошик"
-    removed: "видалено з кошика"
     continue_shopping: "ПРОДОВЖИТИ КУПУВАТИ"
     remove: "Х"
     empty_cart: "ВИДАЛИТИ ВСЕ"
@@ -114,6 +117,18 @@ uk:
       confirm: "ПІДТВЕРДЖЕННЯ"
       complete: "ЗАВЕРШЕННЯ"
 
+  controllers:
+    confirm_risks: 'Ви маєте підтвердити, що розумієте ризик'
+    address_created: 'Адресу було успішно створено' 
+    address_updated: 'Адресу було успішно оновлено'
+    no_page: "Такої сторінки не існує"
+    checkout_failed: "Помилка при замовленні"
+    cart_is_empty: "Ваш кошик порожній"
+    added: "додано до кошика"
+    removed: "видалено з кошика"
+    rating_created: "Ваш відгук скоро з'явиться на сайті"
+    failed_to_remove_book: "Помилка при видаленні книги"
+    
   views:
     pagination:
       first: "&laquo; Початок"

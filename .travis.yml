@@ -3,7 +3,7 @@ rvm:
  - "2.2.2"
 addons:
   code_climate:
-    repo_token: 950276bcfd4accb333ee0fb8f14da60532783dc9b250e851f90321c6d8260569 bundle exec rake
+    CODECLIMATE_REPO_TOKEN=1f5633bd1ef0c9d51fd84b62b0db5f126c5782d106c438ca8990f50e21f5c6bb bundle exec rake
 before_script:
   - psql -c 'create database travis_ci_test;' -U postgres
   - cp config/database.yml.travis config/database.yml

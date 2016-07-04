@@ -5,7 +5,7 @@ class AddressesController < ApplicationController
   def create
     if @address.save
       redirect_to edit_customer_registration_path(current_customer), 
-        notice: 'Address was successfully created.'
+        notice: t("controllers.address_created")
     else
       redirect_to :back, {flash: { 
         alert: @address.errors.full_messages.join('. ') }}
@@ -15,7 +15,7 @@ class AddressesController < ApplicationController
   def update
     if @address.update(address_params)
       redirect_to edit_customer_registration_path(current_customer), 
-        notice: 'Address was successfully updated.' 
+        notice: t("controllers.address_updated")
     else
       redirect_to :back, {flash: { 
         alert: @address.errors.full_messages.join('. ') }} 

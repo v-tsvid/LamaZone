@@ -4,65 +4,62 @@ class OrderItemsController < ApplicationController
   authorize_resource
 
   def index
-    @order = order_with_order_items
-    @order_items = @order.order_items if @order
+    @order = order_with_items
+    @order_items = @order.order_items
 
-    if !@order || @order_items.empty?
-      redirect_to root_path, notice: t("checkout.cart_is_empty") 
+    if @order_items.empty?
+      redirect_to root_path, notice: t("controllers.cart_is_empty") 
     end
   end
 
   def create
     if current_customer
       @order = current_order || Order.new(customer: current_customer)
-      @order.order_items << OrderItem.create(
-        book_id: order_item_params[:book_id], 
-        quantity: order_item_params[:quantity], 
-        order: @order)
-      OrderItem.compact_if_not_compacted(@order.order_items)
+      OrderItem.add_items_to_order(
+        @order, [OrderItem.item_from_params(order_item_params)])
     else
       interact_with_cookies { |order_items| push_to_cookies(order_items) }
     end
-    redirect_to :back, notice: "\"#{Book.find(params[:book_id]).title}\" " \
-                                   "#{t("checkout.added")}"
+    redirect_to :back, notice: "\"#{book_title}\" #{t("controllers.added")}"
   end
 
   def destroy
     @order_item = OrderItem.find_by_id(params[:id])
-    @book = @order_item.book if @order_item
-    @order = current_order
-    
-    @order_item.destroy
-    @order.destroy unless @order.order_items[0]
-    
-    redirect_to :back, notice: "\"#{@book.title}\" " \
-                                 "#{t("checkout.removed")}"
+    if @order_item
+      @order_item.destroy
+      current_order.destroy unless current_order.order_items[0]  
+      redirect_to(:back, 
+        notice: "\"#{@order_item.book.title}\" #{t("controllers.removed")}")
+    else
+      redirect_to :back, notice: t("controllers.failed_to_remove_book")
+    end
   end
 
   def delete_from_cookies
     interact_with_cookies { |order_items| pop_from_cookies(order_items) }
-    redirect_to :back, notice: "\"#{Book.find(params[:book_id]).title}\" " \
-                                   "#{t("checkout.removed")}"
+    redirect_to :back, notice: "\"#{book_title}\" #{t("controllers.removed")}"
   end
 
   private
 
-    def order_with_order_items
+    def order_with_items
+      order = OrderItem.add_items_to_order(get_order, read_from_cookies)
+      cookies.delete('order_items') if order.persisted?
+      order
+    end
+
+    def get_order
       if current_order
-        order = current_order
-        order.order_items = combine_with_cookies(order.order_items)
-      elsif cookies['order_items']
-        if current_customer
-          order = Order.create(customer: current_customer, state: 'in_progress')
-          order.order_items = OrderItem.compact_order_items(read_from_cookies)
-          cookies.delete('order_items')
-        else
-          order = Order.new
-          order.order_items = OrderItem.compact_order_items(read_from_cookies)
-          order.order_items.each { |item| item.send(:update_price) }
-        end
+        current_order
+      elsif cookies['order_items'] && current_customer  
+        Order.create(customer: current_customer, state: 'in_progress')
+      else
+        Order.new
       end
-      order || Order.new
+    end
+
+    def book_title
+      Book.find(params[:book_id]).title
     end
 
     def order_item_params

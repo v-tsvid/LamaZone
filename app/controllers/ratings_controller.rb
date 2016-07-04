@@ -1,11 +1,4 @@
 class RatingsController < ApplicationController
-
-  NOTICE_CREATE_SUCCESS = 'Rating was successfully created. '\
-                          'It will be available soon'
-  NOTICE_UPDATE_SUCCESS = 'Rating was successfully updated. '\
-                          'It will be available soon'
-  NOTICE_DESTROY_SUCCESS = 'Rating was successfully destroyed.'
-
   before_action :authenticate_customer!, except: [:index, :show]
   
   skip_load_resource only: [:new]
@@ -22,7 +15,7 @@ class RatingsController < ApplicationController
     @rating.customer = current_customer
 
     if @rating.save
-      redirect_to book_path(@book), notice: NOTICE_CREATE_SUCCESS 
+      redirect_to book_path(@book), notice: t("controllers.rating_created") 
     else
       render :new 
     end

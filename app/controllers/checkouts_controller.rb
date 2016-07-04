@@ -15,7 +15,7 @@ class CheckoutsController < ApplicationController
     if @checkout_form.valid? && @checkout_form.save
       redirect_to checkout_path(@checkout_form.model.next_step.to_sym)
     else
-      redirect_to root_path, alert: "Can't checkout"
+      redirect_to root_path, alert: t("controllers.checkout_failed")
     end
   end
 

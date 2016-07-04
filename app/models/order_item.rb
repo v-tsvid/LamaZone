@@ -16,6 +16,29 @@ class OrderItem < ActiveRecord::Base
   end
 
   class << self
+
+    def add_items_to_order(order, items_to_add)
+      order.order_items = combine_order_items(
+        order.order_items, items_to_add)
+      order
+    end
+
+    def item_from_params(params)
+      OrderItem.new(book_id: params[:book_id], quantity: params[:quantity])
+    end
+
+    def current_order_items_from_order_params(order_params, current_order)
+      order_params[:order_items_attrs].map do |params|
+        current_order.order_items << item_from_params(params)
+      end
+    end
+
+    def order_items_from_order_params(order_params)
+      order_params[:order_items_attrs].map do |params|
+        item_from_params(params)
+      end
+    end
+
     def compact_order_items(order_items)
       order_items = order_items.group_by{|h| h.book_id}.values.map do |a| 
         OrderItem.new(book_id: a.first.book_id, 
@@ -29,27 +52,23 @@ class OrderItem < ActiveRecord::Base
       order_items
     end
 
-    def compact_if_not_compacted(order_items)
-      if order_items != self.compact_order_items(order_items)
-        temp_items = order_items
-        order_items.each { |item| item.destroy }
-        order_items << self.compact_order_items(temp_items)
-      end
-    end
+    private 
 
-    def current_order_items_from_params(order_params, current_order)
-      order_params[:order_items_attrs].map do |item|
-        OrderItem.create(book_id:  item[:book_id], 
-                         quantity: item[:quantity], 
-                         order:    current_order)
-      end
-    end
+      def combine_order_items(items1, items2)
+        temp_items = items1.map { |item| OrderItem.new(item.attributes) }
+        items1.destroy_all
+        items1 = OrderItem.compact_order_items(temp_items + items2)
 
-    def order_items_from_params(order_params)
-      order_params[:order_items_attrs].map do |item|
-        OrderItem.new(book_id: item[:book_id], quantity: item[:quantity])
+        items1
       end
-    end
+
+      def compact_if_not_compacted(order_items)
+        if order_items != self.compact_order_items(order_items)
+          temp_items = order_items
+          order_items.each { |item| item.destroy }
+          order_items << self.compact_order_items(temp_items)
+        end
+      end
   end
 
   private

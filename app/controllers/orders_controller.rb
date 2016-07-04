@@ -13,14 +13,14 @@ class OrdersController < ApplicationController
   def update
     @order = current_order
     @order.order_items.destroy_all
-    @order_items = OrderItem.current_order_items_from_params(
+    @order_items = OrderItem.current_order_items_from_order_params(
       order_params, current_order)
   
     redirect_to order_items_path
   end
 
   def update_cookies
-    @order_items = OrderItem.order_items_from_params(order_params)
+    @order_items = OrderItem.order_items_from_order_params(order_params)
     write_to_cookies(@order_items)
 
     redirect_to order_items_path

@@ -1,4 +1,5 @@
-class ApplicationController < ActionController::Base
+  class ApplicationController < ActionController::Base
+
   include CookiesHandling
   # Prevent CSRF attacks by raising an exception.
   # For APIs, you may want to use :null_session instead.
@@ -17,7 +18,7 @@ class ApplicationController < ActionController::Base
                 :flash_class
 
   rescue_from ActionController::RoutingError do
-    redirect_to root_path, alert: "There's no page you tried to visit"
+    redirect_to root_path, alert: t("controllers.no_page")
   end
 
   rescue_from CanCan::AccessDenied do |exception|
@@ -32,8 +33,10 @@ class ApplicationController < ActionController::Base
   end
 
   def set_locale
-    # find out how to wrap the line with ||
-    I18n.locale = params[:locale] || session[:omniauth_login_locale] || I18n.default_locale
+    I18n.locale = params[:locale] || 
+    session[:omniauth_login_locale] || 
+    I18n.default_locale
+
     session[:omniauth_login_locale] = I18n.locale
   end
 
@@ -91,23 +94,24 @@ class ApplicationController < ActionController::Base
       # store last url - this is needed for post-login redirect 
       # to whatever the customer last visited.
       return unless request.get? 
-      if (request.path != "/customers/sign_in" &&
-          request.path != "/customers/sign_up" &&
-          request.path != "/customers/password/new" &&
-          request.path != "/customers/password/edit" &&
-          request.path != "/customers/confirmation" &&
-          request.path != "/customers/sign_out" &&
+      if (path_not_equal("/customers/sign_in") &&
+          path_not_equal("/customers/sign_up") &&
+          path_not_equal("/customers/password/new") &&
+          path_not_equal("/customers/password/edit") &&
+          path_not_equal("/customers/confirmation") &&
+          path_not_equal("/customers/sign_out") &&
           !request.xhr?) # don't store ajax calls
         session[:previous_url] = request.fullpath 
       end
     end
 
+    def path_not_equal(path)
+      request.path != path
+    end
+
     def after_sign_in_path_for(resource)
-      if session[:previous_url] == order_items_index_path
-        session[:previous_url] || root_path 
-      else
-        super
-      end
+      prev_url = session[:previous_url]
+      prev_url == order_items_index_path ? prev_url || root_path : super
     end
 
     def after_sign_out_path_for(resource_or_scope)

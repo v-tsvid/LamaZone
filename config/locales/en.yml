@@ -35,6 +35,12 @@ en:
   add_to_cart: "Add to cart"
   add_review: "Add review for this book"
   reviews: "Reviews"
+  rating: 'Rating'
+  text_review: 'Text review'
+  add: "Add"
+  cancel: 'Cancel'
+  new_review_for: 'New review for'
+  or: 'or'
   by: "by"
   by_author: " by "
   by_author_1: "by" 
@@ -94,9 +100,6 @@ en:
 
   checkout:
     shopping_cart: "SHOPPING CART"
-    cart_is_empty: "Your cart is empty"
-    added: "was added to the cart"
-    removed: "was removed from the cart"
     continue_shopping: "CONTINUE SHOPPING"
     remove: "X"
     empty_cart: "EMPTY CART"
@@ -134,6 +137,18 @@ en:
       payment: "PAYMENT"
       confirm: "CONFIRM"
       complete: "COMPLETE"
+
+  controllers:
+    confirm_risks: 'You must confirm that you understand all risks first'
+    address_created: 'Address was successfully created' 
+    address_updated: 'Address was successfully updated'
+    no_page: "There's no page you tried to visit"
+    checkout_failed: "Can't checkout"
+    cart_is_empty: "Your cart is empty"
+    added: "was added to the cart"
+    removed: "was removed from the cart"
+    rating_created: 'Rating was successfully created. It will be available soon'
+    failed_to_remove_book: "Can't remove book"
 
   views:
     pagination:
