@@ -13,8 +13,7 @@
   alias_method :current_user, :current_customer
 
   helper_method :current_order, 
-                :cart_subtotal, 
-                :cart_total_quantity, 
+                :order_from_cookies, 
                 :flash_class
 
   rescue_from ActionController::RoutingError do
@@ -53,19 +52,6 @@
     end
   end
 
-  #consider the proper place for this method
-  def cart_subtotal
-    order = current_order ? current_order : new_order_from_cookies
-    order.order_items.each { |item| item.send(:update_price)}
-    order.send(:update_subtotal)
-  end
-
-  #consider the proper place for this method
-  def cart_total_quantity
-    order = current_order ? current_order : new_order_from_cookies
-    order.order_items.collect { |item| item.quantity }.sum
-  end
-  
   def current_order
     current_customer ? current_customer.current_order_of_customer : nil
   end
@@ -75,6 +61,12 @@
       customer: current_customer, state: 'processing').last : nil)
   end
 
+  def order_from_cookies
+    order = Order.new
+    order.order_items = read_from_cookies
+    order
+  end
+
   protected
 
     def configure_permitted_parameters
@@ -82,13 +74,6 @@
     end
 
   private
-
-    #consider the proper place for this method
-    def new_order_from_cookies
-      order = Order.new
-      order.order_items = read_from_cookies
-      order
-    end
 
     def store_location
       # store last url - this is needed for post-login redirect 

@@ -17,50 +17,43 @@ class OrderItem < ActiveRecord::Base
 
   class << self
 
-    def add_items_to_order(order, items_to_add)
-      order.order_items = combine_order_items(
-        order.order_items, items_to_add)
-      order
-    end
-
-    def item_from_params(params)
+    def order_item_from_params(params)
       OrderItem.new(book_id: params[:book_id], quantity: params[:quantity])
-    end
-
-    def current_order_items_from_order_params(order_params, current_order)
-      order_params[:order_items_attrs].map do |params|
-        current_order.order_items << item_from_params(params)
-      end
     end
 
     def order_items_from_order_params(order_params)
       order_params[:order_items_attrs].map do |params|
-        item_from_params(params)
+        order_item_from_params(params)
       end
     end
 
-    def compact_order_items(order_items)
-      order_items = order_items.group_by{|h| h.book_id}.values.map do |a| 
-        OrderItem.new(book_id: a.first.book_id, 
-                      quantity: a.inject(0){|sum,h| sum + h.quantity})
+    def combine_order_items(items, items_to_add)
+      temp_items = items.map { |item| OrderItem.new(item.attributes) }
+      items.destroy_all
+      items = OrderItem.compact_order_items(temp_items + items_to_add)
+
+      items
+    end
+
+    def compact_order_items(items)
+      items = items.group_by{|gr_item| gr_item.book_id}.values.map do |item| 
+        OrderItem.new(book_id: item.first.book_id, 
+                      quantity: item.inject(0){|sum, inj| sum + inj.quantity})
       end
       
-      order_items.each do |item| 
-        item.price = item.book.price
-      end
-
-      order_items
+      get_prices_from_books(items)
     end
 
     private 
 
-      def combine_order_items(items1, items2)
-        temp_items = items1.map { |item| OrderItem.new(item.attributes) }
-        items1.destroy_all
-        items1 = OrderItem.compact_order_items(temp_items + items2)
-
-        items1
+      def get_prices_from_books(order_items)
+        order_items.each do |item| 
+          item.price = item.book.price
+        end
+        order_items
       end
+
+      
 
       def compact_if_not_compacted(order_items)
         if order_items != self.compact_order_items(order_items)

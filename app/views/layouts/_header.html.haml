@@ -19,7 +19,7 @@
 
         - if !current_admin
           %li{class: current_page?(order_items_path) || current_page?(order_items_index_path)? "active" : nil}
-            =link_to (cart_total_quantity == 0 ? "#{t :cart}: (#{t :is_empty})" : "#{t :cart}: (#{cart_total_quantity}) #{PriceDecorator.new(cart_subtotal).decorate}"), order_items_index_path
+            =link_to CartDecorator.new(current_order || order_from_cookies).decorate, order_items_index_path
 
         - if current_customer
           %li{class: current_page?(edit_customer_registration_path) ? "active" : nil}

@@ -11,10 +11,10 @@ class OrdersController < ApplicationController
   end
 
   def update
-    @order = current_order
-    @order.order_items.destroy_all
-    @order_items = OrderItem.current_order_items_from_order_params(
-      order_params, current_order)
+    current_order.order_items.destroy_all
+    @order = OrderFiller.new(current_order).add_items_to_order(
+      OrderItem.order_items_from_order_params(order_params))
+    @order_items = @order.order_items
   
     redirect_to order_items_path
   end
