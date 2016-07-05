@@ -1,6 +1,5 @@
 module CookiesHandling
-  extend ActiveSupport::Concern
-
+  
   private
     def interact_with_cookies
       order_items = OrderItem.compact_order_items(read_from_cookies)

@@ -1,5 +1,4 @@
 class OrderItemsController < ApplicationController
-  include CookiesHandling
 
   authorize_resource
 
@@ -14,9 +13,8 @@ class OrderItemsController < ApplicationController
 
   def create
     if current_customer
-      @order = current_order || Order.new(customer: current_customer)
-      OrderItem.add_items_to_order(
-        @order, [OrderItem.item_from_params(order_item_params)])
+      @order = OrderFiller.new(current_customers_order).add_items_to_order(
+        [OrderItem.order_item_from_params(order_item_params)])
     else
       interact_with_cookies { |order_items| push_to_cookies(order_items) }
     end
@@ -43,19 +41,13 @@ class OrderItemsController < ApplicationController
   private
 
     def order_with_items
-      order = OrderItem.add_items_to_order(get_order, read_from_cookies)
+      order = OrderFiller.new(get_order).add_items_to_order(read_from_cookies)
       cookies.delete('order_items') if order.persisted?
       order
     end
 
     def get_order
-      if current_order
-        current_order
-      elsif cookies['order_items'] && current_customer  
-        Order.create(customer: current_customer, state: 'in_progress')
-      else
-        Order.new
-      end
+      current_customers_order || Order.new
     end
 
     def book_title

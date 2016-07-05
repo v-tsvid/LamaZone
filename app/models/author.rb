@@ -1,5 +1,5 @@
 class Author < ActiveRecord::Base
-  include Human
+  include Person
 
   validates :firstname, :lastname, presence: true
   

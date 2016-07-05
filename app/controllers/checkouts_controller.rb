@@ -1,6 +1,5 @@
 class CheckoutsController < ApplicationController
   include Wicked::Wizard
-  include CookiesHandling
   include CheckoutRedirecting
   
   steps :address, :shipment, :payment, :confirm, :complete
@@ -10,7 +9,7 @@ class CheckoutsController < ApplicationController
 
   def create
     @checkout_form = CheckoutForm.new(
-      current_or_new_order.for_checkout(checkout_params))
+      current_customers_order.for_checkout(checkout_params))
     
     if @checkout_form.valid? && @checkout_form.save
       redirect_to checkout_path(@checkout_form.model.next_step.to_sym)
@@ -52,9 +51,6 @@ class CheckoutsController < ApplicationController
   end
 
   private
-    def current_or_new_order
-      current_order || Order.new(customer: current_customer)
-    end
     
     def checkout_params
       if params[:order]

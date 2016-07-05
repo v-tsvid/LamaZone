@@ -38,15 +38,32 @@ class CreditCardForm< Reform::Form
     def validate_number
       # CreditCardValidator::Validator.valid? 
       # is provided by credit_card_validator gem
+      number = self.number
       errors.add(:credit_card, INVALID_MESSAGE) unless 
-        self.number && CreditCardValidator::Validator.valid?(self.number)
+        number && CreditCardValidator::Validator.valid?(number)
     end
 
     def validate_exp_date
       errors[:base] << EXPIRED_MESSAGE unless 
         self.expiration_month && self.expiration_year && 
-        (self.expiration_year > Date.today.strftime("%Y") || 
-          self.expiration_year == Date.today.strftime("%Y") &&
-          self.expiration_month >= Date.today.strftime("%m"))
+        (is_year_greater? || is_year_equal? && is_month_greater_or_equal?)
+    end
+
+    def is_month_greater_or_equal?
+      today_month = Date.today.strftime("%m")
+      self.expiration_month >= today_month
+    end
+
+    def is_year_greater?
+      is_year_correct?(:>)
+    end
+
+    def is_year_equal?
+      is_year_correct?(:==)
+    end
+
+    def is_year_correct?(sym)
+      today_year = Date.today.strftime("%Y")
+      self.expiration_year.public_send(sym, today_year)
     end
 end

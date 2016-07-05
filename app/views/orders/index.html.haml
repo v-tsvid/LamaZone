@@ -2,7 +2,7 @@
   .col-md-8.col-md-offset-2
     - @state = Order::STATE_LIST[0]
     %h4= t("orders_page.#{@state}")
-    - @order = @orders.find_by(state: @state)
+    - @order = current_order
     - if @order
       %table.table
         %thead

@@ -1,5 +1,4 @@
 module CheckoutRedirecting
-  extend ActiveSupport::Concern
   
   private
     def redirect_if_wrong_step(checkout_form, step)

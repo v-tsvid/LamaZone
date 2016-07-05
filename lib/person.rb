@@ -1,6 +1,5 @@
-module Human
-  extend ActiveSupport::Concern
-
+module Person
+  
   def full_name
     "#{self.firstname} #{self.lastname}"
   end

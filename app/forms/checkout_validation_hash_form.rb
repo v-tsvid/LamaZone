@@ -1,7 +1,7 @@
 class CheckoutValidationHashForm
   
-  attr_accessor :validation_hash
-  attr_accessor :return_hash
+  attr_reader :validation_hash
+  attr_reader :return_hash
   
   def initialize(model, params, steps, step, next_step, is_next)
     self.model = model
@@ -17,6 +17,8 @@ class CheckoutValidationHashForm
 
   private
 
+    attr_writer :validation_hash
+    attr_writer :return_hash
     attr_accessor :model
     attr_accessor :params
     attr_accessor :steps

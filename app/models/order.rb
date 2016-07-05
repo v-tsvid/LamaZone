@@ -27,6 +27,12 @@ class Order < ActiveRecord::Base
     end
   end
 
+  class << self
+    def create_customers_order(customer)
+      customer ? Order.create(customer: customer, state: 'in_progress') : nil
+    end
+  end
+
   def state_enum
     STATE_LIST
   end
@@ -42,7 +48,7 @@ class Order < ActiveRecord::Base
       checkout_params[:order_items_attrs])
     
     coupon = Coupon.find_by(code: checkout_params[:coupon_code])
-    next_step = self.next_step ? self.next_step : 'address'
+    next_step = self.next_step || 'address'
 
     self.update(coupon: coupon, next_step: next_step)
     self

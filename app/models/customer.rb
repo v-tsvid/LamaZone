@@ -1,5 +1,5 @@
 class Customer < ActiveRecord::Base
-  include Human
+  include Person
 
   devise :database_authenticatable, :registerable,
          :recoverable, :rememberable, :trackable, :validatable,          
@@ -33,7 +33,7 @@ class Customer < ActiveRecord::Base
   private
 
   def custom_label_method
-    "#{self.lastname} #{self.firstname}"
+    full_name
   end
 
   def downcase_email
@@ -41,12 +41,14 @@ class Customer < ActiveRecord::Base
   end
 
   def self.from_omniauth(auth)
+    info = auth.info
+    
     where(provider: auth.provider, uid: auth.uid).first_or_create do |customer|
-      customer.email = auth.info.email
+      customer.email = info.email
       customer.password = Devise.friendly_token[0,20]
       customer.password_confirmation = customer.password
-      customer.firstname = auth.info.first_name
-      customer.lastname = auth.info.last_name   
+      customer.firstname = info.first_name
+      customer.lastname = info.last_name   
     end
   end
 end

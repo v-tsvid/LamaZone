@@ -3,10 +3,11 @@ class Customers::OmniauthCallbacksController < Devise::OmniauthCallbacksControll
     @customer = Customer.from_omniauth(request.env["omniauth.auth"])
 
     @customer.email = "#{@customer.lastname}_#{@customer.firstname}"\
+                      "#{Customer.last.id + 1}"\
                       "@facebook.com" if !@customer.email
-    @customer.save
+     
 
-    if @customer.persisted?
+    if @customer.save
       sign_in_and_redirect @customer, event: :authentication 
       set_flash_message(:notice, :success, 
                         kind: "Facebook") if is_navigational_format?
