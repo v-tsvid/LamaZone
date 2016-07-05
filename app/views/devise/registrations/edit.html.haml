@@ -4,83 +4,45 @@
 
 .row-fluid
   .col-md-3.col-md-offset-2
-    %h4= t("addresses.billing_address")
     .billing_address_form
-      - if @billing_address.persisted?
-        = form_for(@billing_address, html: { method: :put }) do |bil_addr_f|
-          = render 'form', f: bil_addr_f, kountry: @billing_address.try(:country_id), attrs: flash['attrs']
-      - else
-        = form_for(@billing_address, html: { method: :post }) do |bil_addr_f|
-          = render 'form', f: bil_addr_f, kountry: @billing_address.try(:country_id), attrs: flash['attrs']
+      = render 'address_forms', address_str: "billing", 
+        address: @billing_address, flash: flash
     
 
   .col-md-3.col-md-offset-1
     .shipping_address_form
-      %h4= t("addresses.shipping_address")
-      - if @shipping_address.persisted?
-        = form_for(@shipping_address, html: { method: :put }) do |ship_addr_f|
-          = render 'form', f: ship_addr_f, kountry: @shipping_address.try(:country_id), attrs: flash['attrs']
-      - else
-        = form_for(@shipping_address, html: { method: :post }) do |ship_addr_f|
-          = render 'form', f: ship_addr_f, kountry: @shipping_address.try(:country_id), attrs: flash['attrs']
+      = render 'address_forms', address_str: "shipping", 
+        address: @shipping_address, flash: flash
 
 
 .row-fluid
   .col-md-3.col-md-offset-2
     .email_form
-      = form_for(resource, as: resource_name, url: registration_path(resource_name), html: { method: :put }) do |f|
+      = form_for(resource, as: resource_name, 
+        url: registration_path(resource_name), html: { method: :put }) do |f|
 
         %h4= t("settings_page.email")
-        - if resource.errors.messages && resource.errors.messages[:email]
-          .has-error
-            .field
-              = f.email_field :email, value: resource.email, class: "form-control"
-            %span.help-block
-              = "#{resource.errors.messages[:email].uniq.join(', ')}"
-            %br/
-        - else
-          %div
-            .field
-              = f.email_field :email, value: resource.email, class: "form-control"
-            %br/
+        = render 'email_password_fields', f: f, resource: resource, 
+          sym: :email, placeholder: nil
 
         .actions
           = f.submit t("settings_page.save"), class: "btn btn-warning"
   
   .col-md-3.col-md-offset-1
     .password_form
-      = form_for(resource, as: resource_name, url: registration_path(resource_name), html: { method: :put }) do |f|
+      = form_for(resource, as: resource_name, 
+        url: registration_path(resource_name), html: { method: :put }) do |f|
 
         %h4= t("settings_page.password")
 
         - if devise_mapping.confirmable? && resource.pending_reconfirmation?
           %div Currently waiting confirmation for: #{resource.unconfirmed_email}
-
-        - if resource.errors.messages && resource.errors.messages[:current_password]
-          .has-error
-            .field
-              = f.password_field :current_password, placeholder: 'Old password', autocomplete: "off", class: 'form-control'
-            %span.help-block
-              = "#{resource.errors.messages[:current_password].uniq.join(', ')}"
-            %br/
-        - else
-          %div
-            .field
-              = f.password_field :current_password, placeholder: 'Old password', autocomplete: "off", class: 'form-control'
-            %br/
-
-        - if resource.errors.messages && resource.errors.messages[:password]
-          .has-error
-            .field
-              = f.password_field :password, autocomplete: "off", placeholder: 'New password', class: 'form-control'
-            %span.help-block
-              = "#{resource.errors.messages[:password].uniq.join(', ')}"
-            %br/
-        - else
-          %div
-            .field
-              = f.password_field :password, autocomplete: "off", placeholder: 'New password', class: 'form-control'
-            %br/
+        
+        - messages = resource.errors.messages
+        = render 'email_password_fields', f: f, resource: resource, 
+          sym: :current_password, placeholder: 'Old password'
+        = render 'email_password_fields', f: f, resource: resource, 
+          sym: :password, placeholder: 'New password'
 
         .actions
           = f.submit t("settings_page.save"), class: 'btn btn-warning'
@@ -91,10 +53,12 @@
   .col-md-10.col-md-offset-2
     %h4= t("settings_page.remove_acc")
 
-    = form_for(resource, as: resource_name, url: registration_path(resource_name), html: { method: :delete }) do |f|
+    = form_for(resource, as: resource_name, 
+      url: registration_path(resource_name), html: { method: :delete }) do |f|
 
       .actions
         = f.submit t("settings_page.remove_acc_button"), class: 'btn btn-danger'
         = check_box_tag 'confirm'
-        = label_tag nil, t("settings_page.rem_acc_understand"), class: 'label label-warning'
+        = label_tag nil, t("settings_page.rem_acc_understand"), 
+          class: 'label label-warning'
 

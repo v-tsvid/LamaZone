@@ -1,0 +1,5 @@
+%h4= t("addresses.#{address_str}_address")
+- if address.persisted?
+  = render 'address_form', address: address, flash: flash, method: :put
+- else
+  = render 'address_form', address: address, flash: flash, method: :post

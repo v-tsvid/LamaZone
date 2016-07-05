@@ -17,9 +17,12 @@
             %h4= PriceDecorator.new(@book.price).decorate
           .col-md-5.col-md-offset-3
             .book-form-right
-              = number_field_tag 'quantity', '1', in: 1..@book.books_in_stock, id: "book_quantity", class: 'form-control' 
+              = number_field_tag 'quantity', '1', 
+                in: 1..@book.books_in_stock, id: "book_quantity", 
+                class: 'form-control' 
               = hidden_field_tag 'book_id', @book.id
-              = submit_tag t(:add_to_cart), id: "add_to_cart", class: 'btn btn-warning'
+              = submit_tag t(:add_to_cart), id: "add_to_cart", 
+                class: 'btn btn-warning'
 
     %p= @book.description
 
@@ -29,7 +32,8 @@
       .col-md-1
         %h4= t(:reviews)
       .col-md-2
-        = link_to t(:add_review), new_book_rating_path(@book), class: 'btn btn-warning'
+        = link_to t(:add_review), new_book_rating_path(@book), 
+          class: 'btn btn-warning'
     .row
       .col-md-12
         %table.table

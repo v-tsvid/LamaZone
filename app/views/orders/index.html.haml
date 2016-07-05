@@ -3,30 +3,19 @@
     - @state = Order::STATE_LIST[0]
     %h4= t("orders_page.#{@state}")
     - @order = current_order
+    
     - if @order
       %table.table
-        %thead
-          %tr.active
-            %th{colspan: '2'}
-              = t("checkout.items.book")
-            %th= t("checkout.items.price")
-            %th.nowrap
-              = t("checkout.items.qty")
-            %th= t("checkout.items.total")
-            %th
+        = render 'shared/order_table_head', extra_col: true
 
         %tbody
           - @order.order_items.each do |item|
             = render partial: 'checkouts/cart_item', locals: {cart_item: item}
-          %tr
-            %td{colspan: '2'}
-            %td{colspan: '2'}
-              .cart-left-col
-                = "#{t "checkout.order.subtotal"}: "
-            %td.cart-right-col
-              = PriceDecorator.new(@order.send(:update_subtotal)).decorate
-      = link_to t("checkout.to_cart"), order_items_path, class: 'btn btn-warning'
+          = render 'shared/order_table_body', order: @order
+
+      = link_to t("checkout.to_cart"), cart_path, class: 'btn btn-warning'
       %br/
+    
     - else
       %p= t("orders_page.no_orders")
 

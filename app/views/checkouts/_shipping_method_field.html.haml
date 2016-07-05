@@ -1,4 +1,6 @@
+- price = checkout_form.model.calc_shipping_price(method)
 .radio
   %label
-    = model.radio_button(:shipping_method, method, checked: (method == current_method || current_method.nil? && method == Order::SHIPPING_METHOD_LIST[0]))
-    = "#{method} +#{PriceDecorator.new(checkout_form.model.calc_shipping_price(method)).decorate}"
+    = model.radio_button :shipping_method, method, 
+      checked: shipping_method_checked?(method, current_method)
+    = "#{method} +#{PriceDecorator.new(price).decorate}"

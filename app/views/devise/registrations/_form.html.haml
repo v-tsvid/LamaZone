@@ -1,32 +1,13 @@
 .form
   .form-group
-    .field
-      = f.text_field :firstname, placeholder: t("addresses.firstname"), class: "form-control"
-    %br/
-
-    .field
-      = f.text_field :lastname, placeholder: t("addresses.lastname"), class: "form-control"
-    %br/
-
-    .field
-      = f.text_field :phone, placeholder: t("addresses.phone"), class: "form-control"
-    %br/
-
-  .field
-    = f.text_field :address1, placeholder: t("addresses.address1"), class: "form-control"
-  %br/
-
-  .field
-    = f.text_field :address2, placeholder: t("addresses.address2"), class: "form-control"
-  %br/
-
-  .field
-    = f.text_field :city, placeholder: t("addresses.city"), class: "form-control"
-  %br/
-
-  .field
-    = f.text_field :zipcode, placeholder: t("addresses.zipcode"), class: "form-control"
-  %br/
+    - [:firstname, 
+       :lastname, 
+       :phone, 
+       :address1, 
+       :address2, 
+       :city, 
+       :zipcode].each do |item|
+      = render partial: 'text_field', locals: {f: f, sym: item}
 
   .field
     = f.hidden_field :billing_address_for_id
@@ -35,7 +16,8 @@
     = f.hidden_field :shipping_address_for_id
 
   .field
-    = f.select(:country_id, options_for_select(Country.all.map {|country| [country.name, country.id]}, kountry), {}, {class: "form-control"})
+    = f.select(:country_id, options_for_select(countries_for_select, kountry), 
+      {}, {class: "form-control"})
     %br/
     %br/
 

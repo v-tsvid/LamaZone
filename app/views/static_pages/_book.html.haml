@@ -17,8 +17,11 @@
       .col-md-5.col-md-offset-3
         %p
           .form-inline
-            = form_tag(controller: 'order_items', action: 'create', method: :post) do
+            = form_tag controller: 'order_items', action: 'create', 
+              method: :post do
               %strong= "#{PriceDecorator.new(book.price).decorate}"
               = hidden_field_tag 'book_id', book.id
-              = number_field_tag 'quantity', '1', in: 1..book.books_in_stock, id: "book_quantity", class: "form-control"
-              = submit_tag t(:add_to_cart), id: "add_to_cart", class: "btn btn-warning"
+              = number_field_tag 'quantity', '1', in: 1..book.books_in_stock, 
+                id: "book_quantity", class: "form-control"
+              = submit_tag t(:add_to_cart), id: "add_to_cart", 
+                class: "btn btn-warning"

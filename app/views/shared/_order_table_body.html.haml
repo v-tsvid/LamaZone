@@ -1,0 +1,7 @@
+%tr
+  %td{colspan: '2'}
+  %td{colspan: '2'}
+    .cart-left-col
+      = "#{t("checkout.order.subtotal")}: "
+  %td.cart-right-col
+    = PriceDecorator.new(order.send(:update_subtotal)).decorate

@@ -1,23 +1,27 @@
 .row-fluid
   .col-md-2.col-md-offset-5
     %h4 
-      = "Sign in as Admin" if current_page?(new_admin_session_path) || current_page?(admin_session_path)
+      - if current_page?(new_admin_session_path)
+        = "Sign in as Admin" 
 .row-fluid
   .col-md-2.col-md-offset-5.col-centered
-    - unless current_page?(new_admin_session_path) || current_page?(admin_session_path)
+    - unless current_page?(new_admin_session_path)
       = link_to image_tag("fb.png", size: "53x64", alt: "Facebook sign in"), customer_omniauth_authorize_path(:facebook)
       %p or
 .row-fluid
   .col-md-2.col-md-offset-5
-    = form_for(resource, as: resource_name, url: session_path(resource_name)) do |f|
+    = form_for resource, as: resource_name, 
+      url: session_path(resource_name) do |f|
       = devise_error_messages!
       .field
         %br
-        = f.email_field :email, autofocus: true, placeholder: 'email', class: 'form-control'
+        = f.email_field :email, autofocus: true, placeholder: 'email', 
+          class: 'form-control'
 
       .field
         %br
-        = f.password_field :password, autocomplete: "off", placeholder: 'password', class: 'form-control'
+        = f.password_field :password, autocomplete: "off", 
+          placeholder: 'password', class: 'form-control'
 
       .actions
         %br/

@@ -6,19 +6,12 @@
           %tbody
             %tr
               %td
-                %h4= "#{t :ordr} #{@order.extend(OrderDecorator).id}"
+                %h4= "#{t :ordr} #{OrderDecorator.new(@order).decorate}"
               %td
                 %p= "(#{t("orders_page.#{@order.state}")})"
 
     %table.table
-      %thead
-        %tr.active
-          %th{colspan: '2'}
-            = t("checkout.items.book")
-          %th= t("checkout.items.price")
-          %th.nowrap
-              = t("checkout.items.qty")
-          %th= t("checkout.items.total")
+      = render 'shared/order_table_head', extra_col: false
 
       %tbody
         - @order.order_items.each do |item|

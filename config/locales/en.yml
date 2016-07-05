@@ -126,8 +126,8 @@ en:
       total: "TOTAL"
 
       full:
-        bil_address: "Billing address"
-        ship_address: "Shipping address"
+        billing_address: "Billing address"
+        shipping_address: "Shipping address"
         shipmnt: "Shipment"
         payment: "Payment"
 

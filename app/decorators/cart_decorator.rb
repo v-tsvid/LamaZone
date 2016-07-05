@@ -1,8 +1,4 @@
 class CartDecorator < BaseDecorator
-  
-  def cart_subtotal
-
-  end
 
   def decorate
     second_part = 

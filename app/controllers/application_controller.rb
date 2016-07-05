@@ -82,7 +82,7 @@
 
     def after_sign_in_path_for(resource)
       prev_url = session[:previous_url]
-      prev_url == order_items_index_path ? prev_url || root_path : super
+      prev_url == cart_path ? prev_url || root_path : super
     end
 
     def after_sign_out_path_for(resource_or_scope)

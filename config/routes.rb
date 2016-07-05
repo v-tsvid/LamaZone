@@ -11,8 +11,7 @@ Rails.application.routes.draw do
 
   mount RailsAdmin::Engine => '/admin', as: 'rails_admin'
 
-  get    'static_pages/home', path: 'home'
-  get    'order_items/index', path: 'cart'
+  get    'order_items/index', path: 'cart', as: :cart
   delete 'order_items/delete_from_cookies'
   delete 'orders/destroy_cookies'
   post   'orders/update_cookies'
@@ -25,7 +24,7 @@ Rails.application.routes.draw do
   resources :categories, only: :show
   resources :checkouts, only: [:new, :create, :show, :update]
   resources :customers, except: [:index, :destroy]
-  resources :order_items, only: [:index, :create, :destroy]
+  resources :order_items, only: [:create, :destroy]
   resources :orders, only: [:index, :show, :update, :destroy]
 
   match "*path", to: "application#routing_error", via: :all

@@ -4,40 +4,41 @@
       %a.navbar-brand{href: root_path}
         = image_tag "dalailama.png", size: "73x62", alt: "LZ" 
       %p.navbar-text 
-        = "#{t :hello}#{current_customer && current_customer.firstname ? ", #{current_customer.firstname}" : nil}! #{t :in_lamazone}"
+        = hello_customer
     .collapse.navbar-collapse#bs-example-navbar-collapse-1
       %ul.nav.navbar-nav
-        %li{class: current_page?(root_path) ? "active" : nil}
-          =link_to t(:home), root_path
-        %li{class: (controller == BooksController || CategoriesController || RatingsController) && !current_page?(root_path) ? "active" : nil}
-          =link_to t(:shop), books_path
+        %li{class: home_active? ? "active" : nil}
+          = link_to t(:home), root_path
+        %li{class: shop_active? ? "active" : nil}
+          = link_to t(:shop), books_path
 
       %ul.nav.navbar-nav.navbar-right
         - if current_admin 
-          %li{class: current_page?(rails_admin_path) ? "active" : nil}
-            =link_to t(:admin_panel), rails_admin_path
+          %li{class: admin_panel_active? ? "active" : nil}
+            = link_to t(:admin_panel), rails_admin_path
 
         - if !current_admin
-          %li{class: current_page?(order_items_path) || current_page?(order_items_index_path)? "active" : nil}
-            =link_to CartDecorator.new(current_order || order_from_cookies).decorate, order_items_index_path
+          %li{class: current_page?(cart_path) ? "active" : nil}
+            = link_to cart_caption, cart_path
 
         - if current_customer
-          %li{class: current_page?(edit_customer_registration_path) ? "active" : nil}
-            =link_to t(:settings), edit_customer_registration_path
-          %li{class: current_page?(orders_path) ? "active" : nil}
-            =link_to t(:orders), orders_path
+          %li{class: settings_active? ? "active" : nil}
+            = link_to t(:settings), edit_customer_registration_path
+          %li{class: orders_active? ? "active" : nil}
+            = link_to t(:orders), orders_path
         
         - if !current_customer && !current_admin
-          %li{class: current_page?(new_customer_registration_path) ? "active" : nil}
-            =link_to t(:sign_up), new_customer_registration_path
-          %li{class: current_page?(new_customer_session_path) ? "active" : nil}
-            =link_to t(:sign_in), new_customer_session_path
+          %li{class: sign_up_active? ? "active" : nil}
+            = link_to t(:sign_up), new_customer_registration_path
+          %li{class: sign_in_active? ? "active" : nil}
+            = link_to t(:sign_in), new_customer_session_path
 
         - if current_customer || current_admin
-          %li{class: current_page?(destroy_customer_session_path) ? "active" : nil}
-            =link_to t(:sign_out), destroy_customer_session_path, method: "delete"
+          %li{class: sign_out_active? ? "active" : nil}
+            = link_to t(:sign_out), destroy_customer_session_path, 
+              method: "delete"
 
         %li{class: I18n.locale == :en ? "active" : nil}
-          =link_to(image_tag("UK.png"), url_for(:locale => 'en'))
+          = link_to(image_tag("UK.png"), url_for(:locale => 'en'))
         %li{class: I18n.locale == :uk ? "active" : nil}
-          =link_to(image_tag("Ukraine.png"), url_for(:locale => 'uk'))
+          = link_to(image_tag("Ukraine.png"), url_for(:locale => 'uk'))

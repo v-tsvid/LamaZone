@@ -1,0 +1,10 @@
+%thead
+  %tr.active
+    %th{colspan: '2'}
+      = t("checkout.items.book")
+    %th= t("checkout.items.price")
+    %th.nowrap
+      = t("checkout.items.qty")
+    %th= t("checkout.items.total")
+    - if extra_col
+      %th

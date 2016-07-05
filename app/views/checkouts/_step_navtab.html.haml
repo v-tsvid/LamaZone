@@ -1,5 +1,5 @@
 - @text = t("checkout.tabs.#{item}")
-- if CheckoutForm::NEXT_STEPS.index(next_step.to_sym) < CheckoutForm::NEXT_STEPS.index(item) || (next_step.to_sym == :complete && item != :complete)
+- if link_inaccessible?(next_step, item)
   %li{role: "presentation", class: "disabled"}
     = link_to @text
 - else  
