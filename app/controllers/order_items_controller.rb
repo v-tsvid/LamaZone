@@ -13,7 +13,7 @@ class OrderItemsController < ApplicationController
 
   def create
     if current_customer
-      @order = OrderFiller.new(current_customers_order).add_items_to_order(
+      @order = OrderFiller.new(current_customers_order).add_items_to_order(     
         [OrderItem.order_item_from_params(order_item_params)])
     else
       interact_with_cookies { |order_items| push_to_cookies(order_items) }

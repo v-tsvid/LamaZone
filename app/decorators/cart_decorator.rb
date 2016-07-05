@@ -5,6 +5,7 @@ class CartDecorator < BaseDecorator
   end
 
   def decorate
+
     second_part = 
     if calc_total_quantity == 0
       "(#{I18n.t :is_empty})"
