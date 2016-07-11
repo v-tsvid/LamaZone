@@ -1,7 +1,7 @@
-class RatingDecorator < BaseDecorator
+class RatingDecorator < Draper::Decorator
 
   def author_and_date
-    " #{I18n.t :by} #{@obj.customer.full_name}, "\
-    "#{DateDecorator.new(@obj.updated_at).decorate}"
+    " #{I18n.t :by} #{PersonDecorator.decorate(object.customer).full_name}, "\
+    "#{DateDecorator.decorate(object.updated_at).date}"
   end
 end

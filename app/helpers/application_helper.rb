@@ -16,13 +16,13 @@ module ApplicationHelper
   end
 
   def cart_caption
-    CartDecorator.new(current_order || order_from_cookies).decorate
+    (current_order || order_from_cookies).decorate.cart_caption
   end
   
   private
 
     def current_customer_firstname
-      firstname = current_customer.firstname
+      firstname = current_customer.firstname if current_customer
       current_customer && firstname ? ", #{firstname}" : nil
     end
 end

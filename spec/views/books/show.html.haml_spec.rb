@@ -33,7 +33,8 @@ RSpec.describe "books/show", type: :view do
     include_context "stub helpers and render"
 
     it "displays book author's firstname and lastname" do
-      expect(rendered).to have_content @book.author.send(:full_name)
+      expect(rendered).to have_content(
+        PersonDecorator.decorate(@book.author).full_name)
     end
 
     it "displays books quantity customer is going to buy" do
@@ -68,7 +69,8 @@ RSpec.describe "books/show", type: :view do
       end
 
       it "displays rating customer name" do
-        expect(rendered).to have_content(subject.customer.send(:full_name))
+        expect(rendered).to have_content(
+          PersonDecorator.decorate(subject.customer).full_name)
       end
     end
 
@@ -87,7 +89,8 @@ RSpec.describe "books/show", type: :view do
       end
 
       it "does not display rating customer name" do
-        expect(rendered).not_to have_content(subject.customer.send(:full_name))
+        expect(rendered).not_to have_content(
+          PersonDecorator.decorate(subject.customer).full_name)
       end
     end
   end

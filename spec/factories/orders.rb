@@ -1,7 +1,7 @@
 FactoryGirl.define do
   factory :order do
     state { Order::STATE_LIST.sample }
-    next_step { CheckoutsController::WIZARD_STEPS.sample }
+    next_step { CheckoutForm::NEXT_STEPS.sample }
     shipping_method { Order::SHIPPING_METHOD_LIST.sample }
     shipping_price { rand(0.0..100.0) }
     subtotal { rand(0.0..100.0) }

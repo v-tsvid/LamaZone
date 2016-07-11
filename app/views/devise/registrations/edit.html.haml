@@ -21,9 +21,9 @@
       = form_for(resource, as: resource_name, 
         url: registration_path(resource_name), html: { method: :put }) do |f|
 
-        %h4= t("settings_page.email")
+        %h4= t("settings_page.email_caption")
         = render 'email_password_fields', f: f, resource: resource, 
-          sym: :email, placeholder: nil
+          sym: :email, placeholder: t("settings_page.email")
 
         .actions
           = f.submit t("settings_page.save"), class: "btn btn-warning"
@@ -40,9 +40,9 @@
         
         - messages = resource.errors.messages
         = render 'email_password_fields', f: f, resource: resource, 
-          sym: :current_password, placeholder: 'Old password'
+          sym: :current_password, placeholder: t("settings_page.old_password")
         = render 'email_password_fields', f: f, resource: resource, 
-          sym: :password, placeholder: 'New password'
+          sym: :password, placeholder: t("settings_page.new_password")
 
         .actions
           = f.submit t("settings_page.save"), class: 'btn btn-warning'

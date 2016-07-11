@@ -6,7 +6,8 @@
       .col-md-3
         %h4
           = "#{t :by_author_1}"
-          = link_to"#{book.author.full_name}", author_path(book.author)
+          = link_to"#{PersonDecorator.decorate(book.author).full_name}", 
+            author_path(book.author)
     .row-fluid
       .col-md-3
         .image-thumb
@@ -19,7 +20,7 @@
           .form-inline
             = form_tag controller: 'order_items', action: 'create', 
               method: :post do
-              %strong= "#{PriceDecorator.new(book.price).decorate}"
+              %strong= "#{PriceDecorator.decorate(book.price).price}"
               = hidden_field_tag 'book_id', book.id
               = number_field_tag 'quantity', '1', in: 1..book.books_in_stock, 
                 id: "book_quantity", class: "form-control"

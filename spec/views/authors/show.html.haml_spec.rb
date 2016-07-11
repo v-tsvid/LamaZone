@@ -11,7 +11,7 @@ RSpec.describe "authors/show", type: :view do
   
   [:firstname, :lastname, :biography].each do |item|
     it "displays author's #{spaced(item)}" do
-      expect(rendered).to have_selector 'p', text: @author.send(item)
+      expect(rendered).to have_selector 'p', text: @author.public_send(item)
     end
   end
 

@@ -16,19 +16,11 @@ class Rating < ActiveRecord::Base
     state :approved
   end
 
-  rails_admin do
-    object_label_method do
-      :custom_label_method
-    end
+  def custom_label_method
+    "rating #{self.id} for book #{self.book_id}"
   end
 
   def state_enum
     STATE_LIST
   end
-
-  private
-
-    def custom_label_method
-      "rating #{self.id} for book #{self.book_id}"
-    end
 end

@@ -59,11 +59,25 @@ en:
   settings_page:
     settings: "Settings"
     save: "SAVE"
-    email: "EMAIL"
+    email_caption: "EMAIL"
     password: "PASSWORD"
     remove_acc: "REMOVE ACCOUNT"
     remove_acc_button: "PLEASE REMOVE MY ACCOUNT"
     rem_acc_understand: "I understand that all data will be lost"
+    email: 'email'
+    old_password: "old password"
+    new_password: "new password"
+
+  sign_in_page:
+    as_admin: 'Sign in as Admin'
+    sign_in: 'Sign in'
+    remember_me: 'remember me'
+    have_account: 'Have an account?'
+    dont_have_account: "Don't have an account?"
+    sign_up: 'Sign up'
+    email: 'email'
+    password: 'password'
+    password_confirmation: 'password confirmation'
 
   orders_page:
     no_orders: "NO ORDERS"

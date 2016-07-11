@@ -31,4 +31,18 @@ RailsAdmin.config do |config|
     # history_index
     # history_show
   end
+
+  ['Address', 
+   'Author', 
+   'CreditCard', 
+   'Customer', 
+   'Order', 
+   'OrderItem', 
+   'Rating'].each do |model_name|
+    config.model model_name do
+      object_label_method do
+        :custom_label_method
+      end
+    end
+  end
 end

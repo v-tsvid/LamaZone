@@ -9,10 +9,8 @@ class OrderItem < ActiveRecord::Base
   belongs_to :book
   belongs_to :order
 
-  rails_admin do
-    object_label_method do
-      :custom_label_method
-    end
+  def custom_label_method
+    "#{Book.find(self.book_id).title}"
   end
 
   class << self
@@ -53,8 +51,6 @@ class OrderItem < ActiveRecord::Base
         order_items
       end
 
-      
-
       def compact_if_not_compacted(order_items)
         if order_items != self.compact_order_items(order_items)
           temp_items = order_items
@@ -68,9 +64,5 @@ class OrderItem < ActiveRecord::Base
 
     def update_price
       self.price = self.book.price * self.quantity
-    end
-
-    def custom_label_method
-      "#{Book.find(self.book_id).title}"
     end
 end

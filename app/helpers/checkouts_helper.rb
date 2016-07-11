@@ -3,21 +3,21 @@ module CheckoutsHelper
     coupon = item.coupon
 
     {"#{t("checkout.order.subtotal")}: " => 
-     "#{PriceDecorator.new(item.subtotal).decorate}",
+     "#{PriceDecorator.decorate(item.subtotal).price}",
 
      "#{t("checkout.order.discount")}: " => 
      "#{coupon ? coupon.discount : 0}%",
 
      "#{t("checkout.order.shipping")}: " => 
-     "#{PriceDecorator.new(item.shipping_price).decorate}",
+     "#{PriceDecorator.decorate(item.shipping_price).price}",
 
      "#{t("checkout.order.total")}: " => 
-     "#{PriceDecorator.new(item.total_price).decorate}"}
+     "#{PriceDecorator.decorate(item.total_price).price}"}
   end
 
   def shipping_method_checked?(method, current_method)
     method == current_method || 
-    current_method && method == Order::SHIPPING_METHOD_LIST[0]
+    !current_method && method == Order::SHIPPING_METHOD_LIST[0]
   end
 
   def link_inaccessible?(next_step, item)

@@ -4,8 +4,6 @@ class Book < ActiveRecord::Base
   validates :books_in_stock, numericality: 
     { only_integer: true, greater_than_or_equal_to: 0 }
 
-  # scope :bestsellers, -> { Category.find_by_title('bestsellers').books }
-
   belongs_to :author
   has_and_belongs_to_many :categories #, join_table: :books_categories
   has_many :ratings, dependent: :delete_all
@@ -15,8 +13,8 @@ class Book < ActiveRecord::Base
 
   private
 
-    def self.books_of_category(title)
+    def self.of_category(title)
       category = Category.find_by_title(title)
-      category ? category.books : nil
+      category ? category.books : all
     end
 end

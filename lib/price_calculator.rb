@@ -6,14 +6,10 @@ module PriceCalculator
 
   def calc_shipping_price(method)
     case method
-    when SHIPPING_METHOD_LIST[0]
-      5.00
-    when SHIPPING_METHOD_LIST[1]
-      15.00
-    when SHIPPING_METHOD_LIST[2]
-      10.00
-    else
-      0
+    when SHIPPING_METHOD_LIST[0] then 5.00
+    when SHIPPING_METHOD_LIST[1] then 15.00
+    when SHIPPING_METHOD_LIST[2] then 10.00
+    else 0
     end
   end
 

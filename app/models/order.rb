@@ -37,39 +37,15 @@ class Order < ActiveRecord::Base
     STATE_LIST
   end
 
-  rails_admin do
-    object_label_method do
-      :custom_label_method
-    end
+  def custom_label_method
+    self.decorate.number
   end
 
-  def for_checkout(checkout_params)
-    return false unless self.init_with_order_items(
-      checkout_params[:order_items_attrs])
-    
-    coupon = Coupon.find_by(code: checkout_params[:coupon_code])
+  def prepare_for_checkout(coupon_code)
+    coupon = Coupon.find_by(code: coupon_code)
     next_step = self.next_step || 'address'
 
     self.update(coupon: coupon, next_step: next_step)
     self
   end
-
-  def init_with_order_items(items_params)
-    if items_params
-      order_items = items_params.map do |item|
-        OrderItem.new({book_id: item['book_id'], quantity: item['quantity']})
-      end
-    else
-      order_items = Array.new
-    end
-  
-    self.order_items.destroy_all
-    self.order_items = order_items
-  end
-
-  private
-
-    def custom_label_method
-      "#{self.id}"
-    end
 end

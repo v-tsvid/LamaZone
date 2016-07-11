@@ -2,7 +2,7 @@
   .col-md-12
     %h4
       = t("ordr")
-      = OrderDecorator.new(checkout_form.model).decorate
+      = checkout_form.model.decorate.number
 .row-fluid 
   = render partial: 'order_full_address', 
     locals: {sym: :billing_address, view: view, checkout_form: checkout_form}
@@ -17,15 +17,15 @@
     - item = checkout_form.model
     %p= item.shipping_method
     %p
-      = PriceDecorator.new(item.shipping_price).decorate
+      = PriceDecorator.decorate(item.shipping_price).price
     %br/
 
   .col-md-3
     %h4
       = t("checkout.order.full.payment")
       = render partial: 'edit_if_confirm', locals: {view: view, step: :payment}
-    - item = checkout_form.model.credit_card.extend CreditCardDecorator
-    %p= item.number
+    - item = checkout_form.model.credit_card
+    %p= item.decorate.number
     %p= "#{item.expiration_month}/#{item.expiration_year}"
     %br/
 

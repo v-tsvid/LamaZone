@@ -27,7 +27,7 @@ shared_examples 'sign in or sign up via Facebook' do
     find(:css, "a[href=\"#{link_to_click}\"]").click
 
     expect(page).
-      to have_content 'Successfully authenticated from Facebook account.'
+      to have_content t("devise.omniauth_callbacks.success", kind: 'Facebook')
   end
 
   scenario "successfully sign up with Facebook profile of unexisitng user" do
@@ -37,7 +37,7 @@ shared_examples 'sign in or sign up via Facebook' do
     find(:css, "a[href=\"#{link_to_click}\"]").click
 
     expect(page).
-      to have_content 'Successfully authenticated from Facebook account.'
+      to have_content t("devise.omniauth_callbacks.success", kind: 'Facebook')
   end
 
   scenario "successfully sign up when email was not fetched from Facebook" do
@@ -48,7 +48,7 @@ shared_examples 'sign in or sign up via Facebook' do
     find(:css, "a[href=\"#{link_to_click}\"]").click
 
     expect(page).
-      to have_content 'Successfully authenticated from Facebook account.'
+      to have_content t("devise.omniauth_callbacks.success", kind: 'Facebook')
   end
 
   scenario "failed to sign in with invalid credentials" do
@@ -79,25 +79,27 @@ feature "customer signing in" do
   scenario "successfully sign in with correct email and password" do
     fill_in 'customer_email',    with: customer.email
     fill_in 'customer_password', with: customer.password
-    click_button 'Sign in'
+    click_button t("sign_in_page.sign_in")
 
-    expect(page).to have_content 'Signed in successfully'
+    expect(page).to have_content t("devise.sessions.signed_in")
   end
 
   scenario "failed to sign in with incorrect email" do
     fill_in 'customer_email',    with: 'wrong@mail.com'
     fill_in 'customer_password', with: customer.password
-    click_button 'Sign in'    
+    click_button t("sign_in_page.sign_in")   
 
-    expect(page).to have_content 'Invalid email or password'
+    expect(page).to have_content(
+      t("devise.failure.invalid", authentication_keys: "email"))
   end
 
   scenario "failed to sign in with incorrect password" do
     fill_in 'customer_email',    with: customer.email
     fill_in 'customer_password', with: 'wrong_password'
-    click_button 'Sign in'    
+    click_button t("sign_in_page.sign_in") 
 
-    expect(page).to have_content 'Invalid email or password'
+    expect(page).to have_content(
+      t("devise.failure.invalid", authentication_keys: "email"))
   end
 
   context "sign in via Facebook" do
@@ -122,25 +124,27 @@ feature "admin signing in" do
   scenario "successfully sign in with correct email and password" do
     fill_in 'admin_email',    with: admin.email
     fill_in 'admin_password', with: admin.password
-    click_button 'Sign in'
+    click_button t("sign_in_page.sign_in")
 
-    expect(page).to have_content 'Signed in successfully'
+    expect(page).to have_content t("devise.sessions.signed_in")
   end
 
   scenario "failed to sign in with incorrect email" do
     fill_in 'admin_email',    with: 'wrong@mail.com'
     fill_in 'admin_password', with: admin.password
-    click_button 'Sign in'    
+    click_button t("sign_in_page.sign_in")   
 
-    expect(page).to have_content 'Invalid email or password'
+    expect(page).to have_content(
+      t("devise.failure.invalid", authentication_keys: "email"))
   end
 
   scenario "failed to sign in with incorrect password" do
     fill_in 'admin_email',    with: admin.email
     fill_in 'admin_password', with: 'wrong_password'
-    click_button 'Sign in'    
+    click_button t("sign_in_page.sign_in") 
 
-    expect(page).to have_content 'Invalid email or password'
+    expect(page).to have_content(
+      t("devise.failure.invalid", authentication_keys: "email"))
   end
 end
 
@@ -157,18 +161,19 @@ feature 'customer signing up' do
     fill_in 'customer_email',                 with: 'john_doe@mail.com'
     fill_in 'customer_password',              with: 'password'
     fill_in 'customer_password_confirmation', with: 'password'
-    click_button 'Sign up'
+    click_button t("sign_in_page.sign_up") 
 
-    expect(page).to have_content 'Welcome! You have signed up successfully.'
+    expect(page).to have_content t("devise.registrations.signed_up")
   end
 
   scenario 'failed to sign up with invalid credentials' do
     fill_in 'customer_email',                 with: 'invalid@mail'
     fill_in 'customer_password',              with: 'wrong'
     fill_in 'customer_password_confirmation', with: 'wrong1'
-    click_button 'Sign up'
+    click_button t("sign_in_page.sign_up") 
 
-    expect(page).to have_content 'is invalid is too short (minimum is 8 characters)'
+    expect(page).to have_content(
+      'is invalid is too short (minimum is 8 characters)')
   end
 
   context "sign up via Facebook" do

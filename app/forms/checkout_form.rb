@@ -1,5 +1,3 @@
-require 'price_calculator'
-
 class CheckoutForm < Reform::Form
   extend ::ActiveModel::Callbacks
   include PriceCalculator

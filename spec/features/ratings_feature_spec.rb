@@ -17,16 +17,13 @@ feature 'rating management' do
       login_as @customer
     end
 
-    # background {  }
-
     scenario 'add a rating to a book' do
       visit book_path(@book)
-      click_link 'Add review for this book'
-      fill_in 'Rating',   with: '10'
-      fill_in 'Text review', with: 'some review'
-      click_button 'Add'
-      expect(page).to have_content "Rating was successfully created. " \
-                                   "It will be available soon"
+      click_link t(:add_review)
+      fill_in t(:rating),   with: '10'
+      fill_in t(:text_review), with: 'some review'
+      click_button t(:add)
+      expect(page).to have_content t("controllers.rating_created")
     end
   end
 end

@@ -25,7 +25,7 @@ feature 'books catalogue browsing' do
   scenario 'select some category' do
     visit "/categories/#{@category.id}"
     
-    expect(page).to have_content "#{@category.title.capitalize}"
+    expect(page).to have_content t("categories.#{@category.title}")
     @category.books.each do |book|
       expect(page).to have_content book.title
     end
@@ -43,7 +43,7 @@ feature 'books catalogue browsing' do
 
   scenario 'view the categories list in the books catalogue' do
     [@category, @another_category].each do |cat|
-      expect(page).to have_content cat.title.humanize
+      expect(page).to have_content t("categories.#{cat.title}")
     end
   end
 
@@ -53,6 +53,7 @@ feature 'books catalogue browsing' do
     expect(page).to have_content @another_book.title
     expect(page).to have_content @another_book.description
     expect(page).to have_content @another_book.price
-    expect(page).to have_content @another_book.author.full_name
+    expect(page).to have_content(
+      PersonDecorator.decorate(@another_book.author).full_name)
   end
 end

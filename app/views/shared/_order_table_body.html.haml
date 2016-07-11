@@ -4,4 +4,4 @@
     .cart-left-col
       = "#{t("checkout.order.subtotal")}: "
   %td.cart-right-col
-    = PriceDecorator.new(order.send(:update_subtotal)).decorate
+    = PriceDecorator.decorate(order.send(:update_subtotal)).price

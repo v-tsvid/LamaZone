@@ -3,4 +3,4 @@
   %label
     = model.radio_button :shipping_method, method, 
       checked: shipping_method_checked?(method, current_method)
-    = "#{method} +#{PriceDecorator.new(price).decorate}"
+    = "#{method} +#{PriceDecorator.decorate(price).price}"

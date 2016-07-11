@@ -2,15 +2,7 @@ class CreditCard < ActiveRecord::Base
   belongs_to :customer
   has_many :orders, dependent: :destroy
 
-  rails_admin do
-    object_label_method do
-      :custom_label_method
-    end
+  def custom_label_method
+    "#{self.number}"
   end
-
-  private
-
-    def custom_label_method
-      "#{self.number}"
-    end
 end

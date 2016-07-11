@@ -1,6 +1,6 @@
-class DateDecorator < BaseDecorator
+class DateDecorator < Draper::Decorator
  
-  def decorate
-    @obj ? "#{I18n.l(@obj)}" : nil
+  def date
+    object ? "#{I18n.l(object)}" : nil
   end
 end

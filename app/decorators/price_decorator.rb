@@ -1,6 +1,6 @@
-class PriceDecorator < BaseDecorator
+class PriceDecorator < Draper::Decorator
  
-  def decorate
-    @obj ? "$#{'%.2f' % @obj}" : nil
+  def price
+    object ? "$#{'%.2f' % object}" : nil
   end
 end

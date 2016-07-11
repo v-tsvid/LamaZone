@@ -13,15 +13,15 @@ class Address < ActiveRecord::Base
   validates :zipcode, zipcode: { country_code: :country_code }
 
   belongs_to :country
-  belongs_to :customer_billing, class_name: 'Customer', primary_key: 'billing_address_for_id'
-  belongs_to :customer_shipping, class_name: 'Customer', primary_key: 'shipping_address_for_id'
+  belongs_to :customer_billing, class_name: 'Customer', 
+    primary_key: 'billing_address_for_id'
+  belongs_to :customer_shipping, class_name: 'Customer', 
+    primary_key: 'shipping_address_for_id'
   
   before_save :normalize_phone
 
-  rails_admin do
-    object_label_method do
-      :custom_label_method
-    end
+  def custom_label_method
+    "#{self.city} #{self.address1} #{self.address2}"
   end
 
   def attributes_short
@@ -33,10 +33,6 @@ class Address < ActiveRecord::Base
   end
 
   private
-
-    def custom_label_method
-      "#{self.city} #{self.address1} #{self.address2}"
-    end
 
     def normalize_phone
       # provided by phony gem

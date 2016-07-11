@@ -9,7 +9,8 @@ class CheckoutsController < ApplicationController
 
   def create
     @checkout_form = CheckoutForm.new(
-      current_customers_order.for_checkout(checkout_params))
+      current_customers_order.prepare_for_checkout(
+        checkout_params[:coupon_code]))
     
     if @checkout_form.valid? && @checkout_form.save
       redirect_to checkout_path(@checkout_form.model.next_step.to_sym)

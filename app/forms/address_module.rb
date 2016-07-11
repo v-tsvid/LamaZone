@@ -35,7 +35,7 @@ module AddressModule
   private
     def normalize_phone
       # provided by phony gem
-      # delete all characters excepting digits
+      # deletes all characters excepting digits
       Phony.normalize!(self.phone)
     end
 

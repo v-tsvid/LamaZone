@@ -4,8 +4,9 @@ shared_examples 'books_categories specs' do |category_show|
     @books = assign(:books, Kaminari.paginate_array([
       FactoryGirl.create(:book),
       FactoryGirl.create(:book)]).page(1))
-      @categories = assign(:categories, [FactoryGirl.build_stubbed(:category), 
-                                         FactoryGirl.build_stubbed(:category)])
+      @categories = assign(:categories, [
+        FactoryGirl.build_stubbed(:category, title: 'bestsellers'), 
+        FactoryGirl.build_stubbed(:category, title: 'other')])
   end
 
   [:title, :price].each do |item|
@@ -70,8 +71,10 @@ shared_examples 'books_categories specs' do |category_show|
       File.join(Rails.root, CARRIERWAVE_IMAGES[0]))),
       FactoryGirl.create(:book, images: Rack::Test::UploadedFile.new(
       File.join(Rails.root, CARRIERWAVE_IMAGES[1])))]).page(1))
-      @categories = assign(:categories, [FactoryGirl.build_stubbed(:category), 
-                                         FactoryGirl.build_stubbed(:category)])
+      @categories = assign(:categories, [
+        FactoryGirl.build_stubbed(:category, title: 'bestsellers'), 
+        FactoryGirl.build_stubbed(:category, title: 'other')])
+      
       render
       selector = "a[href='#{book_path @books[0]}'] "\
                  "img[src*='#{@books[0].images.thumb.path}']"

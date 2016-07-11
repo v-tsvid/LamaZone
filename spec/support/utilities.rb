@@ -9,6 +9,10 @@ CARRIERWAVE_IMAGES = ["app/assets/images/books-images/41OgOIZBVPL.jpg",
                       "app/assets/images/books-images/61KPB4YQnRL.jpg",
                       "app/assets/images/books-images/71-qtQ6xR1L.jpg"]
 
+def admin_panel_edit_link(str)
+  "a.pjax[href=\"/admin/#{str}/edit\?locale=en\"]"
+end
+
 def setup_ability
   @ability = Object.new
   @ability.extend(CanCan::Ability)

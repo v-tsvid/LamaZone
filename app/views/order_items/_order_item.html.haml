@@ -3,14 +3,14 @@
   %td.cart-title-col
     = link_to "#{order_item.book.title}", order_item.book
   %td.cart-right-col-thin
-    = PriceDecorator.new(order_item.book.price).decorate
+    = PriceDecorator.decorate(order_item.book.price).price
   %td 
     = number_field_tag "order_items_attrs[][quantity]", order_item.quantity, 
       min: 1, class: 'form-control'
     = hidden_field_tag "order_items_attrs[][book_id]", order_item.book.id
   %td.cart-right-col
     = label_tag "order_items_attrs[][price]", 
-      PriceDecorator.new(order_item.price).decorate
+      PriceDecorator.decorate(order_item.price).price
   %td
     - if current_order
       = link_to t("checkout.remove"), order_item,  method: :delete, 

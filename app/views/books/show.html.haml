@@ -2,7 +2,8 @@
   .col-md-12.col-md-offset-1
     %h4 
       = "#{@book.title}#{t :by_author}"
-      = link_to(@book.author.full_name, author_path(@book.author))
+      = link_to PersonDecorator.decorate(@book.author).full_name, 
+        author_path(@book.author)
 
 .row-fluid
   .col-md-3.col-md-offset-1
@@ -14,7 +15,7 @@
       = form_tag(controller: 'order_items', action: 'create', method: :post) do
         .form-inline
           .col-md-4
-            %h4= PriceDecorator.new(@book.price).decorate
+            %h4= PriceDecorator.decorate(@book.price).price
           .col-md-5.col-md-offset-3
             .book-form-right
               = number_field_tag 'quantity', '1', 

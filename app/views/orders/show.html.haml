@@ -6,7 +6,7 @@
           %tbody
             %tr
               %td
-                %h4= "#{t :ordr} #{OrderDecorator.new(@order).decorate}"
+                %h4= "#{t :ordr} #{@order.decorate.number}"
               %td
                 %p= "(#{t("orders_page.#{@order.state}")})"
 

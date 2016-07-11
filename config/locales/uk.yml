@@ -38,11 +38,25 @@ uk:
   settings_page:
     settings: "Налаштування"
     save: "ЗБЕРЕГТИ"
-    email: "EMAIL"
+    email_caption: "ЕЛ. ПОШТА"
     password: "ПАРОЛЬ"
     remove_acc: "ВИДАЛЕННЯ ПРОФІЛЮ"
     remove_acc_button: "ВИДАЛІТЬ МІЙ ПРОФІЛЬ"
     rem_acc_understand: "Я розумію, що усі мох дані будуть втрачені"
+    email: "ел. пошта"
+    old_password: "old password"
+    new_password: "new password"
+
+  sign_in_page:
+    as_admin: 'Увійти як адміністратор'
+    sign_in: "Увійти"
+    remember_me: "запам'ятати мене"
+    have_account: 'Вже зареєстровані?'
+    dont_have_account: "Ще не зареєстровані?"
+    sign_up: 'Зареєструватися'
+    email: 'ел. пошта'
+    password: 'пароль'
+    password_confirmation: 'підтвердження паролю'
 
   orders_page:
     no_orders: "ЗАМОВЛЕНЬ НЕМАЄ"

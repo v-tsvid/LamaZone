@@ -2,7 +2,7 @@
   %tr.active
     %td.small
       %span.stars= "#{(rating.rate / 2.0)}"
-      = RatingDecorator.new(rating).author_and_date
+      = rating.decorate.author_and_date
   %tr
     %td
       = rating.review.to_s

@@ -145,9 +145,9 @@ if Rails.env == 'development' || Rails.env == 'production'
       item.save!
     end
 
-    checkout = Checkout.new(order)
-    checkout.next_step = 'complete'
-    checkout.valid?  
-    checkout.save
+    checkout_form = CheckoutForm.new(order)
+    checkout_form.next_step = 'complete'
+    checkout_form.valid?  
+    checkout_form.save
   end
 end
