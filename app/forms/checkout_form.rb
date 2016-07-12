@@ -26,7 +26,8 @@ class CheckoutForm < Reform::Form
   property :shipping_address, populate_if_empty: Address, form: ShippingAddressForm
   property :credit_card, populate_if_empty: CreditCard, form: CreditCardForm
   property :coupon, populate_if_empty: Coupon, form: CouponForm
-  
+
+  delegate :customer, to: :model
 
   validates :subtotal,
             :total_price, 
@@ -61,11 +62,6 @@ class CheckoutForm < Reform::Form
     false
   end
 
-  def save
-    super
-    model.save!
-  end
-
   def valid?
     run_callbacks :validation do
       super
@@ -80,16 +76,16 @@ class CheckoutForm < Reform::Form
   private
 
     def init_addresses
-      self.model.billing_address ||= self.model.customer.billing_address
-      self.model.shipping_address ||= self.model.customer.shipping_address
+      model.billing_address ||= customer.billing_address
+      model.shipping_address ||= customer.shipping_address
     end
 
     def init_credit_card
-      self.model.credit_card ||= CreditCard.new
+      model.credit_card ||= CreditCard.new
     end
 
     def next_step_confirm_or_complete?
-      self.next_step == 'confirm' || self.next_step == 'complete'
+      next_step == 'confirm' || next_step == 'complete'
     end
 
     def next_step_address_or_shipment?
@@ -97,10 +93,10 @@ class CheckoutForm < Reform::Form
     end
 
     def next_step_address?
-      self.next_step == 'address'
+      next_step == 'address'
     end
 
     def next_step_shipment?
-      self.next_step == 'shipment'
+      next_step == 'shipment'
     end
 end

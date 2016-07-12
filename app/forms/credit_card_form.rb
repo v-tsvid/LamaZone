@@ -44,9 +44,12 @@ class CreditCardForm< Reform::Form
     end
 
     def validate_exp_date
-      errors[:base] << EXPIRED_MESSAGE unless 
-        self.expiration_month && self.expiration_year && 
-        (is_year_greater? || is_year_equal? && is_month_greater_or_equal?)
+      errors[:base] << EXPIRED_MESSAGE unless is_date_correct?   
+    end
+
+    def is_date_correct?
+      self.expiration_month && self.expiration_year && 
+      (is_year_greater? || is_year_equal? && is_month_greater_or_equal?)
     end
 
     def is_month_greater_or_equal?

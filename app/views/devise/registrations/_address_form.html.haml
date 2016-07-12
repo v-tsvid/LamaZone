@@ -1,3 +1,3 @@
 = form_for(address, html: { method: method }) do |addr_f|
-  = render 'form', f: addr_f, kountry: address.try(:country_id), 
+  = render 'form', f: addr_f, default_country: address.try(:country_id), 
     attrs: flash['attrs']

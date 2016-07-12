@@ -23,5 +23,5 @@
       .row-fluid
         %br/
         %h4= t("orders_page.#{state}")
-        - @actual_orders = @orders.where(state: state).reverse_order
-        = render partial: 'orders_list', locals: {orders: @actual_orders}
+        = render partial: 'orders_list', 
+          locals: {orders: actual_orders(@orders, state)}

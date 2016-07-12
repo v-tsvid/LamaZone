@@ -1,8 +1,9 @@
-- order_summary_cols_hash(item).each do |key, val|
+- order_summary = OrderSummary.new(item)
+- [:subtotal, :discount, :shipping_price, :total_price].each do |row|
   %tr
   %td{colspan: '2'}
   %td{colspan: '2'}
     .summary-left-col
-      = key
+      = order_summary.public_send(row)[:tag]
   %td.summary-right-col
-    = val
+    = order_summary.public_send(row)[:price]

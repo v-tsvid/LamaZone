@@ -20,5 +20,5 @@
     %br/
     - attr = attrs['country_id'] if attrs
     = addr_f.select(:country_id, options_for_select(countries_for_select, 
-      (attr.nil? ? kountry : attr)), {}, {class: "form-control"})
+      (attr.nil? ? default_country : attr)), {}, {class: "form-control"})
     %br/

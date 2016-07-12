@@ -11,6 +11,4 @@ class OrderItemForm< Reform::Form
   validates :price, numericality: { greater_than: 0 }
   validates :quantity, numericality: { only_integer: true,
                                        greater_than: 0 }
-
-
 end

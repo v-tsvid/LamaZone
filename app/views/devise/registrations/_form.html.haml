@@ -16,7 +16,8 @@
     = f.hidden_field :shipping_address_for_id
 
   .field
-    = f.select(:country_id, options_for_select(countries_for_select, kountry), 
+    = f.select(:country_id, 
+      options_for_select(countries_for_select, default_country), 
       {}, {class: "form-control"})
     %br/
     %br/

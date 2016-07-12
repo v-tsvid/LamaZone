@@ -23,7 +23,7 @@ class CheckoutsController < ApplicationController
     @checkout_form = CheckoutForm.new(last_order) if last_order
       
     if @checkout_form
-      redirect_if_wrong_step(@checkout_form, step)
+      redirect_if_wrong_step(@checkout_form, step) and return
       @checkout_form.init_empty_attributes(step)
       render_wizard
     else

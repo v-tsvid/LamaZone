@@ -2,8 +2,7 @@
   .col-md-12.col-md-offset-1
     %h4 
       = "#{@book.title}#{t :by_author}"
-      = link_to PersonDecorator.decorate(@book.author).full_name, 
-        author_path(@book.author)
+      = link_to @book.author.decorate.full_name, author_path(@book.author)
 
 .row-fluid
   .col-md-3.col-md-offset-1

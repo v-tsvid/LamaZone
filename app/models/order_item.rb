@@ -34,28 +34,26 @@ class OrderItem < ActiveRecord::Base
     end
 
     def compact_order_items(items)
-      items = items.group_by{|gr_item| gr_item.book_id}.values.map do |item| 
+      items = grouped(items).map do |item| 
         OrderItem.new(book_id: item.first.book_id, 
-                      quantity: item.inject(0){|sum, inj| sum + inj.quantity})
+                      quantity: total_quantity(item))
       end
-      
       get_prices_from_books(items)
     end
 
     private 
 
-      def get_prices_from_books(order_items)
-        order_items.each do |item| 
-          item.price = item.book.price
-        end
-        order_items
+      def grouped(items)
+        items.group_by{|gr_item| gr_item.book_id}.values
       end
 
-      def compact_if_not_compacted(order_items)
-        if order_items != self.compact_order_items(order_items)
-          temp_items = order_items
-          order_items.each { |item| item.destroy }
-          order_items << self.compact_order_items(temp_items)
+      def total_quantity(item)
+        item.inject(0){|sum, inj| sum + inj.quantity}
+      end
+
+      def get_prices_from_books(order_items)
+        order_items.each do |item| 
+          item.price = item.book.price * item.quantity
         end
       end
   end

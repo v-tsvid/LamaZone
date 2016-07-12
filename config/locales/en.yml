@@ -136,8 +136,8 @@ en:
       summary: "ORDER SUMMARY"
       subtotal: "SUBTOTAL"
       discount: "DISCOUNT"
-      shipping: "SHIPPING"
-      total: "TOTAL"
+      shipping_price: "SHIPPING"
+      total_price: "TOTAL"
 
       full:
         billing_address: "Billing address"

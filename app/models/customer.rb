@@ -1,4 +1,5 @@
 class Customer < ActiveRecord::Base
+  include PersonMethods
 
   devise :database_authenticatable, :registerable,
          :recoverable, :rememberable, :trackable, :validatable,          
@@ -18,30 +19,43 @@ class Customer < ActiveRecord::Base
   has_one :shipping_address, class_name: 'Address', foreign_key: 'shipping_address_for_id'
 
   before_save :downcase_email
-  
-  def custom_label_method
-    PersonDecorator.decorate(self).full_name
-  end
 
   def current_order_of_customer
     Order.find_by(customer: self, state: 'in_progress')
   end
 
-  private
+  def email_for_facebook
+    "#{self.lastname}_#{self.firstname}#{number}@facebook.com"
+  end
 
-    def downcase_email
-      self.email.downcase!
-    end
+  class << self
 
-    def self.from_omniauth(auth)
+    def from_omniauth(auth)
       info = auth.info
       
-      where(provider: auth.provider, uid: auth.uid).first_or_create do |customer|
+      by_facebook(auth).first_or_create do |customer|
         customer.email = info.email
         customer.password = Devise.friendly_token[0,20]
         customer.password_confirmation = customer.password
         customer.firstname = info.first_name
         customer.lastname = info.last_name   
       end
+    end
+
+    private
+
+      def by_facebook(auth)
+        where(provider: auth.provider, uid: auth.uid)
+      end
+  end
+
+  private    
+
+    def number
+      Customer.last ? (Customer.last.id + 1) : 1
+    end
+
+    def downcase_email
+      self.email.downcase!
     end
 end

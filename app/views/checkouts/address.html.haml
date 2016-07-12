@@ -5,7 +5,6 @@
   = form_for @checkout_form, url: wizard_path, 
     html: { method: :put } do |checkout_form|
     = checkout_form.fields_for(:model, @checkout_form.model) do |model|
-      - nil_addresses = {'billing_address' => nil, 'shipping_address' => nil }
       - @attrs = flash['attrs'] || nil_addresses
       
       .row-fluid
@@ -15,7 +14,7 @@
           #billing_form
             = render 'address_form', model: model, address: billing_address, 
               addr: 'billing_address', attrs: @attrs['billing_address'], 
-              kountry: billing_address.try(:country_id)
+              default_country: billing_address.try(:country_id)
             %br/
 
         .col-md-3.col-md-offset-1
@@ -29,7 +28,7 @@
           #shipping_form
             = render 'address_form', model: model, address: shipping_address, 
               addr: 'shipping_address', attrs: @attrs['shipping_address'], 
-              kountry: shipping_address.try(:country_id)
+              default_country: shipping_address.try(:country_id)
         
         .col-md-3.col-md-offset-1
           %h4.center= t("checkout.order.summary")

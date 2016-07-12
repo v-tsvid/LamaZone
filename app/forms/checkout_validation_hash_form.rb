@@ -58,9 +58,12 @@ class CheckoutValidationHashForm
     end
 
     def addresses_for_return_hash
-      addr = @params['use_billing'] ? 'billing_address' : 'shipping_address'
       { 'billing_address' => validation_hash['billing_address'], 
-        'shipping_address' => validation_hash[addr] }
+        'shipping_address' => validation_hash[billing_or_shipping] }
+    end
+
+    def billing_or_shipping
+      @params['use_billing'] ? 'billing_address' : 'shipping_address'
     end
 
     def shipping_for_return_hash

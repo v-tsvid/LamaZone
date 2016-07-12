@@ -6,7 +6,7 @@
       .col-md-3
         %h4
           = "#{t :by_author_1}"
-          = link_to"#{PersonDecorator.decorate(book.author).full_name}", 
+          = link_to"#{book.author.decorate.full_name}", 
             author_path(book.author)
     .row-fluid
       .col-md-3

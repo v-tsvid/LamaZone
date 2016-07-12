@@ -1,10 +1,7 @@
 class Author < ActiveRecord::Base
+  include PersonMethods
 
   validates :firstname, :lastname, presence: true
   
-  has_many :books
-
-  def custom_label_method
-    PersonDecorator.decorate(self).full_name
-  end    
+  has_many :books    
 end

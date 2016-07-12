@@ -4,6 +4,14 @@
   include OrderHelpers
   # Prevent CSRF attacks by raising an exception.
   # For APIs, you may want to use :null_session instead.
+
+  PATHS = ["/customers/sign_in", 
+           "/customers/sign_up", 
+           "/customers/password/new", 
+           "/customers/password/edit",
+           "/customers/confirmation",
+           "/customers/sign_out"]
+
   protect_from_forgery with: :exception
 
   before_action :configure_permitted_parameters, if: :devise_controller?
@@ -65,19 +73,9 @@
       # store last url - this is needed for post-login redirect 
       # to whatever the customer last visited.
       return unless request.get? 
-      if (path_not_equal("/customers/sign_in") &&
-          path_not_equal("/customers/sign_up") &&
-          path_not_equal("/customers/password/new") &&
-          path_not_equal("/customers/password/edit") &&
-          path_not_equal("/customers/confirmation") &&
-          path_not_equal("/customers/sign_out") &&
-          !request.xhr?) # don't store ajax calls
+      unless PATHS.include?(request.path) || request.xhr? # don't store ajax calls
         session[:previous_url] = request.fullpath 
       end
-    end
-
-    def path_not_equal(path)
-      request.path != path
     end
 
     def after_sign_in_path_for(resource)
