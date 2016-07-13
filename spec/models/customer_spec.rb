@@ -93,7 +93,7 @@ RSpec.describe Customer, type: :model do
   context "#custom_label_method" do
     it "returns string with lastname and firstname" do
       expect(customer.send(:custom_label_method)).
-        to eq "#{customer.lastname} #{customer.firstname}"
+        to eq customer.decorate.full_name
     end
   end
 
@@ -102,13 +102,6 @@ RSpec.describe Customer, type: :model do
       expect(customer.email).to receive(:downcase!).
         and_return(customer.email.downcase!)
       customer.send(:downcase_email)
-    end
-  end
-
-  context "#full_name" do
-    it "returns string wih lastname joined to firstname" do
-      expect(customer.send(:full_name)).
-        to eq "#{customer.firstname} #{customer.lastname}"
     end
   end
 end

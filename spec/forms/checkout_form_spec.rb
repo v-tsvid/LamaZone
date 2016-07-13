@@ -1,15 +1,15 @@
 require 'rails_helper'
 
-RSpec.describe Checkout, type: :model do
+RSpec.describe CheckoutForm, type: :model do
   let(:order) { FactoryGirl.create :order_with_order_items }
-  let(:checkout) { Checkout.new(order) }
+  let(:checkout_form) { CheckoutForm.new(order) }
   
-  subject { checkout }
+  subject { checkout_form }
   
   before do
-    allow_any_instance_of(Checkout).to receive(:update_shipping_price)
-    allow_any_instance_of(Checkout).to receive(:update_subtotal)
-    allow_any_instance_of(Checkout).to receive(:update_total_price)
+    allow_any_instance_of(CheckoutForm).to receive(:update_shipping_price)
+    allow_any_instance_of(CheckoutForm).to receive(:update_subtotal)
+    allow_any_instance_of(CheckoutForm).to receive(:update_total_price)
   end
 
   [:total_price,
@@ -30,7 +30,7 @@ RSpec.describe Checkout, type: :model do
   
   [:subtotal,
    :total_price, 
-   :customer,  
+   # :customer,  
    :state, 
    :next_step].each do |item|
     it { is_expected.to validate_presence_of item }
@@ -38,7 +38,7 @@ RSpec.describe Checkout, type: :model do
 
   context "when :next_step_address? returns true" do
     before do
-      allow_any_instance_of(Checkout).to receive(
+      allow_any_instance_of(CheckoutForm).to receive(
         :next_step_address?).and_return(true)
     end
 
@@ -52,7 +52,7 @@ RSpec.describe Checkout, type: :model do
 
   context "when :next_step_address? returns false" do
     before do
-      allow_any_instance_of(Checkout).to receive(
+      allow_any_instance_of(CheckoutForm).to receive(
         :next_step_address?).and_return(false)
     end
 
@@ -66,7 +66,7 @@ RSpec.describe Checkout, type: :model do
 
   context "when :next_step_confirm_or_complete? is true" do
     before do
-      allow_any_instance_of(Checkout).to receive(
+      allow_any_instance_of(CheckoutForm).to receive(
         :next_step_confirm_or_complete?).and_return(true)
     end
 
@@ -75,7 +75,7 @@ RSpec.describe Checkout, type: :model do
 
   context "when :next_step_confirm_or_complete? is false" do
     before do
-      allow_any_instance_of(Checkout).to receive(
+      allow_any_instance_of(CheckoutForm).to receive(
         :next_step_confirm_or_complete?).and_return(false)
     end
 
@@ -85,13 +85,13 @@ RSpec.describe Checkout, type: :model do
   context "addresses validating" do
     before do
       [:billing_address, :shipping_address].each do |item|
-        allow_any_instance_of(Checkout).to receive(item).and_return(nil)
+        allow_any_instance_of(CheckoutForm).to receive(item).and_return(nil)
       end
     end
 
     context "when :next_step_address? is true" do
       before do
-        allow_any_instance_of(Checkout).to receive(
+        allow_any_instance_of(CheckoutForm).to receive(
           :next_step_address?).and_return(true)
       end
 
@@ -104,7 +104,7 @@ RSpec.describe Checkout, type: :model do
 
     context "when :next_step_address? is false" do
       before do
-        allow_any_instance_of(Checkout).to receive(
+        allow_any_instance_of(CheckoutForm).to receive(
           :next_step_address?).and_return(false)
       end
 
@@ -118,7 +118,7 @@ RSpec.describe Checkout, type: :model do
 
   context "when :next_step_address_or_shipment? is true" do
     before do
-      allow_any_instance_of(Checkout).to receive(
+      allow_any_instance_of(CheckoutForm).to receive(
         :next_step_address_or_shipment?).and_return true
     end
 
@@ -133,7 +133,7 @@ RSpec.describe Checkout, type: :model do
 
   context "when :next_step_address_or_shipment? is false" do
     before do
-      allow_any_instance_of(Checkout).to receive(
+      allow_any_instance_of(CheckoutForm).to receive(
         :next_step_address_or_shipment?).and_return false
     end
 
@@ -155,15 +155,8 @@ RSpec.describe Checkout, type: :model do
   end
 
   context "#persisted?" do
-    subject { checkout.persisted? }
+    subject { checkout_form.persisted? }
     it { is_expected.to eq false }
-  end
-
-  context "#save" do
-    it "receives save! on model" do
-      expect(subject.model).to receive(:save!)
-      subject.save
-    end
   end
 
   context "#valid?" do
@@ -180,12 +173,12 @@ RSpec.describe Checkout, type: :model do
   [['confirm', 'complete'], ['address', 'shipment']].each do |item|
 
     context "#next_step_#{item[0]}_or_#{item[1]}?" do
-      subject { checkout.send("next_step_#{item[0]}_or_#{item[1]}?".to_sym) }
+      subject { checkout_form.send("next_step_#{item[0]}_or_#{item[1]}?".to_sym) }
 
       item.each do |sub_item|
         context "when next_step is \'#{sub_item}\'" do
           before do
-            allow(checkout).to receive(:next_step).and_return sub_item
+            allow(checkout_form).to receive(:next_step).and_return sub_item
           end
 
           it { is_expected.to eq true }
@@ -194,7 +187,7 @@ RSpec.describe Checkout, type: :model do
 
       context "when next_step is neither '#{item[0]}' nor '#{item[1]}'" do
         before do
-          allow(checkout).to receive(:next_step).and_return 'payment'
+          allow(checkout_form).to receive(:next_step).and_return 'payment'
         end
 
         it { is_expected.to eq false }
@@ -204,11 +197,11 @@ RSpec.describe Checkout, type: :model do
 
   ['address', 'shipment'].each do |item|
     context "#next_step_#{item}?" do
-      subject { checkout.send("next_step_#{item}?".to_sym) }
+      subject { checkout_form.send("next_step_#{item}?".to_sym) }
 
       context "when next_step is '#{item}'" do
         before do
-          allow(checkout).to receive(:next_step).and_return item
+          allow(checkout_form).to receive(:next_step).and_return item
         end
 
         it { is_expected.to eq true }
@@ -217,7 +210,7 @@ RSpec.describe Checkout, type: :model do
 
       context "when next_step is not '#{item}'" do
         before do
-          allow(checkout).to receive(:next_step).and_return 'payment'
+          allow(checkout_form).to receive(:next_step).and_return 'payment'
         end
 
         it { is_expected.to eq false }

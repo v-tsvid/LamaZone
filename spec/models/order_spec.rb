@@ -17,9 +17,9 @@ RSpec.describe Order, type: :model do
   end
 
   context "#custom_label_method" do
-    it "returns string with id" do
+    it "returns decorated number" do
       expect(order.send(:custom_label_method)).
-        to eq "#{order.id}"
+        to eq order.decorate.number
     end
   end
 

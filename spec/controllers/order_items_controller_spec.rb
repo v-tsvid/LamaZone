@@ -25,34 +25,41 @@ RSpec.describe OrderItemsController, type: :controller do
     end
   end
 
-  shared_examples "order item creating" do |ord|
-    it "creates order item with passed params and #{ord} order id" do
-      expect(OrderItem).to receive(:create).with(
-        book_id: params[:book_id].to_s, 
-        quantity: params[:quantity].to_s, 
-        order: order)
-      subject
-    end
-  end
-
-  shared_examples ":compact_if_not_compacted" do
-    it "receives :compact_if_not_compacted with order.order_items" do
-      expect(OrderItem).to receive(:compact_if_not_compacted).with(order.order_items)
-      subject
-    end
-  end
-
   shared_examples "redirecting to :back" do
     it "redirects to :back" do
       expect(subject).to redirect_to(request.env["HTTP_REFERER"])
     end
   end
 
-  shared_examples "notice added or removed" do |add_or_remove|
-    it "sets flash[:notice] to 'book title' was #{add_or_remove} the cart" do
+  describe "GET #index" do
+    subject { get :index }
+    let(:order_with_order_items) { FactoryGirl.create :order_with_order_items }
+
+    shared_examples "redirecting to root" do
+      it "redirects to root_path" do
+        expect(subject).to redirect_to root_path
+      end
+
+      it "sets flash[:notice] to 'your cart is empty'" do
+        subject
+        expect(flash[:notice]).to eq "Your cart is empty"
+      end
+    end
+
+    it "assigns :order_with_items as @order" do
+      allow(controller).to receive(:order_with_items).and_return(
+        order_with_order_items)
       subject
-      expect(flash[:notice]).to eq "\"#{Book.find(book.id).title}\" " \
-                                 "was #{add_or_remove} the cart"
+      expect(assigns(:order)).to eq order_with_order_items
+    end
+
+    context "when @order order items are empty" do
+      before do
+        allow(order_with_order_items.order_items).
+          to receive(:empty?).and_return true
+      end
+
+      it_behaves_like "redirecting to root"
     end
   end
 
@@ -71,53 +78,15 @@ RSpec.describe OrderItemsController, type: :controller do
       before do
         allow(controller).to receive(:current_customer).and_return customer
       end
-
-      context "when current order exists" do
-        let(:order) { FactoryGirl.create :order, customer: customer }
-        before { allow(controller).to receive(:current_order).and_return order }
-
-        it_behaves_like ":compact_if_not_compacted"
-        it_behaves_like "order item creating", 'current'
-      end
-
-      context "when current_order doesn't exist" do
-        let(:order) { Order.new(customer: customer) }
-        before do 
-          allow(Order).to receive(:new).and_return order
-          allow(controller).to receive(:current_order).and_return nil 
-        end
-
-        it "receives :new on Order with current customer" do
-          expect(Order).to receive(:new).with(customer: customer)
-          subject
-        end
-
-        it_behaves_like ":compact_if_not_compacted"
-        it_behaves_like "order item creating", 'new'
-      end
-
-      context "if order wasn't saved" do
-        before do 
-          allow_any_instance_of(Order).to receive(:save!).and_return false
-        end
-
-        it_behaves_like "redirecting to :back"
-      end
     end
 
     context "when current customer doesn't exist" do
       before do
         allow(controller).to receive(:current_customer).and_return nil
       end
-
-      it "receives :push_to_cookies" do
-        expect(controller).to receive(:push_to_cookies)
-        subject
-      end
     end
 
     it_behaves_like "redirecting to :back"
-    it_behaves_like "notice added or removed", "added to"
   end
 
   describe "POST #destroy" do
@@ -130,7 +99,7 @@ RSpec.describe OrderItemsController, type: :controller do
 
     subject { delete :destroy, {id: order_item.id} }
 
-    it "finds order item by requested order_id" do
+    it "finds order item by requested order_item_id" do
       allow(OrderItem).to receive(:find_by).and_return order_item
       expect(OrderItem).to receive(:find_by).with(id: order_item.id.to_s)
       subject
@@ -149,49 +118,8 @@ RSpec.describe OrderItemsController, type: :controller do
     end
 
     it_behaves_like "redirecting to :back"
-    it_behaves_like "notice added or removed", "removed from"
   end
-
-  describe "GET #index" do
-    subject { get :index }
-    let(:order_with_order_items) { FactoryGirl.create :order_with_order_items }
-
-    shared_examples "redirecting to root" do
-      it "redirects to root_path" do
-        expect(subject).to redirect_to root_path
-      end
-
-      it "sets flash[:notice] to 'your cart is empty'" do
-        subject
-        expect(flash[:notice]).to eq "Your cart is empty"
-      end
-    end
-
-    it "assigns :order_with_order_items as @order" do
-      allow(controller).to receive(:order_with_order_items).and_return(
-        order_with_order_items)
-      subject
-      expect(assigns(:order)).to eq order_with_order_items
-    end
-
-    context "when @order assigned to nil" do
-      before do
-        allow(controller).to receive(:order_with_order_items).and_return nil
-      end
-
-      it_behaves_like "redirecting to root"
-    end
-
-    context "when @order order items are empty" do
-      before do
-        allow(order_with_order_items.order_items).
-          to receive(:empty?).and_return true
-      end
-
-      it_behaves_like "redirecting to root"
-    end
-  end
-
-  describe "#order_with_order_items" do
+  
+  describe "#order_with_items" do
   end
 end

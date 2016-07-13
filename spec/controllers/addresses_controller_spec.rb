@@ -39,7 +39,7 @@ RSpec.describe AddressesController, type: :controller do
         subject
         expect(response).to redirect_to(
           edit_customer_registration_path(customer))
-        expect(flash[:notice]).to eq 'Address was successfully created.'
+        expect(flash[:notice]).to eq 'Address was successfully created'
       end
     end
 
@@ -94,7 +94,7 @@ RSpec.describe AddressesController, type: :controller do
         subject
         expect(response).to redirect_to(
           edit_customer_registration_path(customer))
-        expect(flash[:notice]).to eq 'Address was successfully updated.'
+        expect(flash[:notice]).to eq 'Address was successfully updated'
       end
     end
 

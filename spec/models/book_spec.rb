@@ -32,13 +32,13 @@ RSpec.describe Book, type: :model do
     expect(book).to have_and_belong_to_many :categories
   end
 
-  context ".books_of_category" do
+  context ".of_category" do
     before do
       @best_book = FactoryGirl.create(:bestseller_book)
       @other_books = FactoryGirl.create_list(:book, 2)
     end
 
-    subject { Book.books_of_category('bestsellers') }
+    subject { Book.of_category('bestsellers') }
 
     it "returns books belongs to certain category" do
       expect(subject).to match_array [@best_book]
