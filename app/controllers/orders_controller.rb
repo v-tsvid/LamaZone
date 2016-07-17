@@ -1,7 +1,7 @@
 class OrdersController < ApplicationController
 
   load_and_authorize_resource only: [:index, :show]
-  authorize_resource except: [:index, :show]
+  authorize_resource only: [:update, :destroy]
 
   def index
   end
@@ -11,16 +11,17 @@ class OrdersController < ApplicationController
 
   def update
     current_order.order_items.destroy_all
-    @order = OrderFiller.new(current_order).add_items_to_order(
-      OrderItem.order_items_from_order_params(order_params))
+    items = OrderItem.order_items_from_order_params order_params
+    @order = OrderFiller.new(current_order).add_items_to_order items
+
     @order_items = @order.order_items
   
     redirect_to cart_path
   end
 
   def update_cookies
-    @order_items = OrderItem.order_items_from_order_params(order_params)
-    write_to_cookies(@order_items)
+    @order_items = OrderItem.order_items_from_order_params order_params
+    write_to_cookies @order_items 
 
     redirect_to cart_path
   end

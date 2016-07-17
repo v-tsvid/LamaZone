@@ -171,6 +171,9 @@ en:
       previous: "&lsaquo; Prev"
       next: "Next &rsaquo;"
 
+  unauthorized: 
+    default: 'You are not authorized to access this page.'
+
   defaults: &defaults
     formats:
       default: "%B %d %Y"

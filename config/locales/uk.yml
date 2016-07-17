@@ -149,6 +149,9 @@ uk:
       last: "Кінець &raquo;"
       previous: "&lsaquo; Назад"
       next: "Вперед &rsaquo;"
+
+  unauthorized: 
+    default: 'Авторизуйтеся, щоб отримати доступ до цієї сторінки.'
   
   defaults: &defaults
     month_names:

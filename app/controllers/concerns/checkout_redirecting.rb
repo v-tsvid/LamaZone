@@ -35,7 +35,6 @@ module CheckoutRedirecting
     end
 
     def is_completed_order?(order_next_step, current_step)
-      # byebug
       order_next_step == 'complete' && current_step != :complete
     end
 

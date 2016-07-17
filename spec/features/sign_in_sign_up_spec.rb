@@ -55,7 +55,7 @@ shared_examples 'sign in or sign up via Facebook' do
     invalid_facebook_sign_in
     Rails.application.env_config["omniauth.auth"] = 
       OmniAuth.config.mock_auth[:facebook]
-    find(:css, "a[href=\"#{link_to_click}\"]").click
+    silence_omniauth { find(:css, "a[href=\"#{link_to_click}\"]").click }
 
     expect(page).
       to have_content 'Invalid credentials'

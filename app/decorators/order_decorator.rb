@@ -4,6 +4,11 @@ class OrderDecorator < Draper::Decorator
     "R%09d" % object.id
   end
 
+  def completed_date
+    DateDecorator.decorate(object.completed_date).date || 
+      I18n.t("orders_page.not_completed")
+  end
+
   def cart_caption
     second_part = 
     if calc_total_quantity == 0

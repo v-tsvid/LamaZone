@@ -7,7 +7,7 @@
       = form_tag @order, method: :put do
         = render partial: 'form', locals: {order: @order}
     - else
-      = form_tag controller: 'orders', action: 'update_cookies', method: :post do
+      = form_tag controller: 'orders', action: 'update_cookies', method: :put do
         = render partial: 'form', locals: {order: @order}
 
 

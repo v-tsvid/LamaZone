@@ -1,4 +1,4 @@
-  class ApplicationController < ActionController::Base
+class ApplicationController < ActionController::Base
 
   include CookiesHandling
   include OrderHelpers
@@ -19,22 +19,13 @@
 
   after_filter :store_location
 
+  rescue_from ActionController::RoutingError, with: :handle_routing_error
+  rescue_from CanCan::AccessDenied, with: :handle_access_denied
+
   alias_method :current_user, :current_customer
 
   helper_method :current_order, 
-                :order_from_cookies, 
-                :flash_class
-
-  rescue_from ActionController::RoutingError do
-    redirect_to root_path, alert: t("controllers.no_page")
-  end
-
-  rescue_from CanCan::AccessDenied do |exception|
-    respond_to do |format|
-      format.json { head :forbidden }
-      format.html { redirect_to root_path, alert: exception.message }
-    end
-  end
+                :order_from_cookies
 
   def routing_error
     raise ActionController::RoutingError.new(params[:path])
@@ -52,15 +43,6 @@
     { locale: I18n.locale }.merge options
   end
 
-  def flash_class(level)
-    case level
-      when 'notice' then "alert alert-warning"
-      when 'success' then "alert alert-success"
-      when 'error' then "alert alert-danger"
-      when 'alert' then "alert alert-danger"
-    end
-  end
-
   protected
 
     def configure_permitted_parameters
@@ -69,18 +51,27 @@
 
   private
 
+    def handle_access_denied(exception)
+      redirect_to root_path, alert: exception.message
+    end
+
+    def handle_routing_error
+      redirect_to root_path, alert: t("controllers.no_page")
+    end
+
     def store_location
       # store last url - this is needed for post-login redirect 
       # to whatever the customer last visited.
-      return unless request.get? 
-      unless PATHS.include?(request.path) || request.xhr? # don't store ajax calls
-        session[:previous_url] = request.fullpath 
-      end
+      session[:previous_url] = request.fullpath if last_url_to_store?
+    end
+
+    def last_url_to_store?
+       request.get? && !request.xhr? && !PATHS.include?(request.path)
     end
 
     def after_sign_in_path_for(resource)
       prev_url = session[:previous_url]
-      prev_url == cart_path ? prev_url || root_path : super
+      prev_url == cart_path ? cart_path : super
     end
 
     def after_sign_out_path_for(resource_or_scope)

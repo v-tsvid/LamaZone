@@ -1,31 +1,56 @@
 require 'rails_helper'
+require 'controllers/shared/shared_controller_specs'
 
-RSpec.describe Customers::OmniauthCallbacksController, type: :controller do
+RSpec.describe Customers::OmniauthCallbacksController do
+  let(:customer) { FactoryGirl.create :customer }
 
-  before do 
-    OmniAuth.config.mock_auth[:facebook] = OmniAuth::AuthHash.new({
-      'provider' => 'facebook',
-      'uuid'     => "580001345483302",
-      'facebook' => {
-        'email' => "vad_1989@mail.ru",
-        'first_name' => "Vadim",
-        'last_name' => "Tsvid"
-       }
-    })
+  describe '#facebook' do
+    subject { get :facebook }
 
-    OmniAuth.config.test_mode = true
+    before do
+      valid_facebook_sign_in
+      request.env['devise.mapping'] = Devise.mappings[:customer]
+      request.env['omniauth.auth'] = OmniAuth.config.mock_auth[:facebook]
+    end
 
-    request.env["devise.mapping"] = Devise.mappings[:customer] # If using Devise
-    request.env["omniauth.auth"] = OmniAuth.config.mock_auth[:facebook]
+    it 'assigns @customer' do
+      subject
+      expect(assigns :customer).not_to be_nil
+    end
 
-    @customer = Customer.from_omniauth(request.env["omniauth.auth"])
+    context 'if customer was saved' do
+      before do    
+        allow(Customer).to receive(:from_omniauth).and_return customer
+      end
+
+      it 'authenticates customer' do
+        subject
+        expect(controller.current_customer).to eq customer
+      end
+
+      it_behaves_like 'redirecting to root_path'
+
+      it_behaves_like('flash setting', :notice, 
+        t("devise.omniauth_callbacks.success", kind: 'Facebook'))
+    end
+
+    context 'if customer was not saved' do
+      before do
+        allow(Customer).to receive(:from_omniauth).and_return nil
+      end
+
+      it "assigns session['devise.facebook_data']" do
+        subject
+        expect(session['devise.facebook_data']).not_to be_nil
+      end
+
+      it 'redirects to new_customer_registration_path' do
+        expect(subject).to redirect_to new_customer_registration_path
+      end
+
+      it_behaves_like('flash setting', :notice, 
+        t("devise.omniauth_callbacks.failure", 
+          kind: 'Facebook', reason: 'nil'))
+    end
   end
-
-  describe "#facebook" do
-    # it "assigns customer from omniauth as @customer" do
-    #   get 'facebook'
-    #   expect(assigns(:customer)).to eq @customer
-    # end
-  end
-
 end

@@ -13,6 +13,6 @@
       - orders.each do |order|
         %tr
           %td= order.decorate.number
-          %td= order_completed_date(order)
+          %td= order.decorate.completed_date
           %td= PriceDecorator.decorate(order.total_price).price
           %td= link_to t("orders_page.view"), order

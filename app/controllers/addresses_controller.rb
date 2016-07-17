@@ -26,13 +26,13 @@ class AddressesController < ApplicationController
 
     def address_params
       params.require(:address).permit(:phone, 
+                                      :firstname, 
+                                      :lastname,
                                       :address1, 
                                       :address2, 
                                       :city, 
                                       :zipcode, 
                                       :country_id, 
-                                      :firstname, 
-                                      :lastname,
                                       :billing_address_for_id,
                                       :shipping_address_for_id)
     end

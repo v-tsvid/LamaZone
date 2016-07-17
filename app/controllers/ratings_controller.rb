@@ -1,5 +1,5 @@
 class RatingsController < ApplicationController
-  before_action :authenticate_customer!, except: [:index, :show]
+  before_action :authenticate_customer!
   
   skip_load_resource only: [:new]
   load_and_authorize_resource

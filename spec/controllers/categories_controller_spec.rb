@@ -8,21 +8,11 @@ RSpec.describe CategoriesController, type: :controller do
   describe "GET #show" do
     subject { get :show, {id: categories[0].to_param} }
 
-    it_behaves_like "load and authorize resource"
+    it_behaves_like "load and authorize resource", :category
+    it_behaves_like 'check abilities', :read, Category
 
-    it "assigns all categories as @categoies" do
-      subject
-      expect(assigns(:categories)).to eq(categories)
-    end
-
-    it "assigns current category as @categoy" do
-      subject
-      expect(assigns(:category)).to eq(categories[0])
-    end
-
-    it "assigns the books of the category as @books" do
-      subject
-      expect(assigns(:books)).to eq categories[0].books
+    [:books, :categories].each do |var|
+      it_behaves_like 'assigning', var
     end
   end
 end
