@@ -32,6 +32,16 @@ RSpec.describe Book, type: :model do
     expect(book).to have_and_belong_to_many :categories
   end
 
+  context ".title_by_id" do
+    it "returns book title if book was found by id passed" do
+      expect(Book.title_by_id(book.id)).to eq book.title
+    end
+
+    it "returns nil if book was not found" do
+      expect(Book.title_by_id(book.id + 1)).to eq nil
+    end
+  end
+
   context ".of_category" do
     before do
       @best_book = FactoryGirl.create(:bestseller_book)

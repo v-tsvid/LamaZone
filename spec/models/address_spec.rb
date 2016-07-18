@@ -35,6 +35,22 @@ RSpec.describe Address, type: :model do
         to eq "#{address.city} #{address.address1} #{address.address2}"
     end
   end
+
+  context "#attributes_short" do
+    subject { address.attributes_short }
+
+    it "returns short list of attributes" do
+      expect(subject).to eq({
+        "phone"      => address.phone, 
+        "address1"   => address.address1, 
+        "address2"   => address.address2, 
+        "city"       => address.city, 
+        "zipcode"    => address.zipcode, 
+        "country_id" => address.country_id, 
+        "firstname"  => address.firstname, 
+        "lastname"   => address.lastname})
+    end
+  end
   
   context "#normalize_phone" do
     it "normalizes phone" do

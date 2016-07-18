@@ -46,47 +46,40 @@ RSpec.describe Customer, type: :model do
   it "is using #downcase_email as a callback before save" do
     expect(customer).to callback(:downcase_email).before(:save)
   end
-  
-  context ".from_omniauth" do
 
-    before do
-      valid_facebook_sign_in
-      @auth = OmniAuth.config.mock_auth[:facebook]
+  context "#current_order_of_customer" do
+    let(:order) { FactoryGirl.create :order }
+    subject { customer.current_order_of_customer }
+
+    it "returns order in progress of the customer if found" do
+      allow(Order).to receive(:find_by).and_return order
+      expect(subject).to eq order
     end
 
-    it "returns first customer with required 'uid' and 'provider' of finded" do
-      customers = FactoryGirl.create_list :customer, 2, uid: @auth.uid
-      expect(Customer.from_omniauth(@auth)).to eq customers[0]
+    it "returns nil if order not found" do
+      allow(Order).to receive(:find_by).and_return nil
+      expect(subject).to eq nil
     end
+  end
 
-    it "returns new customer if didn't find required" do
-      expect{ Customer.from_omniauth(@auth) }.to change { Customer.count }.by 1
-    end    
-
-    [:uid, :provider].each do |item|
-      it "new customer has required '#{item.to_s}'" do
-        expect(Customer.from_omniauth(@auth).send(item)).to eq @auth.send(item) 
-      end
+  context "#email_for_facebook" do
+    subject { customer.email_for_facebook }
+    
+    it "returns generated fake email" do
+      expect(subject).to eq(
+        "#{customer.lastname}_#{customer.firstname}"\
+        "#{Customer.last.id + 1}@facebook.com")
     end
+  end
 
-    {email: :email, 
-     firstname: :first_name, 
-     lastname: :last_name}.each do |key, value|
-      
-      it "if creates customer, sets it's '#{key}' equal to one in auth hash" do
-        expect(Customer.from_omniauth(@auth).send(key)).
-          to eq @auth.info.send(value)
-      end
-    end
-
-    it "if creates customer, sets it's password to 20-chars string" do
-      expect(Customer.from_omniauth(@auth).password.length).to eq 20
-    end
-
-    it "if creates customer, sets password_confirmation equal to password" do
-      customer = Customer.from_omniauth(@auth)
-      expect(customer.password_confirmation).
-        to eq customer.password
+  context ".by_facebook" do
+    let(:auth) { OmniAuth::AuthHash.new({provider: 'facebook', uid: '12345'}) }
+    subject { Customer.by_facebook(auth) }
+    
+    it "returns customer found by auth provider and uid" do
+      allow(Customer).to receive(:where).with(
+        provider: auth.provider, uid: auth.uid).and_return customer
+      expect(subject).to eq customer
     end
   end
 

@@ -16,7 +16,7 @@ class OrderItem < ActiveRecord::Base
   class << self
 
     def order_item_from_params(params)
-      OrderItem.new(book_id: params[:book_id], quantity: params[:quantity])
+      new(book_id: params[:book_id], quantity: params[:quantity])
     end
 
     def order_items_from_order_params(order_params)
@@ -27,7 +27,6 @@ class OrderItem < ActiveRecord::Base
 
     def combine_order_items(items, items_to_add)
       temp_items = items.map { |item| OrderItem.new(item.attributes) }
-      items.destroy_all
       items = OrderItem.compact_order_items(temp_items + items_to_add)
 
       items

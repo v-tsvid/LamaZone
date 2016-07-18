@@ -1,5 +1,5 @@
 require 'rails_helper'
-require 'controllers/shared/shared_controller_specs'
+require 'shared/shared_specs'
 
 RSpec.describe BooksController, type: :controller do
   let(:book) { FactoryGirl.create :book_of_category }

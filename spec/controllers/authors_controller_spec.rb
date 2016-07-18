@@ -1,5 +1,5 @@
 require 'rails_helper'
-require 'controllers/shared/shared_controller_specs'
+require 'shared/shared_specs'
 
 RSpec.describe AuthorsController, type: :controller do
 

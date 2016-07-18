@@ -12,14 +12,12 @@ class Book < ActiveRecord::Base
   
   class << self
     def title_by_id(id)
-      self.find_by_id(id).try(:title)
+      find_by_id(id).try(:title)
     end
-  end
 
-  private
-
-    def self.of_category(title)
+    def of_category(title)
       category = Category.find_by_title(title)
       category ? category.books : all
     end
+  end
 end

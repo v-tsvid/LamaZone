@@ -1,4 +1,5 @@
 require 'rails_helper'
+require 'shared/shared_specs'
 
 RSpec.describe Order, type: :model do
   let(:order) { FactoryGirl.create :order, created_at: DateTime.now,
@@ -11,10 +12,31 @@ RSpec.describe Order, type: :model do
     end
   end
 
-
   it "has many order_items" do
     expect(order).to have_many :order_items
   end
+
+  context ".create_customers_order" do
+    let(:customer) { FactoryGirl.create :customer }
+    
+    context "if customer passed is not nil" do
+      subject { Order.create_customers_order(customer) }
+
+      it "creates for customer order with state 'in_progress" do
+        expect(Order).to receive(:create).with(
+          customer: customer, state: 'in_progress')
+        subject
+      end
+    end
+
+    context "if customer passed is nil" do
+      subject { Order.create_customers_order(nil) }
+
+      it { is_expected.to eq nil }
+    end
+  end
+
+  it_behaves_like 'state_enum testing', :order
 
   context "#custom_label_method" do
     it "returns decorated number" do
@@ -39,5 +61,36 @@ RSpec.describe Order, type: :model do
         expect(Order.in_progress).not_to match_array(item)
       end
     end 
+  end
+
+  context "#prepare_for_checkout" do
+    before do
+      Coupon.create(code: '123', discount: 10)
+    end
+
+    it "updates order with coupon: nil if coupon was not found" do
+      expect(order).to receive(:update).with(
+        coupon: nil, next_step: order.next_step)
+      order.prepare_for_checkout('invalid coupon code')
+    end
+
+    it "updates order with coupon if it was found" do
+      expect(order).to receive(:update).with(
+        coupon: Coupon.first, next_step: order.next_step)
+      order.prepare_for_checkout(Coupon.first.code)
+    end
+
+    it "updates order with next_step: 'address' if order next_step is nil" do
+      allow(order).to receive(:next_step).and_return nil
+      expect(order).to receive(:update).with(
+        coupon: Coupon.first, next_step: 'address')
+      order.prepare_for_checkout(Coupon.first.code)
+    end
+
+    it "updates order current next_step if it is not nil" do
+      expect(order).to receive(:update).with(
+        coupon: Coupon.first, next_step: order.next_step)
+      order.prepare_for_checkout(Coupon.first.code)
+    end
   end
 end

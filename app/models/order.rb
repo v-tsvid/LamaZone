@@ -29,7 +29,7 @@ class Order < ActiveRecord::Base
 
   class << self
     def create_customers_order(customer)
-      customer ? Order.create(customer: customer, state: 'in_progress') : nil
+      customer ? create(customer: customer, state: 'in_progress') : nil
     end
   end
 
@@ -44,7 +44,7 @@ class Order < ActiveRecord::Base
   def prepare_for_checkout(coupon_code)
     coupon = Coupon.find_by(code: coupon_code)
     next_step = self.next_step || 'address'
-
+    
     self.update(coupon: coupon, next_step: next_step)
     self
   end

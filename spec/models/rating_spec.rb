@@ -1,4 +1,5 @@
 require 'rails_helper'
+require 'shared/shared_specs'
 
 RSpec.describe Rating, type: :model do
   let(:rating) { FactoryGirl.create :rating }
@@ -28,4 +29,6 @@ RSpec.describe Rating, type: :model do
         to eq "rating #{rating.id} for book #{rating.book_id}"
     end
   end
+
+  it_behaves_like 'state_enum testing', :rating
 end

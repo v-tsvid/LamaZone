@@ -1,5 +1,5 @@
 require 'rails_helper'
-require 'controllers/shared/shared_controller_specs'
+require 'shared/shared_specs'
 
 RSpec.describe Customers::OmniauthCallbacksController do
   let(:customer) { FactoryGirl.create :customer }
@@ -20,7 +20,8 @@ RSpec.describe Customers::OmniauthCallbacksController do
 
     context 'if customer was saved' do
       before do    
-        allow(Customer).to receive(:from_omniauth).and_return customer
+        allow_any_instance_of(OmniauthAuthorizer).to receive(:authorize).
+          and_return customer
       end
 
       it 'authenticates customer' do
@@ -36,7 +37,8 @@ RSpec.describe Customers::OmniauthCallbacksController do
 
     context 'if customer was not saved' do
       before do
-        allow(Customer).to receive(:from_omniauth).and_return nil
+        allow_any_instance_of(OmniauthAuthorizer).to receive(:authorize).
+          and_return nil
       end
 
       it "assigns session['devise.facebook_data']" do

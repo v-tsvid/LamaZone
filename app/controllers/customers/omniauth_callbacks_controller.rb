@@ -1,6 +1,7 @@
 class Customers::OmniauthCallbacksController < Devise::OmniauthCallbacksController
   def facebook
-    @customer = Customer.from_omniauth(request.env["omniauth.auth"])
+    # @customer = Customer.from_omniauth(request.env["omniauth.auth"])
+    @customer = OmniauthAuthorizer.new(request.env["omniauth.auth"]).authorize
     
     if @customer && @customer.save
       sign_in_and_redirect @customer, event: :authentication 

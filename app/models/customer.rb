@@ -30,25 +30,9 @@ class Customer < ActiveRecord::Base
 
   class << self
 
-    def from_omniauth(auth)
-      info = auth.info
-
-      if info
-        by_facebook(auth).first_or_create do |customer|
-          customer.firstname = info.first_name
-          customer.lastname = info.last_name
-          customer.email = info.email || customer.email_for_facebook
-          customer.password = Devise.friendly_token[0,20]
-          customer.password_confirmation = customer.password
-        end
-      end
+    def by_facebook(auth)
+      where(provider: auth.provider, uid: auth.uid)
     end
-
-    private
-
-      def by_facebook(auth)
-        where(provider: auth.provider, uid: auth.uid)
-      end
   end
 
   private
