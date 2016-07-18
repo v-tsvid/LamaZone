@@ -28,6 +28,9 @@ uk:
   shipping_method: "СПОСІБ ДОСТАВКИ"
   c_card: "КРЕДИТНА КАРТА"
   ordr: "ЗАМОВЛЕННЯ"
+  firstname: "Ім'я:"
+  lastname: 'Прізвище:'
+  bio: 'Біографія:'
 
   categories:
     category: 'Категорія'
@@ -44,8 +47,8 @@ uk:
     remove_acc_button: "ВИДАЛІТЬ МІЙ ПРОФІЛЬ"
     rem_acc_understand: "Я розумію, що усі мої дані будуть втрачені"
     email: "ел. пошта"
-    old_password: "old password"
-    new_password: "new password"
+    old_password: "старий пароль"
+    new_password: "новий пароль"
 
   sign_in_page:
     as_admin: 'Увійти як адміністратор'
@@ -104,6 +107,11 @@ uk:
     place_order: "ЗАМОВИТИ"
     back_to_store: "НАЗАД ДО МАГАЗИНУ"
     to_cart: "ДО КОШИКА"
+    recent_completed_order: "Ваше останнє замовлення"
+    proceed_from_step: "Будь-ласка, спочатку виконайте цей крок"
+    no_completed_orders: "Ви поки що не маєте завершених замовлень"
+    no_orders_to_confirm: "Ви поки що не маєте замовлень, що чекають підтвердження"
+    checkout_first: "Будь-ласка, спочатку зробіть замовлення"
 
     items:
       book: "КНИГА"
@@ -115,12 +123,12 @@ uk:
       summary: "ЗАМОВЛЕННЯ"
       subtotal: "ВСЬОГО"
       discount: "ЗНИЖКА"
-      shipping: "ДОСТАВКА"
-      total: "ДО СПЛАТИ"
+      shipping_price: "ДОСТАВКА"
+      total_price: "ДО СПЛАТИ"
 
       full:
-        bil_address: "Адр. платника"
-        ship_address: "Адр. отримувача"
+        billing_address: "Адр. платника"
+        shipping_address: "Адр. отримувача"
         shipment: "Доставка"
         payment: "Оплата"
 

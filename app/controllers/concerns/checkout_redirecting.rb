@@ -14,9 +14,9 @@ module CheckoutRedirecting
 
     def wrong_step_notice(order_next_step, current_step)
       if is_completed_order?(order_next_step, current_step) 
-        "Your recent completed order"
+        t("checkout.recent_completed_order")
       elsif is_wrong_step?(order_next_step, current_step)
-        "Please proceed checkout from this step"
+        t("checkout.proceed_from_step")
       else
         nil
       end
@@ -24,9 +24,9 @@ module CheckoutRedirecting
 
     def notice_when_checkout_is_nil(step)
       case step
-      when :complete then "You have no completed orders"
-      when :confirm then "You have no orders to confirm"
-      else "Please checkout first"
+      when :complete then t("checkout.no_completed_orders")
+      when :confirm then t("checkout.no_orders_to_confirm")
+      else t("checkout.checkout_first")
       end
     end
 

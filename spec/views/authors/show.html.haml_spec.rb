@@ -16,6 +16,6 @@ RSpec.describe "authors/show", type: :view do
   end
 
   it "displays back to shopping button" do
-    expect(rendered).to have_link 'BACK TO SHOPPING', href: books_path
+    expect(rendered).to have_link t("checkout.back_to_store"), href: books_path
   end
 end

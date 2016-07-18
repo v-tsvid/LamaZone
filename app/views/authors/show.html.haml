@@ -1,13 +1,13 @@
 %p
-  %strong Firstname:
+  %strong= t(:firstname)
   = @author.firstname
 
 %p
-  %strong Lastname:
+  %strong= t(:lastname)
   = @author.lastname
 
 %p
-  %strong Biography:
+  %strong= t(:bio)
   = @author.biography
 
-= link_to 'BACK TO SHOPPING', books_path, class: "btn btn-warning"
+= link_to t("checkout.back_to_store"), books_path, class: "btn btn-warning"

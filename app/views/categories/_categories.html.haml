@@ -2,7 +2,7 @@
   %h4= t :shop_by
   %table
     %tbody
-      %td= link_to t(:all), books_path
+      %td= link_to t("categories.all"), books_path
       - @categories.each do |category|
         %tr
           %td= link_to "#{t "categories.#{category.title}"}", category

@@ -51,7 +51,8 @@ RSpec.describe "books/show", type: :view do
     include_context "stub helpers and render"
 
     it "renders _book_ratings partial" do
-      expect(view).to render_template(partial: '_rating', count: @book.ratings.count)
+      expect(view).to render_template(partial: '_rating', 
+        count: @book.ratings.count)
     end
 
     context "for approved rating" do

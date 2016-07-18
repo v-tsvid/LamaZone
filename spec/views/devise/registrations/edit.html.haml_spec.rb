@@ -56,7 +56,7 @@ RSpec.describe "devise/registrations/edit", type: :view do
   end
 
   it "displays caption" do
-    expect(rendered).to match 'Settings'
+    expect(rendered).to match t("settings_page.settings")
   end
 
   context "fields for billing address" do
