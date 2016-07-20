@@ -18,3 +18,14 @@ CarrierWave.configure do |config|
   config.ignore_processing_errors = true
   config.ignore_download_errors = true
 end
+
+if Rails.env.test?
+  CarrierWave.configure do |config|
+    config.storage = :file
+    config.enable_processing = false
+  end
+else
+  CarrierWave.configure do |config|
+    config.storage = :fog
+  end
+end

@@ -1,14 +1,3 @@
-CARRIERWAVE_IMAGES = ["app/assets/images/books-images/41OgOIZBVPL.jpg",
-                      "app/assets/images/books-images/4133VHHWJ1L.jpg",
-                      "app/assets/images/books-images/51-W1m2z4WL.jpg",
-                      "app/assets/images/books-images/51AdUxb4frL.jpg",
-                      "app/assets/images/books-images/51KBQZ+S9+L.jpg",
-                      "app/assets/images/books-images/51N9CN+kljL.jpg",
-                      "app/assets/images/books-images/51TX2yVUq0L.jpg",
-                      "app/assets/images/books-images/51TxD+aE+bL._SX331_BO1,204,203,200_.jpg",
-                      "app/assets/images/books-images/61KPB4YQnRL.jpg",
-                      "app/assets/images/books-images/71-qtQ6xR1L.jpg"]
-
 def admin_panel_edit_link(str)
   "a.pjax[href=\"/admin/#{str}/edit\?locale=en\"]"
 end

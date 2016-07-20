@@ -65,6 +65,7 @@ RSpec.describe OrdersController, type: :controller do
     end
 
     it_behaves_like 'redirecting to cart_path'
+    it_behaves_like "flash setting", :notice, t("controllers.updated")
   end
 
   describe "PUT #update_cookies" do
@@ -80,6 +81,7 @@ RSpec.describe OrdersController, type: :controller do
     end
 
     it_behaves_like 'redirecting to cart_path'
+    it_behaves_like "flash setting", :notice, t("controllers.updated")
   end
 
   describe "DELETE #destroy" do

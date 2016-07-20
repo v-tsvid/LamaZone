@@ -47,8 +47,8 @@ uk:
     remove_acc_button: "ВИДАЛІТЬ МІЙ ПРОФІЛЬ"
     rem_acc_understand: "Я розумію, що усі мої дані будуть втрачені"
     email: "ел. пошта"
-    old_password: "старий пароль"
-    new_password: "новий пароль"
+    old_password: "старий пароль *"
+    new_password: "новий пароль *"
 
   sign_in_page:
     as_admin: 'Увійти як адміністратор'
@@ -77,22 +77,22 @@ uk:
   addresses:
     billing_address: "АДРЕСА ПЛАТНИКА"
     shipping_address: "АДРЕСА ОТРИМУВАЧА"
-    firstname: "Ім'я"
-    lastname: "Прізвище"
-    phone: "Телефон"
-    address1: "Адреса (р. 1)"
+    firstname: "Ім'я *"
+    lastname: "Прізвище *"
+    phone: "Телефон *"
+    address1: "Адреса (р. 1) *"
     address2: "Адреса (р. 2)"
-    city: "Нас. пункт"
-    zipcode: "Пошт. індекс"
+    city: "Нас. пункт *"
+    zipcode: "Пошт. індекс *"
     use_billing: "Скопіювати адресу платника"
 
   credit_card:
-    firstname: "Ім'я"
-    lastname: "Прізвище"
-    number: "Номер"
-    expiration_month: "Термін дії, місяць"
-    expiration_year: "Термін дії, рік"
-    cvv: "CVV"
+    firstname: "Ім'я *"
+    lastname: "Прізвище *"
+    number: "Номер *"
+    expiration_month: "Термін дії, місяць *"
+    expiration_year: "Термін дії, рік *"
+    cvv: "CVV *"
 
   checkout:
     shopping_cart: "КОШИК"
@@ -148,6 +148,7 @@ uk:
     cart_is_empty: "Ваш кошик порожній"
     added: "додано до кошика"
     removed: "видалено з кошика"
+    updated: "Вміст кошика оновлено"
     rating_created: "Ваш відгук скоро з'явиться на сайті"
     failed_to_remove_book: "Помилка при видаленні книги"
     

@@ -15,7 +15,8 @@ feature 'books catalogue browsing' do
       visit root_path
     end
 
-    scenario "see the bestsellers" do
+    scenario "see carousel with bestsellers" do
+      expect(page).to have_css("div#bestBooksCarousel.carousel.slide")
       @best_books.each do |book|
         expect(page).to have_content book.title
       end

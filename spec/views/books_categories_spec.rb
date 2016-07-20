@@ -66,18 +66,16 @@ shared_examples 'books_categories specs' do |category_show|
   context "_book partial content" do
 
     it "displays linked preview of the book" do
-      @books = assign(:books, Kaminari.paginate_array([
-      FactoryGirl.create(:book, images: Rack::Test::UploadedFile.new(
-      File.join(Rails.root, CARRIERWAVE_IMAGES[0]))),
-      FactoryGirl.create(:book, images: Rack::Test::UploadedFile.new(
-      File.join(Rails.root, CARRIERWAVE_IMAGES[1])))]).page(1))
+      @books = assign(:books, Kaminari.paginate_array(
+        FactoryGirl.create_list(:book, 2)).page(1))
+      
       @categories = assign(:categories, [
         FactoryGirl.build_stubbed(:category, title: 'bestsellers'), 
         FactoryGirl.build_stubbed(:category, title: 'other')])
       
       render
       selector = "a[href='#{book_path @books[0]}'] "\
-                 "img[src*='#{@books[0].images.thumb.path}']"
+        "img[src*='#{short_image_path(@books[0].images.thumb.path)}']"
       expect(rendered).to have_selector(selector)
     end
 

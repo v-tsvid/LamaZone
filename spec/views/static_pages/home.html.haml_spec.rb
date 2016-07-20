@@ -4,10 +4,8 @@ RSpec.describe "static_pages/home.html.haml", type: :view do
   
   before do
     @books = assign(:books, [
-      FactoryGirl.build_stubbed(:book,
-        images: File.open(Rails.root + "app/assets/images/books-images/51AdUxb4frL.jpg")), 
-      FactoryGirl.build_stubbed(:book,
-        images: File.open(Rails.root + "app/assets/images/books-images/51KBQZ+S9+L.jpg"))])
+      FactoryGirl.build_stubbed(:book), 
+      FactoryGirl.build_stubbed(:book)])
 
 
     allow(view).to receive(:cool_price)

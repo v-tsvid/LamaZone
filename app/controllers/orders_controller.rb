@@ -16,14 +16,14 @@ class OrdersController < ApplicationController
 
     @order_items = @order.order_items
   
-    redirect_to cart_path
+    redirect_to cart_path, notice: t("controllers.updated")
   end
 
   def update_cookies
     @order_items = OrderItem.order_items_from_order_params order_params
     write_to_cookies @order_items 
 
-    redirect_to cart_path
+    redirect_to cart_path, notice: t("controllers.updated")
   end
 
   def destroy
