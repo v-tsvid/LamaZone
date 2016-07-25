@@ -1,13 +1,7 @@
 require 'rails_helper'
-require 'shared/shared_specs'
+require 'shared/controllers/shared_controllers_specs'
 
 RSpec.describe OrdersController, type: :controller do
-
-  shared_examples 'redirecting to cart_path' do
-    it "redirects to cart_path" do
-      expect(subject).to redirect_to cart_path
-    end
-  end
   
   let(:customer) { FactoryGirl.create :customer }
   let(:order) { FactoryGirl.create :order, customer: customer }

@@ -1,0 +1,40 @@
+en:
+  admin:
+    actions:
+      approve_rating: 
+        title: "Approve %{model_label} '%{object_label}'"
+        menu: "Approve"
+        breadcrumb: "%{object_label}"
+      reject_rating:
+        title: "Reject %{model_label} '%{object_label}'"
+        menu: "Reject"
+        breadcrumb: "%{object_label}"
+      bulk_approve_ratings: 
+        title: "Approve %{model_label_plural}"
+        menu: "Multiple approve"
+        breadcrumb: "%{object_label}"
+        bulk_link: "Approve selected %{model_label_plural}"
+      bulk_reject_ratings:
+        title: "Reject selected %{model_label_plural}"
+        menu: "Multiple reject"
+        breadcrumb: "%{object_label}"
+        bulk_link: "Reject selected %{model_label_plural}"
+
+      complete_order: 
+        title: "Complete %{model_label} '%{object_label}'"
+        menu: "Complete"
+        breadcrumb: "%{object_label}"
+      cancel_order: 
+        title: "Cancel %{model_label} '%{object_label}'"
+        menu: "Cancel"
+        breadcrumb: "%{object_label}"
+      ship_order: 
+        title: "Ship %{model_label} '%{object_label}'"
+        menu: "Ship"
+        breadcrumb: "%{object_label}"
+
+      bulk_complete_orders:
+        title: "Complete selected %{model_label_plural}"
+        menu: "Multiple complete"
+        breadcrumb: "%{object_label}"
+        bulk_link: "Complete selected %{model_label_plural}"

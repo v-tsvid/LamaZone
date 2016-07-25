@@ -1,5 +1,5 @@
 require 'rails_helper'
-require 'shared/shared_specs'
+require 'shared/controllers/shared_controllers_specs'
 
 RSpec.describe Customers::OmniauthCallbacksController do
   let(:customer) { FactoryGirl.create :customer }
@@ -52,7 +52,7 @@ RSpec.describe Customers::OmniauthCallbacksController do
 
       it_behaves_like('flash setting', :notice, 
         t("devise.omniauth_callbacks.failure", 
-          kind: 'Facebook', reason: 'nil'))
+          kind: 'Facebook', reason: t("facebook_authorize_failure")))
     end
   end
 end

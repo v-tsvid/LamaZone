@@ -10,8 +10,6 @@ ISO3166::Country.all.map do |item|
   Country.create!(name: item[0], alpha2: item[1])
 end
 
-coupons = FactoryGirl.create_list(:coupon, 5)
-
 if Rails.env == 'development' || Rails.env == 'production' 
   Admin.create!(email: 'admin@mail.com', password: '12345678',
                 password_confirmation: '12345678')
@@ -24,9 +22,10 @@ if Rails.env == 'development' || Rails.env == 'production'
 
   FactoryGirl.create(:customer, 
     firstname: 'Cus', lastname: 'Tomer', 
-    email: 'customer@mail.com', password: '12345678',
-    password_confirmation: '12345678')
+    email: 'mail@mail.com', password: '12345678',
+    password_confirmation: '12345678', provider: '', uid: '')
 
+  coupons = FactoryGirl.create_list(:coupon, 5)
 
   author = FactoryGirl.create(:author,
     firstname: 'Dalai',
@@ -82,7 +81,7 @@ if Rails.env == 'development' || Rails.env == 'production'
   price: 15.21,
   books_in_stock: rand(20..100),
   author_id: author.id,
-  images: File.open(Rails.root + "app/assets/images/books-images/51KBQZ+S9+L.jpg"))
+  images: File.open(Rails.root + "app/assets/images/books-images/51KBQZS9L.jpg"))
 
   other_books[2] = FactoryGirl.create(:book,
   title: 'The Best Teachings Of The Dalai Lama: Journey To A Happy, Fulfilling & Meaningful Life',
@@ -90,7 +89,7 @@ if Rails.env == 'development' || Rails.env == 'production'
   price: 8.95,
   books_in_stock: rand(20..100),
   author_id: author.id,
-  images: File.open(Rails.root + "app/assets/images/books-images/51N9CN+kljL.jpg"))
+  images: File.open(Rails.root + "app/assets/images/books-images/51N9CNkljL.jpg"))
 
   other_books[3] = FactoryGirl.create(:book,
   title: '365 Dalai Lama: Daily Advice from the Heart',
@@ -106,7 +105,7 @@ if Rails.env == 'development' || Rails.env == 'production'
   price: 14.36,
   books_in_stock: rand(20..100),
   author_id: author.id,
-  images: File.open(Rails.root + "app/assets/images/books-images/51TxD+aE+bL._SX331_BO1,204,203,200_.jpg"))
+  images: File.open(Rails.root + "app/assets/images/books-images/51TxDaEbL._SX331_BO1,204,203,200_.jpg"))
 
   other_books[5] = FactoryGirl.create(:book,
   title: "The Dalai Lama's Little Book of Inner Peace: The Essential Life and Teachings",
@@ -133,7 +132,6 @@ if Rails.env == 'development' || Rails.env == 'production'
 
   rand(10..50).times do 
     order = FactoryGirl.build :order
-    # order_items = Array.new
     
     rand(1..3).times do
       order.order_items << FactoryGirl.build(:order_item, 

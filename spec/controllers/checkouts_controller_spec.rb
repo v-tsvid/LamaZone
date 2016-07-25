@@ -1,5 +1,6 @@
 require 'rails_helper'
-require 'shared/shared_specs'
+require 'shared/controllers/shared_controllers_specs'
+require 'shared/controllers/shared_checkouts_controller_specs'
 
 RSpec.describe CheckoutsController, type: :controller do
   
@@ -19,20 +20,6 @@ RSpec.describe CheckoutsController, type: :controller do
       ]
     }
   }
-
-  shared_examples "new checkout form" do
-    it "receives :new on CheckoutForm" do
-      expect(CheckoutForm).to receive(:new).with(order)
-      subject
-    end
-  end
-
-  shared_examples "setting up wizard" do
-    it "receives :setup_wizard" do
-      expect(controller).to receive(:setup_wizard)
-      subject
-    end
-  end
 
   before do
     @request.env["devise.mapping"] = Devise.mappings[:customer]

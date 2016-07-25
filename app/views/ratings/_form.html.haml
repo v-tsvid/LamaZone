@@ -1,7 +1,10 @@
 = f.hidden_field :book_id, readonly: true, value: @book.id
 .field
-  = f.label :rate, t(:rating)
-  = f.number_field :rate, in: 1..10, value: 10
+  .rating
+    - for i in 1..10
+      %input{:id => "rate#{i}", :name => "rating[rate]", :type => "radio", 
+        :value => "#{i}", :class => 'star {half:true}'}
+%br/
 .field
   = f.label :review, t(:text_review)
   %br/

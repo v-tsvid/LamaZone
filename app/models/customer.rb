@@ -1,6 +1,6 @@
 class Customer < ActiveRecord::Base
   include PersonMethods
-
+  
   devise :database_authenticatable, :registerable,
          :recoverable, :rememberable, :trackable, :validatable,          
          :omniauthable, :omniauth_providers => [:facebook]

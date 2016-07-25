@@ -15,6 +15,11 @@ class Order < ActiveRecord::Base
   belongs_to :coupon
   has_many :order_items, dependent: :delete_all
 
+  scope :processing_by_customer, -> customer { 
+    where(customer: customer, state: 'processing') }
+
+  scope :by_state, -> state { where(state: state) }
+
   aasm column: 'state', whiny_transitions: false do 
     state :in_progress, initial: true
     state :processing
@@ -22,8 +27,20 @@ class Order < ActiveRecord::Base
     state :completed 
     state :canceled
 
+    event :process do
+      transitions from: :in_progress, to: :processing
+    end
+
+    event :ship do
+      transitions from: :processing, to: :shipping
+    end
+
+    event :complete do
+      transitions from: [:processing, :shipping], to: :completed
+    end
+
     event :cancel do
-      transitions from: [:processing], to: :canceled
+      transitions from: [:processing, :shipping], to: :canceled
     end
   end
 

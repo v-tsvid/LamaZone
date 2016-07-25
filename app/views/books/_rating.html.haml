@@ -1,8 +1,16 @@
 - if rating.state == 'approved'
   %tr.active
     %td.small
-      %span.stars= "#{(rating.rate / 2.0)}"
+      .rating
+        - for i in 1..10
+          - if rating.rate == i
+            = checked_rating_input(i, rating.rate).html_safe
+          - else
+            = unchecked_rating_input(i, rating.rate).html_safe
+    %td.small.col-righted
       = rating.decorate.author_and_date
   %tr
-    %td
+    %td{colspan: '2'}
       = rating.review.to_s
+  %tr
+    %td

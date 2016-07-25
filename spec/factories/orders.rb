@@ -9,7 +9,7 @@ FactoryGirl.define do
     completed_date { Date.today.next_day }
     customer
     credit_card
-    coupon_id { [true, false].sample ? Coupon.all.sample.id : nil }
+    coupon
     created_at { DateTime.now }
     association :billing_address, factory: :address
     association :shipping_address, factory: :address
@@ -20,6 +20,14 @@ FactoryGirl.define do
     factory :order_skip_state_to_default do
       after(:build) { |order| order.class.skip_callback(
         :create, :before, :state_to_default) }
+    end
+
+    factory :order_with_or_without_coupon do
+      after(:create) do |order, evaluator|
+        coupon = [true, false].sample ? FactoryGirl.create(:coupon) : nil
+        order.coupon = coupon
+        order.save
+      end
     end
 
     factory :order_with_order_items do
@@ -33,5 +41,4 @@ FactoryGirl.define do
       end
     end
   end
-
 end

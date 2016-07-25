@@ -1,5 +1,5 @@
 require 'rails_helper'
-require 'shared/shared_specs'
+require 'shared/controllers/shared_controllers_specs'
 
 RSpec.describe CategoriesController, type: :controller do
 

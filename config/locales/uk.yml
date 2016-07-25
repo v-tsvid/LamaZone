@@ -31,6 +31,7 @@ uk:
   firstname: "Ім'я:"
   lastname: 'Прізвище:'
   bio: 'Біографія:'
+  facebook_authorize_failure: "Авторизація за допомогою Facebook невдала"
 
   categories:
     category: 'Категорія'
@@ -112,6 +113,8 @@ uk:
     no_completed_orders: "Ви поки що не маєте завершених замовлень"
     no_orders_to_confirm: "Ви поки що не маєте замовлень, що чекають підтвердження"
     checkout_first: "Будь-ласка, спочатку зробіть замовлення"
+    select_month: "Оберіть місяць"
+    select_year: "Оберіть рік"
 
     items:
       book: "КНИГА"

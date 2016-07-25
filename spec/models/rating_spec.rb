@@ -1,5 +1,5 @@
 require 'rails_helper'
-require 'shared/shared_specs'
+require 'shared/models/shared_models_specs'
 
 RSpec.describe Rating, type: :model do
   let(:rating) { FactoryGirl.create :rating }

@@ -1,0 +1,8 @@
+uk:
+  activerecord:
+    errors:
+      models:
+        my_model:
+          attributes:
+            whatever:
+              inclusion: "Please select whatever."

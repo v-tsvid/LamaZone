@@ -14,40 +14,40 @@
       = render 'address_forms', address_str: "shipping", 
         address: @shipping_address, flash: flash
 
+- unless resource.uid
+  .row-fluid
+    .col-md-3.col-md-offset-2
+      .email_form
+        = form_for(resource, as: resource_name, 
+          url: registration_path(resource_name), html: { method: :put }) do |f|
 
-.row-fluid
-  .col-md-3.col-md-offset-2
-    .email_form
-      = form_for(resource, as: resource_name, 
-        url: registration_path(resource_name), html: { method: :put }) do |f|
+          %h4= t("settings_page.email_caption")
+          = render 'email_password_fields', f: f, resource: resource, 
+            sym: :email, placeholder: t("settings_page.email")
 
-        %h4= t("settings_page.email_caption")
-        = render 'email_password_fields', f: f, resource: resource, 
-          sym: :email, placeholder: t("settings_page.email")
+          .actions
+            = f.submit t("settings_page.save"), class: "btn btn-warning"
+    
+    .col-md-3.col-md-offset-1
+      .password_form
+        = form_for(resource, as: resource_name, 
+          url: registration_path(resource_name), html: { method: :put }) do |f|
 
-        .actions
-          = f.submit t("settings_page.save"), class: "btn btn-warning"
-  
-  .col-md-3.col-md-offset-1
-    .password_form
-      = form_for(resource, as: resource_name, 
-        url: registration_path(resource_name), html: { method: :put }) do |f|
+          %h4= t("settings_page.password")
 
-        %h4= t("settings_page.password")
+          - if devise_mapping.confirmable? && resource.pending_reconfirmation?
+            %div Currently waiting confirmation for: #{resource.unconfirmed_email}
+          
+          - messages = resource.errors.messages
+          = render 'email_password_fields', f: f, resource: resource, 
+            sym: :current_password, placeholder: t("settings_page.old_password")
+          = render 'email_password_fields', f: f, resource: resource, 
+            sym: :password, placeholder: t("settings_page.new_password")
 
-        - if devise_mapping.confirmable? && resource.pending_reconfirmation?
-          %div Currently waiting confirmation for: #{resource.unconfirmed_email}
-        
-        - messages = resource.errors.messages
-        = render 'email_password_fields', f: f, resource: resource, 
-          sym: :current_password, placeholder: t("settings_page.old_password")
-        = render 'email_password_fields', f: f, resource: resource, 
-          sym: :password, placeholder: t("settings_page.new_password")
+          .actions
+            = f.submit t("settings_page.save"), class: 'btn btn-warning'
 
-        .actions
-          = f.submit t("settings_page.save"), class: 'btn btn-warning'
-
-.row-fluid
+  .row-fluid
 
 .row-fluid
   .col-md-10.col-md-offset-2
@@ -59,6 +59,6 @@
       .actions
         = f.submit t("settings_page.remove_acc_button"), class: 'btn btn-danger'
         = check_box_tag 'confirm'
-        = label_tag nil, t("settings_page.rem_acc_understand"), 
-          class: 'label label-warning'
+        = label_tag t("settings_page.rem_acc_understand"), nil, 
+            class: 'label label-default'
 

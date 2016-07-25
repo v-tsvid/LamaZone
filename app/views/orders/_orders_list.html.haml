@@ -1,15 +1,16 @@
-- if orders.empty?
-  %p= t("orders_page.no_orders")
-- else
-  %table.table.orders-list
-    %thead
-      %tr.active
-        %th= t("orders_page.number")
-        %th= t("orders_page.completed")
-        %th= t("orders_page.total")
-        %th
+%table.table.orders-list
+  %thead
+    %tr.active
+      %th= t("orders_page.number")
+      %th= t("orders_page.completed")
+      %th= t("orders_page.total")
+      %th
 
-    %tbody
+  %tbody
+    - if orders.empty?
+      %tr
+        %td{colspan: '3'}= t("orders_page.no_orders")
+    - else
       - orders.each do |order|
         %tr
           %td= order.decorate.number

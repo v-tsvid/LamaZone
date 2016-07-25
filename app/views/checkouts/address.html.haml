@@ -24,7 +24,7 @@
           - else
             = check_box_tag 'use_billing', 'use billing', false
           = label_tag t("addresses.use_billing"), nil, 
-            class: 'label label-warning'
+            class: 'label label-default'
 
           #shipping_form
             = render 'address_form', model: model, address: shipping_address, 

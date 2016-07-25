@@ -2,6 +2,14 @@ def admin_panel_edit_link(str)
   "a.pjax[href=\"/admin/#{str}/edit\?locale=en\"]"
 end
 
+def admin_panel_show_link(str)
+  "a.pjax[href=\"/admin/#{str}\?locale=en\"]"
+end
+
+def admin_panel_custom_action_link(str, action)
+  "a.pjax[href=\"/admin/#{str}/#{action}\?locale=en\"]"
+end
+
 def setup_ability
   @ability = Object.new
   @ability.extend(CanCan::Ability)

@@ -1,3 +1,13 @@
+require Rails.root.join('lib/rails_admin/approve_rating')
+require Rails.root.join('lib/rails_admin/reject_rating')
+require Rails.root.join('lib/rails_admin/bulk_approve_ratings')
+require Rails.root.join('lib/rails_admin/bulk_reject_ratings')
+
+require Rails.root.join('lib/rails_admin/complete_order')
+require Rails.root.join('lib/rails_admin/cancel_order')
+require Rails.root.join('lib/rails_admin/ship_order')
+require Rails.root.join('lib/rails_admin/bulk_complete_orders')
+
 RailsAdmin.config do |config|
 
   ### Popular gems integration
@@ -9,7 +19,7 @@ RailsAdmin.config do |config|
   config.current_user_method(&:current_admin)
 
   ## == Cancan ==
-  # config.authorize_with :cancan
+  config.authorize_with :cancan
 
   ## == PaperTrail ==
   # config.audit_with :paper_trail, 'User', 'PaperTrail::Version' # PaperTrail >= 3.0.0
@@ -27,16 +37,40 @@ RailsAdmin.config do |config|
     delete
     show_in_app
 
+    approve_rating
+    reject_rating
+    bulk_approve_ratings
+    bulk_reject_ratings
+
+    ship_order
+    complete_order
+    cancel_order
+    bulk_complete_orders
+
+
     ## With an audit adapter, you can add:
     # history_index
     # history_show
   end
+  
+  ['Author', 'Book', 'Category', 'Rating', 'OrderItem'].each do |model_name|
+    config.model model_name do 
+      exclude_fields :created_at, :updated_at
+    end
+  end
 
-  ['Address', 
-   'Author', 
-   'CreditCard', 
+  config.model 'Order' do
+    exclude_fields(:created_at, 
+                   :updated_at, 
+                   :billing_address, 
+                   :shipping_address, 
+                   :credit_card,
+                   :next_step)
+  end
+
+  ['Author',
    'Customer', 
-   'Order', 
+   'Order',
    'OrderItem', 
    'Rating'].each do |model_name|
     config.model model_name do

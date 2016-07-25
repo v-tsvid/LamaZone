@@ -1,5 +1,5 @@
 require 'rails_helper'
-require 'views/books_categories_spec'
+require 'shared/views/shared_books_categories_view_specs'
 
 RSpec.describe "books/index", type: :view do
 

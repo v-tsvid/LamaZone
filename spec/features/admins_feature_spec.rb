@@ -40,20 +40,17 @@ feature "admin panel customizing" do
 
   context "database records representing" do
     
-    ['address', 
-     'author', 
-     'credit_card', 
-     'customer', 
+    ['author', 
      'order', 
      'order_item', 
      'rating'].each do |str|
       scenario "#{str.humanize.downcase} represents with custom_label_method" do
         item = FactoryGirl.create str.to_sym
         first(:link, text: str.humanize.pluralize).click
-        find(:css, admin_panel_edit_link("#{str}/#{item.id}")).click
+        find(:css, admin_panel_show_link("#{str}/#{item.id}")).click
 
         expect(page).to have_content(
-          "Edit #{str.humanize} '#{item.custom_label_method}'")
+          "Details for #{str.humanize} '#{item.custom_label_method}'")
       end
     end
   end
@@ -70,15 +67,11 @@ feature "data management with admin panel" do
     visit rails_admin_path
   end
   
-  ['Addresses', 
-   'Admins', 
+  ['Admins', 
    'Authors', 
    'Books', 
    'Categories',
-   'Countries',
    'Coupons',
-   'Credit cards',
-   'Customers',
    'Order items', 
    'Orders',
    'Ratings'].each do |item|
@@ -87,14 +80,14 @@ feature "data management with admin panel" do
     end
   end
 
-  scenario "allowed to change order states" do
-    order = FactoryGirl.create :order, state: "processing"
-    first(:link, text: 'Orders').click
-    find(:css, admin_panel_edit_link("order/#{order.id}")).click
-    find("option[value='canceled']").click
-    find("button[name='_save']").click
-    expect(page).to have_content "Order successfully updated"
-  end
+  # scenario "allowed to change order states" do
+  #   order = FactoryGirl.create :order, state: "processing"
+  #   first(:link, text: 'Orders').click
+  #   find(:css, admin_panel_edit_link("order/#{order.id}")).click
+  #   find("option[value='canceled']").click
+  #   find("button[name='_save']").click
+  #   expect(page).to have_content "Order successfully updated"
+  # end
 
   scenario "allowed to change rating states" do
     rating = FactoryGirl.create :rating, state: "pending"
@@ -103,5 +96,43 @@ feature "data management with admin panel" do
     find("option[value='approved']").click
     find("button[name='_save']").click
     expect(page).to have_content "Rating successfully updated"
+  end
+  
+  context "custom actions" do
+    context "ratings" do
+      let!(:rating) { FactoryGirl.create :rating, state: "pending" }
+      let!(:str) { "rating/#{rating.id}" }
+      
+      before do 
+        first(:link, text: 'Ratings').click
+      end
+
+      ['approve', 'reject'].each do |item|
+        scenario "allowed to #{item} ratings" do  
+          first(
+            :css, admin_panel_custom_action_link(str, "#{item}_rating")).click
+
+          expect(page).to have_content "You have #{item}"
+        end
+      end
+    end
+    
+    context "orders" do
+      let!(:order) { FactoryGirl.create :order, state: "processing" }
+      let!(:str) { "order/#{order.id}" }
+
+      before do 
+        first(:link, text: 'Orders').click
+      end
+
+      ['complete', 'cancel', 'ship'].each do |item|
+        scenario "allowed to #{item} orders" do
+          first(
+            :css, admin_panel_custom_action_link(str, "#{item}_order")).click
+          expect(page).to have_content "You have "
+          expect(page).to have_content "item"
+        end
+      end
+    end
   end
 end

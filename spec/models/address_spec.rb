@@ -29,13 +29,6 @@ RSpec.describe Address, type: :model do
     expect(address).to callback(:normalize_phone).before(:save)
   end
 
-  context "#custom_label_method" do
-    it "returns string with city, address1 and address2" do
-      expect(address.send(:custom_label_method)).
-        to eq "#{address.city} #{address.address1} #{address.address2}"
-    end
-  end
-
   context "#attributes_short" do
     subject { address.attributes_short }
 

@@ -1,7 +1,6 @@
 %table.table
   = render 'shared/order_table_head', extra_col: true
 
-    
   %tbody  
     = render order.order_items
     = render 'shared/order_table_body', order: order

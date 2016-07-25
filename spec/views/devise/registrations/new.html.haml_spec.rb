@@ -1,32 +1,5 @@
 require 'rails_helper'
-
-shared_examples "fields displaying" do |with_errors|
-
-  before do
-    @customer = assign(:resource, FactoryGirl.build_stubbed(:customer))
-  end
-
-  [:email, :password, :password_confirmation].each do |item|
-
-    if with_errors == true
-      it "displays field for new customer's #{spaced(item)} with errors" do
-
-        allow(@customer).to receive_message_chain("errors.messages") {
-          { item => ["some_#{item}_error", "another_#{item}_error"]} }
-      
-        render
-        expect(rendered).to have_selector(
-          ".has-error input[id='customer_#{item.to_s}']")  
-        expect(rendered).to have_selector(
-          ".help-block", text:"some_#{item}_error, another_#{item}_error")
-      end
-    else
-      it "displays field for new customer's #{spaced(item)}" do
-        expect(rendered).to have_selector("div input[id='customer_#{item.to_s}']")  
-      end
-    end  
-  end
-end
+require 'shared/views/shared_devise_view_specs'
 
 RSpec.describe "devise/registrations/new", type: :view do
   

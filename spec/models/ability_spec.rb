@@ -1,14 +1,46 @@
 require 'rails_helper'
 require 'cancan/matchers'
+require 'shared/models/shared_ability_model_specs.rb'
 
 RSpec.describe Ability, type: :model do
   subject(:ability) { Ability.new(customer) }
 
-  shared_examples 'any customer' do
-    ['Author', 'Book', 'Category', 'Rating'].each do |item|
-      it "can read any #{item.downcase}" do
-        expect(subject).to have_abilities(:read, item.constantize)
+  context 'authorized admin' do
+    let(:customer) { FactoryGirl.create :customer }
+    before { allow(customer).to receive(:class).and_return(Admin) }
+
+    it "can access rails_admin" do
+      expect(subject).to have_abilities(:access, :rails_admin)
+    end
+
+    it "can access dashboard" do
+      expect(subject).to have_abilities(:dashboard)
+    end
+
+    [:author,
+     :admin, 
+     :book, 
+     :coupon, 
+     :category, 
+     :order_item, 
+     :rating].each do |item|
+      it "can manage #{item.to_s.pluralize}" do
+        expect(subject).to have_abilities(:manage, FactoryGirl.create(item))
       end
+    end
+
+    [:read, 
+     :complete_order, 
+     :ship_order, 
+     :cancel_order, 
+     :bulk_complete_orders].each do |item|
+      it "has :#{item} ability on Order" do
+        expect(subject).to have_abilities(item, FactoryGirl.create(:order))
+      end
+    end
+
+    it "cannot create ratings" do
+      expect(subject).to not_have_abilities(:create, FactoryGirl.build(:rating))
     end
   end
 

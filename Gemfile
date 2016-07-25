@@ -61,6 +61,7 @@ gem 'reform-rails', '0.1.0'
 gem 'routing-filter', '0.5.1'
 gem "rubycritic", '2.9.1', :require => false
 gem 'draper', '2.1.0'
+gem 'jquery-star-rating-rails', '4.0.4'
   
   
 group :development, :test do

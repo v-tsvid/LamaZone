@@ -1,5 +1,6 @@
 require 'rails_helper'
-require 'shared/shared_specs'
+require 'shared/controllers/shared_controllers_specs'
+require 'shared/controllers/shared_addresses_controller_specs'
 
 RSpec.describe AddressesController, type: :controller do
 
@@ -12,16 +13,6 @@ RSpec.describe AddressesController, type: :controller do
     @request.env["devise.mapping"] = Devise.mappings[:customer]
     sign_in customer
     request.env["HTTP_REFERER"] = edit_customer_registration_path(customer)
-  end
-
-  shared_examples 'setting alert within address errors' do
-    it_behaves_like 'flash setting', :alert, 'error1. error2' do
-      before do
-        allow_any_instance_of(Address).
-          to receive_message_chain("errors.full_messages").
-            and_return(['error1', 'error2'])
-      end
-    end
   end
 
   describe "POST #create" do

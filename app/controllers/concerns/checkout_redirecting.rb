@@ -5,11 +5,10 @@ module CheckoutRedirecting
     def redirect_if_wrong_step(checkout_form, step)
       order_next_step = checkout_form.model.next_step
       notice = wrong_step_notice(order_next_step, step)
-      
-      if notice
-        redirect_to(
-          checkout_path(order_next_step.to_sym), notice: notice) or return
-      end
+
+      return unless notice
+      redirect_to(
+        checkout_path(order_next_step.to_sym), notice: notice) or return
     end
 
     def wrong_step_notice(order_next_step, current_step)
@@ -21,7 +20,8 @@ module CheckoutRedirecting
         nil
       end
     end
-
+    
+    #!
     def notice_when_checkout_is_nil(step)
       case step
       when :complete then t("checkout.no_completed_orders")
@@ -37,7 +37,8 @@ module CheckoutRedirecting
     def is_completed_order?(order_next_step, current_step)
       order_next_step == 'complete' && current_step != :complete
     end
-
+    
+    #!
     def is_next?(prev_step, next_step)
       prev_index = steps.index(prev_step.to_sym) if prev_step
       next_index = steps.index(next_step.to_sym) if next_step

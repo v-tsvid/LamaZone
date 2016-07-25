@@ -1,5 +1,5 @@
 require 'rails_helper'
-require 'shared/shared_specs'
+require 'shared/models/shared_models_specs'
 
 RSpec.describe Order, type: :model do
   let(:order) { FactoryGirl.create :order, created_at: DateTime.now,

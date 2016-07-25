@@ -3,15 +3,12 @@ class OrderItemsController < ApplicationController
   authorize_resource
 
   def index
-    @order = OrderFiller.new(get_order).add_items_to_order(read_from_cookies)
-    cookies.delete('order_items') if @order.persisted?
-
+    @order = actualize_cart
     @order_items = @order.order_items
-
-    if @order_items.empty?
-      @order.destroy
-      redirect_to root_path, notice: t("controllers.cart_is_empty") 
-    end
+    return unless @order_items.empty?
+    
+    @order.destroy
+    redirect_to root_path, notice: t("controllers.cart_is_empty") 
   end
 
   def create
@@ -46,9 +43,7 @@ class OrderItemsController < ApplicationController
 
   private
 
-    def get_order
-      current_customers_order || Order.new
-    end
+    
 
     def order_item_params
       params.permit(:book_id, :quantity)

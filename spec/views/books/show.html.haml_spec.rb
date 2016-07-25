@@ -1,14 +1,7 @@
 require 'rails_helper'
+require 'shared/views/shared_books_view_specs'
 
 RSpec.describe "books/show", type: :view do
-
-  shared_context "stub helpers and render" do
-    before do
-      allow(view).to receive(:cool_price)
-      allow(view).to receive(:cool_date)
-      render 
-    end
-  end
 
   before do 
     @book = assign(:book, FactoryGirl.create(:book))

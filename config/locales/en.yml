@@ -31,6 +31,7 @@ en:
   firstname: 'Firstname:'
   lastname: 'Lastname:'
   bio: 'Biography:'
+  facebook_authorize_failure: "Can't authorize via Facebook"
   
   categories:
     category: 'Category'
@@ -112,6 +113,8 @@ en:
     no_completed_orders: "You have no completed orders"
     no_orders_to_confirm: "You have no orders to confirm"
     checkout_first: "Please checkout first"
+    select_month: "Select Month"
+    select_year: "Select Year"
 
     items:
       book: "BOOK"

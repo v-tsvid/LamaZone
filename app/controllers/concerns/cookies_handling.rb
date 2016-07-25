@@ -20,25 +20,25 @@ module CookiesHandling
     end
 
     def write_to_cookies(items)
-      cookies[:order_items] = ''
+      str = ''
       items.each do |item|
-        cookies[:order_items] = { 
-          value: [
-            cookies[:order_items],
-            item[:book_id],
-            item[:quantity]].join(' '),
-          expires: 30.days.from_now }
+        str = [str, item[:book_id], item[:quantity]].join(' ')
       end
+      
+      cookies[:order_items] = {value: str, expires: 30.days.from_now}
     end
 
     def read_from_cookies
       order_items = Array.new
       if cookies[:order_items]
-        cookies[:order_items].split(' ').
-          partition.with_index{ |v, index| index.even? }.transpose.each do |item|
-            order_items << OrderItem.new(book_id: item[0], quantity: item[1])
+        pairs_of_numbers(cookies[:order_items]).each do |item|
+          order_items << OrderItem.new(book_id: item[0], quantity: item[1])
         end
       end
       order_items
+    end
+
+    def pairs_of_numbers(str)
+      str.split(' ').partition.with_index{ |v, index| index.even? }.transpose
     end
 end

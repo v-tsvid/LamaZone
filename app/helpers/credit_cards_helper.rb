@@ -1,5 +1,13 @@
 module CreditCardsHelper
 
+  def years_for_select
+    Array('2015'..'2029')
+  end
+
+  def months_for_select
+    Array('01'..'12')
+  end
+
   def credit_card_errors?(errors, attr_sym)
     errors && errors["credit_card.#{attr_sym}"] 
   end

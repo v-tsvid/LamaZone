@@ -14,5 +14,9 @@
 //= require jquery_ujs
 //= require bootstrap-sprockets
 //= require turbolinks
-//= require stars
+//= require jquery-star-rating
+//= require jquery.MetaData
+//= require jquery.rating.load
 //= require checkouts
+//= require jquery.maskedinput
+//= require jquery.masks.load

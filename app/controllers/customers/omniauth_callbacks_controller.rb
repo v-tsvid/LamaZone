@@ -1,6 +1,5 @@
 class Customers::OmniauthCallbacksController < Devise::OmniauthCallbacksController
   def facebook
-    # @customer = Customer.from_omniauth(request.env["omniauth.auth"])
     @customer = OmniauthAuthorizer.new(request.env["omniauth.auth"]).authorize
     
     if @customer && @customer.save
@@ -11,7 +10,7 @@ class Customers::OmniauthCallbacksController < Devise::OmniauthCallbacksControll
       session["devise.facebook_data"] = request.env["omniauth.auth"] 
       redirect_to new_customer_registration_path
       set_flash_message(:notice, :failure, kind: "Facebook", 
-        reason: "#{@customer.inspect}") if is_navigational_format?
+        reason: t("facebook_authorize_failure")) if is_navigational_format?
     end
   end
 end

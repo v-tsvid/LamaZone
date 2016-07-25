@@ -20,7 +20,7 @@ feature 'rating management' do
     scenario 'add a rating to a book' do
       visit book_path(@book)
       click_link t(:add_review)
-      fill_in t(:rating),   with: '10'
+      choose('rate10')
       fill_in t(:text_review), with: 'some review'
       click_button t(:add)
       expect(page).to have_content t("controllers.rating_created")

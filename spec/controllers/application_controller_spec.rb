@@ -1,4 +1,5 @@
 require 'rails_helper'
+require 'shared/controllers/shared_application_controller_specs'
 
 RSpec.describe ApplicationController, type: :controller do
   controller {}
@@ -37,11 +38,6 @@ RSpec.describe ApplicationController, type: :controller do
   end
 
   describe "#set_locale" do
-    shared_examples 'setting omniauth locale' do
-      it "sets session[:omniauth_login_locale] equal to I18n.locale" do
-        expect(controller.session[:omniauth_login_locale]).to eq I18n.locale
-      end
-    end
 
     subject { controller.set_locale }
 

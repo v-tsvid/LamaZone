@@ -20,10 +20,6 @@ class Address < ActiveRecord::Base
   
   before_save :normalize_phone
 
-  def custom_label_method
-    "#{self.city} #{self.address1} #{self.address2}"
-  end
-
   def attributes_short
     self.attributes.except('created_at', 
                            'updated_at', 
