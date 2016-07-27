@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>RubyCritic</title>
+    <link href="../assets/stylesheets/application.css" media="screen, projection, print" rel="stylesheet" type="text/css">
+    <link href="../assets/stylesheets/prettify.custom_theme.css" media="screen, projection, print" rel="stylesheet" type="text/css">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+  </head>
+  <body>
+    <header class="project-header group">
+      <div class="container">
+        <h1 class="logo"><a href="../overview.html" class="logo-link">RubyCritic</a></h1>
+        <nav class="project-nav">
+          <a href="../overview.html" class="project-nav-item">Overview</a>
+          <a href="../code_index.html" class="project-nav-item">Code</a>
+          <a href="../smells_index.html" class="project-nav-item">Smells</a>
+        </nav>
+      </div>
+    </header>
+    <div class="container">
+      <div class="file-header group rated">
+  <span class="rating rating-d circled-text circle">
+    D
+  </span>
+  <h2 class="file-name">RailsAdmin::Config::Actions::ApproveRating</h2>
+
+  <span class="file-committed-at">
+    
+      Updated <time class='js-timeago' datetime='2016-07-27 12:56:55 +0300'>2016-07-27 12:56:55 +0300</time>
+    
+  </span>
+
+  <div class="file-stats group">
+    <div class="file-stat">
+      80 complexity
+    </div>
+    <div class="file-stat">
+      26.7 complexity per method
+    </div>
+    <div class="file-stat">
+      2 churn
+    </div>
+    <div class="file-stat">
+      3 methods
+    </div>
+    <div class="file-stat">
+      186 duplication
+    </div>
+  </div>
+
+  
+    <button id="js-toggle-smells" class="smells-toggle-button button">Toggle Smells</button>
+  
+</div>
+
+<code class="prettyprint linenums lang-ruby file-code js-file-code">require &#39;rails_admin/config/actions&#39;
+require &#39;rails_admin/config/actions/base&#39;
+require &#39;rails_admin/rating_state_changer&#39;
+require &#39;rails_admin/order_state_changer&#39;
+require &#39;rails_admin/rating_bulk_state_changer&#39;
+ 
+module RailsAdmin
+  module Config
+    module Actions
+      class ApproveRating &lt; RailsAdmin::Config::Actions::Base<ul class="nocode smells js-smells">  <li class="smell ">    <span class="description">      (<a href="http://docs.seattlerb.org/flay/" target="_blank">DuplicateCode</a>)      Similar code found in 2 nodes                        <a href="approve_rating.html#L10" class="js-smell-location">0</a>                  <a href="approve_rating.html#L32" class="js-smell-location">1</a>                  </span>  </li></ul>
+        include RatingStateChanger
+
+        RailsAdmin::Config::Actions.register(self)
+
+        register_instance_option :visible? do
+          visible_for_state_not? &#39;approved&#39;
+        end
+
+        register_instance_option :member? do
+          true
+        end
+
+        register_instance_option :link_icon do
+          &#39;icon-check&#39;
+        end
+
+        register_instance_option :controller do
+          change_state &#39;approved&#39;
+        end
+      end
+
+      class RejectRating &lt; RailsAdmin::Config::Actions::Base<ul class="nocode smells js-smells">  <li class="smell ">    <span class="description">      (<a href="http://docs.seattlerb.org/flay/" target="_blank">DuplicateCode</a>)      Similar code found in 2 nodes                        <a href="approve_rating.html#L10" class="js-smell-location">0</a>                  <a href="approve_rating.html#L32" class="js-smell-location">1</a>                  </span>  </li></ul>
+        include RatingStateChanger
+
+        RailsAdmin::Config::Actions.register(self)
+
+        register_instance_option :visible? do
+          visible_for_state_not? &#39;rejected&#39;
+        end
+
+        register_instance_option :member? do
+          true
+        end
+
+        register_instance_option :link_icon do
+          &#39;icon-remove-sign&#39;
+        end
+
+        register_instance_option :controller do
+          change_state &#39;rejected&#39;
+        end
+      end
+
+      class BulkApproveRatings &lt; RailsAdmin::Config::Actions::Base<ul class="nocode smells js-smells">  <li class="smell ">    <span class="description">      (<a href="http://docs.seattlerb.org/flay/" target="_blank">DuplicateCode</a>)      Similar code found in 2 nodes                        <a href="approve_rating.html#L54" class="js-smell-location">0</a>                  <a href="approve_rating.html#L72" class="js-smell-location">1</a>                  </span>  </li></ul>
+        include RatingBulkStateChanger
+
+        RailsAdmin::Config::Actions.register(self)
+
+        register_instance_option :visible? do
+          visible_for_ratings?
+        end
+
+        register_instance_option :bulkable? do
+          true
+        end
+
+        register_instance_option :controller do
+          bulk_change_state(&#39;approved&#39;)
+        end
+      end
+
+      class BulkRejectRatings &lt; RailsAdmin::Config::Actions::Base<ul class="nocode smells js-smells">  <li class="smell ">    <span class="description">      (<a href="http://docs.seattlerb.org/flay/" target="_blank">DuplicateCode</a>)      Similar code found in 2 nodes                        <a href="approve_rating.html#L54" class="js-smell-location">0</a>                  <a href="approve_rating.html#L72" class="js-smell-location">1</a>                  </span>  </li></ul>
+        include RatingBulkStateChanger
+
+        RailsAdmin::Config::Actions.register(self)
+
+        register_instance_option :visible? do
+          visible_for_ratings?
+        end
+
+        register_instance_option :bulkable? do
+          true
+        end
+
+        register_instance_option :controller do
+          bulk_change_state(&#39;rejected&#39;)
+        end
+      end
+
+      class CancelOrder &lt; RailsAdmin::Config::Actions::Base<ul class="nocode smells js-smells">  <li class="smell ">    <span class="description">      (<a href="http://docs.seattlerb.org/flay/" target="_blank">DuplicateCode</a>)      Similar code found in 2 nodes                        <a href="approve_rating.html#L90" class="js-smell-location">0</a>                  <a href="approve_rating.html#L118" class="js-smell-location">1</a>                  </span>  </li>  <li class="smell ">    <span class="description">      (<a href="https://github.com/troessner/reek/blob/master/docs/Irresponsible-Module.md" target="_blank">IrresponsibleModule</a>)      RailsAdmin::Config::Actions::CancelOrder has no descriptive comment          </span>  </li></ul>
+        include OrderStateChanger
+
+        RailsAdmin::Config::Actions.register(self)
+
+        register_instance_option :visible? do
+          visible_for_states?
+        end
+
+        register_instance_option :member? do
+          true
+        end
+
+        register_instance_option :link_icon do
+          &#39;icon-remove-sign&#39;
+        end
+
+        register_instance_option :controller do
+          change_state :cancel, &#39;canceled&#39;
+        end
+
+        private 
+
+          def states<ul class="nocode smells js-smells">  <li class="smell ">    <span class="description">      (<a href="https://github.com/troessner/reek/blob/master/docs/Utility-Function.md" target="_blank">UtilityFunction</a>)      RailsAdmin::Config::Actions::CancelOrder#states doesn't depend on instance state (maybe move it to another class?)          </span>  </li></ul>
+            Order::STATE_LIST[1, 2]
+          end
+      end
+
+      class CompleteOrder &lt; RailsAdmin::Config::Actions::Base<ul class="nocode smells js-smells">  <li class="smell ">    <span class="description">      (<a href="http://docs.seattlerb.org/flay/" target="_blank">DuplicateCode</a>)      Similar code found in 2 nodes                        <a href="approve_rating.html#L90" class="js-smell-location">0</a>                  <a href="approve_rating.html#L118" class="js-smell-location">1</a>                  </span>  </li>  <li class="smell ">    <span class="description">      (<a href="https://github.com/troessner/reek/blob/master/docs/Irresponsible-Module.md" target="_blank">IrresponsibleModule</a>)      RailsAdmin::Config::Actions::CompleteOrder has no descriptive comment          </span>  </li></ul>
+        include OrderStateChanger
+
+        RailsAdmin::Config::Actions.register(self)
+
+        register_instance_option :visible? do
+          visible_for_states?
+        end
+
+        register_instance_option :member? do
+          true
+        end
+
+        register_instance_option :link_icon do
+          &#39;icon-check&#39;
+        end
+
+        register_instance_option :controller do
+          change_state :complete, &#39;completed&#39;
+        end
+
+        private 
+
+          def states<ul class="nocode smells js-smells">  <li class="smell ">    <span class="description">      (<a href="https://github.com/troessner/reek/blob/master/docs/Utility-Function.md" target="_blank">UtilityFunction</a>)      RailsAdmin::Config::Actions::CompleteOrder#states doesn't depend on instance state (maybe move it to another class?)          </span>  </li></ul>
+            Order::STATE_LIST[1, 2]
+          end
+      end
+
+      class ShipOrder &lt; RailsAdmin::Config::Actions::Base<ul class="nocode smells js-smells">  <li class="smell ">    <span class="description">      (<a href="https://github.com/troessner/reek/blob/master/docs/Irresponsible-Module.md" target="_blank">IrresponsibleModule</a>)      RailsAdmin::Config::Actions::ShipOrder has no descriptive comment          </span>  </li></ul>
+        include OrderStateChanger
+
+        RailsAdmin::Config::Actions.register(self)
+
+        register_instance_option :visible? do
+          visible_for_states?
+        end
+
+        register_instance_option :member? do
+          true
+        end
+
+        register_instance_option :link_icon do
+          &#39;icon-arrow-right&#39;
+        end
+
+        register_instance_option :controller do
+          change_state :ship, &#39;shipped&#39;
+        end
+
+        private 
+
+          def states<ul class="nocode smells js-smells">  <li class="smell ">    <span class="description">      (<a href="https://github.com/troessner/reek/blob/master/docs/Utility-Function.md" target="_blank">UtilityFunction</a>)      RailsAdmin::Config::Actions::ShipOrder#states doesn't depend on instance state (maybe move it to another class?)          </span>  </li></ul>
+            [Order::STATE_LIST[1]]
+          end
+      end
+
+      class BulkCompleteOrders &lt; RailsAdmin::Config::Actions::Base
+        RailsAdmin::Config::Actions.register(self)
+
+        register_instance_option :visible? do
+          authorized? &amp;&amp; bindings[:abstract_model].model == Order
+        end
+
+        register_instance_option :bulkable? do
+          true
+        end
+
+        register_instance_option :controller do
+          Proc.new do
+            @objects = list_entries(@model_config)
+            if @objects.any? { |object| object.may_complete? == false }
+              flash[:alert] = &quot;One or few Orders are &quot;\
+                                &quot;unable to complete&quot;
+            else
+              @objects.each do |object|
+                object.complete
+                object.completed_date = Date.today
+                object.save  
+              end
+              flash[:success] = &quot;Orders were successfully completed.&quot;
+            end
+            redirect_to back_or_index
+          end
+        end
+      end
+    end
+  end
+end
+</code>
+
+    </div>
+    <script src='../assets/javascripts/jquery-2.1.0.js'></script>
+    <script src='../assets/javascripts/jquery.tablesorter.js'></script>
+    <script src='../assets/javascripts/jquery.floatThead-v1.2.7.js'></script>
+    <script src='../assets/javascripts/jquery.timeago-v1.4.1.js'></script>
+    <script src='../assets/javascripts/highcharts.src-4.0.1.js'></script>
+    <script src='../assets/javascripts/jquery.scrollTo-1.4.11.js'></script>
+    <script src='../assets/javascripts/prettify-4-Mar-2013.js'></script>
+    <script src='../assets/javascripts/application.js'></script>
+  </body>
+</html>
