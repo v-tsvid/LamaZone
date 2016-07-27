@@ -46,7 +46,7 @@ exclude_paths:
 - !/log/.keep
 - "/tmp"
 - "/app/tmp"
-- "/app/lib/tmp"
+- "/lib/tmp"
 - "/public/assets"
 - "/coverage"
 - "/config/secrets.yml"
