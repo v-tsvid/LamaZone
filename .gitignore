@@ -16,3 +16,4 @@
 /config/secrets.yml
 /config/local_env.yml
 /public/uploads/tmp
+/public/assets

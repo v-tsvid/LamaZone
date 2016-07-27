@@ -36,7 +36,7 @@ RailsAdmin.config do |config|
     edit
     delete
     show_in_app
-
+    
     approve_rating
     reject_rating
     bulk_approve_ratings
