@@ -1,14 +1,17 @@
 require 'rails_admin/config/actions'
 require 'rails_admin/config/actions/base'
+require 'rails_admin/rating_bulk_state_changer'
  
 module RailsAdmin
   module Config
     module Actions
       class BulkRejectRatings < RailsAdmin::Config::Actions::Base
+        include RatingBulkStateChanger
+
         RailsAdmin::Config::Actions.register(self)
 
         register_instance_option :visible? do
-          authorized? && bindings[:abstract_model].model == Rating
+          visible_for_ratings?
         end
 
         register_instance_option :bulkable? do
@@ -16,14 +19,7 @@ module RailsAdmin
         end
 
         register_instance_option :controller do
-          Proc.new do
-            @objects = list_entries(@model_config)
-            @objects.each do |object|
-              object.update_attribute(:state, 'rejected')
-            end
-            flash[:success] = "Ratings were successfully rejected."
-            redirect_to back_or_index
-          end
+          bulk_change_state('rejected')
         end
       end
     end

@@ -1,18 +1,17 @@
 require 'rails_admin/config/actions'
 require 'rails_admin/config/actions/base'
+require 'rails_admin/order_state_changer'
  
 module RailsAdmin
   module Config
     module Actions
       class CompleteOrder < RailsAdmin::Config::Actions::Base
+        include OrderStateChanger
+
         RailsAdmin::Config::Actions.register(self)
 
         register_instance_option :visible? do
-          authorized? && 
-          bindings[:object].class == Order && 
-          bindings[:object].state != Order::STATE_LIST[0] &&
-          bindings[:object].state != Order::STATE_LIST[3] &&
-          bindings[:object].state != Order::STATE_LIST[4]
+          visible_for_states?
         end
 
         register_instance_option :member? do
@@ -24,18 +23,14 @@ module RailsAdmin
         end
 
         register_instance_option :controller do
-          Proc.new do
-            @object.complete
-            @object.completed_date = Date.today
-            flash[:notice] = if @object.save
-              "You have completed order #{@object.custom_label_method}"
-            else
-              "Unable to complete order #{@object.custom_label_method}"
-            end
-         
-            redirect_to back_or_index
-          end
+          change_state :complete, 'completed'
         end
+
+        private 
+
+          def states
+            Order::STATE_LIST[1, 2]
+          end
       end
     end
   end

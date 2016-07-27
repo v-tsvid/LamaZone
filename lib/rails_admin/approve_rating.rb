@@ -1,16 +1,17 @@
 require 'rails_admin/config/actions'
 require 'rails_admin/config/actions/base'
+require 'rails_admin/rating_state_changer'
  
 module RailsAdmin
   module Config
     module Actions
       class ApproveRating < RailsAdmin::Config::Actions::Base
+        include RatingStateChanger
+
         RailsAdmin::Config::Actions.register(self)
 
         register_instance_option :visible? do
-          authorized? && 
-          bindings[:object].class == Rating && 
-          bindings[:object].state != 'approved'
+          visible_for_state_not? 'approved'
         end
 
         register_instance_option :member? do
@@ -22,13 +23,7 @@ module RailsAdmin
         end
 
         register_instance_option :controller do
-          Proc.new do
-            @object.update_attribute(:state, 'approved')
-            flash[:notice] = "You have approved the "\
-                             "#{@object.custom_label_method}"
-         
-            redirect_to back_or_index
-          end
+          change_state 'approved'
         end
       end
     end
