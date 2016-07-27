@@ -34,7 +34,8 @@ RSpec.describe OrderItem, type: :model do
   context ".custom_label_method" do
     it "returns string with associated book title" do
       expect(order_item.send(:custom_label_method)).
-        to eq "#{Book.find(order_item.book_id).title}"
+        to eq "order #{order_item.order_id}, "\
+              "book #{order_item.book_id}, #{order_item.quantity} pcs"
     end
   end
 

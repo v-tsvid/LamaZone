@@ -22,7 +22,6 @@ RSpec.describe Ability, type: :model do
      :book, 
      :coupon, 
      :category, 
-     :order_item, 
      :rating].each do |item|
       it "can manage #{item.to_s.pluralize}" do
         expect(subject).to have_abilities(:manage, FactoryGirl.create(item))

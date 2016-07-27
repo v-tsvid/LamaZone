@@ -10,7 +10,7 @@ class OrderItem < ActiveRecord::Base
   belongs_to :order
 
   def custom_label_method
-    "#{Book.find(self.book_id).title}"
+    "order #{order_id}, book #{book_id}, #{quantity} pcs"
   end
 
   class << self

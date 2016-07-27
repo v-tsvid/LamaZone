@@ -1,4 +1,6 @@
 class Customers::OmniauthCallbacksController < Devise::OmniauthCallbacksController
+  after_action :actualize_cart
+  
   def facebook
     @customer = OmniauthAuthorizer.new(request.env["omniauth.auth"]).authorize
     

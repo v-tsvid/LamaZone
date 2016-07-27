@@ -52,31 +52,30 @@ RailsAdmin.config do |config|
     # history_index
     # history_show
   end
-  
-  ['Author', 'Book', 'Category', 'Rating', 'OrderItem'].each do |model_name|
-    config.model model_name do 
-      exclude_fields :created_at, :updated_at
-    end
-  end
 
-  config.model 'Order' do
-    exclude_fields(:created_at, 
-                   :updated_at, 
-                   :billing_address, 
-                   :shipping_address, 
-                   :credit_card,
-                   :next_step)
-  end
+  config.excluded_models << OrderItem
 
   ['Author',
+   'Book',
+   'Category',
+   'Coupon',
    'Customer', 
    'Order',
    'OrderItem', 
    'Rating'].each do |model_name|
     config.model model_name do
-      object_label_method do
-        :custom_label_method
+      unless ['Book', 'Category', 'Coupon'].include?(model_name)
+        object_label_method do
+          :custom_label_method
+        end
       end
+
+      exclude_fields :created_at, :updated_at
+
+      exclude_fields(:billing_address, 
+                   :shipping_address, 
+                   :credit_card,
+                   :next_step) if model_name == 'Order'
     end
   end
 end

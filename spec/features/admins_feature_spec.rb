@@ -42,7 +42,6 @@ feature "admin panel customizing" do
     
     ['author', 
      'order', 
-     'order_item', 
      'rating'].each do |str|
       scenario "#{str.humanize.downcase} represents with custom_label_method" do
         item = FactoryGirl.create str.to_sym
@@ -72,7 +71,6 @@ feature "data management with admin panel" do
    'Books', 
    'Categories',
    'Coupons',
-   'Order items', 
    'Orders',
    'Ratings'].each do |item|
     scenario "allowed to crud #{item}" do
@@ -80,24 +78,6 @@ feature "data management with admin panel" do
     end
   end
 
-  # scenario "allowed to change order states" do
-  #   order = FactoryGirl.create :order, state: "processing"
-  #   first(:link, text: 'Orders').click
-  #   find(:css, admin_panel_edit_link("order/#{order.id}")).click
-  #   find("option[value='canceled']").click
-  #   find("button[name='_save']").click
-  #   expect(page).to have_content "Order successfully updated"
-  # end
-
-  scenario "allowed to change rating states" do
-    rating = FactoryGirl.create :rating, state: "pending"
-    first(:link, text: 'Ratings').click
-    find(:css, admin_panel_edit_link("rating/#{rating.id}")).click
-    find("option[value='approved']").click
-    find("button[name='_save']").click
-    expect(page).to have_content "Rating successfully updated"
-  end
-  
   context "custom actions" do
     context "ratings" do
       let!(:rating) { FactoryGirl.create :rating, state: "pending" }
