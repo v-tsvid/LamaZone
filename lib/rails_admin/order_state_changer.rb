@@ -2,9 +2,8 @@ module OrderStateChanger
   private 
 
     def visible_for_states?
-      authorized? && 
-      bindings[:object].class == Order && 
-      states.include?(bindings[:object].state)
+      object = bindings[:object]
+      authorized? && object.is_a?(Order) && states.include?(object.state)
     end
 
     def change_state(sym, str)

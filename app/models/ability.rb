@@ -3,7 +3,7 @@ class Ability
 
   def initialize(user)
     
-    if user && user.class == Admin
+    if user && user.is_a?(Admin)
       can :access, :rails_admin
       can :dashboard
       can :manage, [Author, Admin, Book, Coupon, Category, Rating]
@@ -13,7 +13,7 @@ class Ability
            :cancel_order, 
            :bulk_complete_orders], Order
       cannot :create, Rating
-    elsif user && user.class == Customer
+    elsif user && user.is_a?(Customer)
       can :manage, Address, billing_address_for_id: user.id
       can :manage, Address, shipping_address_for_id: user.id
       can :read, Country

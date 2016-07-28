@@ -1,5 +1,5 @@
 %tr.default
-  %td= image_tag cart_item.book.images, size: '30x40'
+  %td= image_tag cart_item.book.images.url, size: '30x40'
   %td.cart-title-col
     = link_to "#{cart_item.book.title}", cart_item.book
   %td.cart-price-col

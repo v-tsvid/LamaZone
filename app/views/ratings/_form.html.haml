@@ -2,8 +2,8 @@
 .field
   .rating
     - for i in 1..10
-      %input{:id => "rate#{i}", :name => "rating[rate]", :type => "radio", 
-        :value => "#{i}", :class => 'star {half:true}'}
+      %input{id: "rate#{i}", name: "rating[rate]", type: "radio", 
+        value: "#{i}", class: 'star {half:true}'}
 %br/
 .field
   = f.label :review, t(:text_review)

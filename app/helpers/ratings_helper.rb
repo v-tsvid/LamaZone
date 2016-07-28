@@ -10,8 +10,8 @@ module RatingsHelper
 
   private
 
-    def rating_input(i, rate)
-      "<input name='star#{rate}' type='radio' value=#{i} class='star "\
-      "{half:true}' disabled='disabled'"
+    def rating_input(i, id)
+      "<input name='star#{id}' type='radio' value=#{i} "\
+      "class='star {half:true}' disabled='disabled'"
     end
 end

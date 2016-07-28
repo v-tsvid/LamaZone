@@ -35,9 +35,6 @@
 
           %h4= t("settings_page.password")
 
-          - if devise_mapping.confirmable? && resource.pending_reconfirmation?
-            %div Currently waiting confirmation for: #{resource.unconfirmed_email}
-          
           - messages = resource.errors.messages
           = render 'email_password_fields', f: f, resource: resource, 
             sym: :current_password, placeholder: t("settings_page.old_password")

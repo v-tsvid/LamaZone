@@ -1,7 +1,7 @@
 .col-md-4
   .book-col
     .image-thumb
-      %p= link_to image_tag(book.images.thumb), book_path(book)
+      %p= link_to image_tag(book.images.thumb.url), book_path(book)
     %p= link_to book.title, book_path(book)
     %h4= PriceDecorator.decorate(book.price).price
     %br/

@@ -7,7 +7,7 @@ RSpec.describe Ability, type: :model do
 
   context 'authorized admin' do
     let(:customer) { FactoryGirl.create :customer }
-    before { allow(customer).to receive(:class).and_return(Admin) }
+    before { allow(customer).to receive(:is_a?).with(Admin).and_return true }
 
     it "can access rails_admin" do
       expect(subject).to have_abilities(:access, :rails_admin)

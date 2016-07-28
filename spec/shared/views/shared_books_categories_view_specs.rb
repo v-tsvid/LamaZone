@@ -72,10 +72,13 @@ shared_examples 'books_categories specs' do |category_show|
       @categories = assign(:categories, [
         FactoryGirl.build_stubbed(:category, title: 'bestsellers'), 
         FactoryGirl.build_stubbed(:category, title: 'other')])
+
+      allow_any_instance_of(Book).to receive_message_chain("images.thumb.url").
+        and_return 'some_url'
       
       render
       selector = "a[href='#{book_path @books[0]}'] "\
-        "img[src*='#{short_image_path(@books[0].images.thumb.path)}']"
+        "img[src=\"/images/some_url\"]"
       expect(rendered).to have_selector(selector)
     end
 

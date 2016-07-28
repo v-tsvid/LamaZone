@@ -4,9 +4,9 @@
       .rating
         - for i in 1..10
           - if rating.rate == i
-            = checked_rating_input(i, rating.rate).html_safe
+            = checked_rating_input(i, rating.id).html_safe
           - else
-            = unchecked_rating_input(i, rating.rate).html_safe
+            = unchecked_rating_input(i, rating.id).html_safe
     %td.small.col-righted
       = rating.decorate.author_and_date
   %tr

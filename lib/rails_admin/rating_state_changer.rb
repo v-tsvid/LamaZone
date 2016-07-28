@@ -2,9 +2,8 @@ module RatingStateChanger
   private 
 
     def visible_for_state_not?(str)
-      authorized? && 
-      bindings[:object].class == Rating && 
-      bindings[:object].state != str
+      object = bindings[:object]
+      authorized? && object.is_a?(Rating) && object.state != str
     end
 
     def change_state(str)

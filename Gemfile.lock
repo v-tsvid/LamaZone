@@ -53,6 +53,7 @@ GEM
     autoprefixer-rails (5.2.1.1)
       execjs
       json
+    aws_cf_signer (0.1.3)
     axiom-types (0.1.1)
       descendants_tracker (~> 0.0.4)
       ice_nine (~> 0.11.0)
@@ -79,6 +80,9 @@ GEM
     capybara-webkit (1.6.0)
       capybara (>= 2.3.0, < 2.5.0)
       json
+    cloudinary (1.2.2)
+      aws_cf_signer
+      rest-client
     codeclimate-engine-rb (0.3.1)
       virtus (~> 1.0)
     codeclimate-test-reporter (0.4.8)
@@ -119,6 +123,8 @@ GEM
       representable (>= 2.4.0, <= 3.1.0)
       uber
     docile (1.1.5)
+    domain_name (0.5.20160615)
+      unf (>= 0.0.5, < 1.0.0)
     draper (2.1.0)
       actionpack (>= 3.0)
       activemodel (>= 3.0)
@@ -170,6 +176,8 @@ GEM
     haml (4.0.6)
       tilt
     hashie (3.4.2)
+    http-cookie (1.0.2)
+      domain_name (~> 0.5)
     i18n (0.7.0)
     i18n_data (0.7.0)
     ice_nine (0.11.2)
@@ -207,6 +215,7 @@ GEM
     net-scp (1.2.1)
       net-ssh (>= 2.6.5)
     net-ssh (2.9.2)
+    netrc (0.11.0)
     nokogiri (1.6.8)
       mini_portile2 (~> 2.1.0)
       pkg-config (~> 1.1.7)
@@ -302,6 +311,10 @@ GEM
     request_store (1.3.1)
     responders (2.1.0)
       railties (>= 4.2.0, < 5)
+    rest-client (2.0.0)
+      http-cookie (>= 1.0.2, < 2.0)
+      mime-types (>= 1.16, < 4.0)
+      netrc (~> 0.8)
     routing-filter (0.5.1)
       actionpack (~> 4.2)
       activesupport (~> 4.2)
@@ -377,6 +390,9 @@ GEM
     uglifier (2.7.1)
       execjs (>= 0.3.0)
       json (>= 1.8.0)
+    unf (0.1.4)
+      unf_ext
+    unf_ext (0.0.7.2)
     validates_timeliness (3.0.14)
       timeliness (~> 0.3.6)
     validates_zipcode (0.0.6)
@@ -411,6 +427,7 @@ DEPENDENCIES
   capybara (= 2.4.4)
   capybara-webkit (= 1.6.0)
   carrierwave (= 0.10.0)!
+  cloudinary (= 1.2.2)
   codeclimate-test-reporter (= 0.4.8)
   coffee-rails (= 4.1.0)
   countries (= 0.11.5)

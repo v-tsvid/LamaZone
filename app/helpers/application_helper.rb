@@ -1,7 +1,4 @@
 module ApplicationHelper
-  def short_image_path(path)
-    path.sub(Rails.root.to_s + "/public", "")
-  end
 
   def resource_name
     :customer
